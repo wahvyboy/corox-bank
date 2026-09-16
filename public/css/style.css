@@ -1,0 +1,1884 @@
+/* ==========================================================================
+   COROX BANK — Official Responsive Design System
+   Wells Fargo Institutional Architecture & Wireframe Framework
+   Signature Brand Palette: Corox Crimson Red (#CC0000), Onyx Carbon (#1B1B1B), 
+   Pure Crisp White (#FFFFFF), Warm Gold (#DDAA00), and Soft Neutral Canvas
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+:root {
+    /* Wells Fargo Institutional Typography System */
+    --font-serif: 'Merriweather', 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-primary: var(--font-sans);
+    --font-display: 'Merriweather', 'Playfair Display', Georgia, serif;
+
+    /* Corox Bank Official Color System */
+    --brand-red: #CC0000;           /* Signature Corox Crimson Red */
+    --brand-red-hover: #B30000;     /* Deep Red */
+    --brand-red-dark: #8B0000;      /* Dark Crimson */
+    --brand-red-subtle: rgba(204, 0, 0, 0.08);
+
+    --brand-gold: #DDAA00;          /* Warm Institutional Gold Accent */
+    --brand-gold-accent: #FFB81C;   /* Wells Fargo Stagecoach Gold */
+    --brand-gold-dark: #B8860B;
+
+    --brand-dark: #1B1B1B;          /* Carbon Onyx from logo */
+    --brand-dark-deep: #111317;     /* Midnight Obsidian */
+    --brand-dark-surface: #1E2229;  /* Modern Card Surface */
+    --brand-dark-light: #2D323C;
+
+    --pure-white: #FFFFFF;
+    --off-white: #F8F9FA;
+    --surface-light: #F3F4F6;
+    --bg-cream: #FAF9F6;
+
+    --text-dark: #111827;
+    --text-muted-dark: #4B5563;
+    --text-light: #FFFFFF;
+    --text-muted-light: #9CA3AF;
+
+    --accent-red-gradient: linear-gradient(135deg, #CC0000 0%, #8B0000 100%);
+    --accent-dark-gradient: linear-gradient(135deg, #1B1B1B 0%, #0B0D11 100%);
+
+    --border-subtle: #E5E7EB;
+    --border-medium: #D1D5DB;
+    --border-red: rgba(204, 0, 0, 0.2);
+
+    --success: #059669;
+    --success-bg: #ecfdf5;
+    --warning: #D97706;
+    --warning-bg: #fffbeb;
+    --danger: #CC0000;
+    --danger-bg: #fef2f2;
+    --info: #CC0000;
+    --info-bg: #fef2f2;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-pill: 9999px;
+
+    --shadow-card: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.1);
+    --shadow-button: 0 4px 14px rgba(204, 0, 0, 0.3);
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--off-white);
+    color: var(--text-dark);
+    line-height: 1.65;
+    min-height: 100vh;
+}
+
+h1, h2, h3, .serif-heading {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================================================
+   Wells Fargo Style Utility Navigation Bar
+   ========================================================================== */
+.wf-utility-bar {
+    background: #F3F4F6;
+    border-bottom: 1px solid #E5E7EB;
+    font-size: 13px;
+    font-family: var(--font-sans);
+    width: 100%;
+}
+
+.wf-utility-inner {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 38px;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.wf-segments {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.wf-segment {
+    padding: 9px 16px;
+    font-weight: 600;
+    color: #4B5563;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    border-bottom: 3px solid transparent;
+    display: inline-flex;
+    align-items: center;
+}
+
+.wf-segment:hover {
+    color: var(--brand-red);
+}
+
+.wf-segment.active {
+    color: var(--brand-red);
+    font-weight: 800;
+    border-bottom: 3px solid var(--brand-red);
+    background: #FFFFFF;
+}
+
+.wf-quick-links {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: 12px;
+    color: #6B7280;
+    font-weight: 600;
+}
+
+.wf-quick-links a {
+    transition: color 0.2s;
+}
+
+.wf-quick-links a:hover {
+    color: var(--brand-red);
+    text-decoration: underline;
+}
+
+.wf-wire-desk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #111827;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   Main Institutional Header (Crisp White Wells Fargo Style)
+   ========================================================================== */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E5E7EB;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+}
+
+.nav-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.brand-logo-img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+}
+
+.nav-link {
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+    transition: all 0.2s ease;
+    padding: 8px 0;
+    position: relative;
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    color: var(--brand-red);
+}
+
+.nav-link.active {
+    color: var(--brand-red);
+    font-weight: 800;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--brand-red);
+    border-radius: 2px;
+}
+
+.header-cta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.btn-nav {
+    padding: 0.6rem 1.3rem;
+    font-size: 14px;
+    min-height: 42px;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--brand-red);
+    border: 1.5px solid var(--brand-red);
+}
+
+.btn-outline:hover {
+    background: var(--brand-red);
+    color: #FFFFFF;
+}
+
+/* ==========================================================================
+   Continuous Moving Marquee Ticker — Pure Crisp White Wells Fargo Style
+   ========================================================================== */
+.ticker-bar {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: #111827 !important;
+    padding: 0.65rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 1px solid #E5E7EB !important;
+    border-bottom: 1px solid #E5E7EB !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 20;
+}
+
+.ticker-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ticker-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #CC0000;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 5px 11px;
+    border-radius: 4px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.pulse-dot {
+    width: 7px;
+    height: 7px;
+    background: #4ade80;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+}
+
+.ticker-track-wrapper {
+    overflow: hidden;
+    flex: 1;
+    position: relative;
+    mask-image: linear-gradient(to right, transparent 0px, black 25px, black calc(100% - 25px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0px, black 25px, black calc(100% - 25px), transparent 100%);
+}
+
+.ticker-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 3.5rem;
+    white-space: nowrap;
+    animation: marquee 48s linear infinite;
+    will-change: transform;
+}
+
+.ticker-bar:hover .ticker-track {
+    animation-play-state: paused;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+}
+
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.ticker-label {
+    color: #4B5563 !important;
+    font-weight: 700;
+    font-size: 11.5px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.ticker-val {
+    font-weight: 800;
+    color: #111827 !important;
+    font-size: 13px;
+}
+
+.ticker-up {
+    color: #059669 !important;
+}
+
+.ticker-down {
+    color: #CC0000 !important;
+}
+
+.brand-logo-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    background: transparent;
+}
+
+.brand-text {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--pure-white);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    list-style: none;
+}
+
+.nav-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted-light);
+    transition: all 0.25s ease;
+    padding: 6px 0;
+    position: relative;
+    white-space: nowrap;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--pure-white);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--pure-white);
+    border-radius: 2px;
+}
+
+.header-cta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.btn-nav {
+    padding: 0.6rem 1.2rem;
+    font-size: 13px;
+    min-height: 40px;
+}
+
+.nav-mobile-btn {
+    display: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm);
+    color: var(--pure-white);
+    cursor: pointer;
+    padding: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile Nav Drawer */
+.mobile-nav-drawer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #CC0000;
+    z-index: 2000;
+    padding: 2rem 1.5rem;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+}
+
+.mobile-nav-drawer.open {
+    display: flex;
+}
+
+.mobile-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.mobile-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.mobile-nav-list a {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--pure-white);
+    display: block;
+    padding: 6px 0;
+}
+
+.mobile-nav-list a.active {
+    color: #FFB81C;
+    border-left: 3px solid #FFFFFF;
+    padding-left: 8px;
+}
+
+/* Corox Bank Crimson & Onyx Buttons System */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.8rem 1.6rem;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    min-height: 48px;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.btn-primary {
+    background: var(--brand-red);
+    color: var(--pure-white);
+    box-shadow: var(--shadow-button);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary:hover {
+    background: var(--brand-red-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(204, 0, 0, 0.5);
+}
+
+.btn-secondary {
+    background: var(--brand-dark);
+    color: var(--pure-white);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+    background: #2b2b2b;
+    transform: translateY(-2px);
+    border-color: var(--brand-red);
+    color: var(--pure-white);
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 16px;
+    min-height: 52px;
+    border-radius: var(--radius-lg);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* Hero Section */
+.hero-video-wrapper {
+    position: relative;
+    padding: 5.5rem 1.5rem 4.5rem;
+    overflow: hidden;
+    background: var(--brand-dark-deep);
+    color: var(--pure-white);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.hero-video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.38;
+    z-index: 0;
+    filter: brightness(0.55) contrast(1.15);
+}
+
+.hero-video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(204, 0, 0, 0.15) 0%, rgba(11, 13, 17, 0.96) 80%);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1050px;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--pure-white);
+    padding: 6px 16px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.hero-content h1 {
+    font-size: 3.4rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+    color: var(--pure-white);
+    letter-spacing: -0.5px;
+}
+
+.hero-content p {
+    font-size: 1.15rem;
+    color: var(--text-muted-light);
+    max-width: 780px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.75;
+}
+
+.hero-video-container {
+    margin-top: 3rem;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    position: relative;
+    background: #000;
+    width: 100%;
+}
+
+.hero-video-container video {
+    width: 100%;
+    height: auto;
+    max-height: 440px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Page Hero */
+.page-hero {
+    padding: 5rem 1.5rem 4rem;
+    text-align: center;
+    background: linear-gradient(135deg, #111317 0%, #1B1B1B 100%);
+    border-bottom: 3px solid var(--brand-red);
+    color: var(--pure-white);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.page-hero h1 {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
+}
+
+.page-hero p {
+    font-size: 1.1rem;
+    color: var(--text-muted-light);
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+/* Section Containers & Spacing */
+.section-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 5rem 1.8rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.section-header h2 {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--brand-dark);
+    margin-bottom: 0.8rem;
+    letter-spacing: -0.5px;
+}
+
+.section-header p {
+    color: var(--text-muted-dark);
+    font-size: 1.08rem;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+/* Cards Grid */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    width: 100%;
+}
+
+.card-with-img {
+    background: var(--pure-white);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: all 0.35s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+    width: 100%;
+}
+
+.card-with-img:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--brand-red);
+}
+
+.card-img-wrapper {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+    background: var(--brand-dark);
+}
+
+.card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.card-with-img:hover .card-img-wrapper img {
+    transform: scale(1.06);
+}
+
+.card-body {
+    padding: 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body h3 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--brand-dark);
+    margin-bottom: 0.8rem;
+}
+
+.card-body p {
+    color: var(--text-muted-dark);
+    font-size: 0.96rem;
+    line-height: 1.65;
+    margin-bottom: 1.8rem;
+    flex: 1;
+}
+
+/* Split Showcase Feature */
+.showcase-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.showcase-img-box {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-hover);
+    width: 100%;
+    background: var(--brand-dark);
+}
+
+.showcase-img-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+.feature-card {
+    background: var(--pure-white);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    box-shadow: var(--shadow-card);
+    transition: all 0.35s ease;
+    width: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--brand-red);
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-md);
+    background: rgba(204, 0, 0, 0.08);
+    color: var(--brand-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.feature-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--brand-dark);
+    margin-bottom: 0.6rem;
+}
+
+.feature-card p {
+    color: var(--text-muted-dark);
+    font-size: 0.95rem;
+    line-height: 1.65;
+}
+
+/* Stat Cards in About Us */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.stat-card {
+    background: var(--pure-white);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.8rem;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+}
+
+.stat-title {
+    font-size: 11px;
+    color: var(--text-muted-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 0.4rem;
+    font-weight: 800;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--brand-red);
+    font-family: var(--font-serif);
+}
+
+/* ==========================================================================
+   Footer — Corox Brand Red Wells Fargo Style
+   ========================================================================== */
+.site-footer {
+    background: #CC0000 !important;
+    background-color: #CC0000 !important;
+    color: #FFFFFF !important;
+    padding: 4.5rem 1.8rem 2.5rem;
+    border-top: 5px solid #8B0000;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.footer-grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.8fr repeat(3, 1fr);
+    gap: 3rem;
+    margin-bottom: 3.5rem;
+    width: 100%;
+}
+
+.footer-col h4 {
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    font-family: var(--font-serif);
+    letter-spacing: 0.3px;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+    padding-left: 3px;
+}
+
+.social-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    transition: all 0.25s ease;
+}
+
+.social-icon-btn:hover {
+    background: #FFFFFF;
+    color: #CC0000;
+    transform: translateY(-3px);
+    border-color: #FFFFFF;
+}
+
+.footer-bottom {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+    text-align: center;
+    width: 100%;
+    line-height: 1.7;
+}
+
+/* ==========================================================================
+   Wells Fargo Wireframe Setting & UI/UX Components
+   ========================================================================== */
+.wf-hero-wrapper {
+    background: #FAF9F6;
+    border-bottom: 1px solid #E5E7EB;
+    width: 100%;
+    padding: 2.5rem 1rem;
+    box-sizing: border-box;
+}
+
+.wf-hero-grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 2.5rem;
+    align-items: stretch;
+}
+
+@media (max-width: 980px) {
+    .wf-hero-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Wells Fargo Signature Embedded Sign-On Card */
+.wf-signon-card {
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 12px;
+    padding: 2rem 1.8rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.wf-signon-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.wf-signon-header h3 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: #111827;
+    margin: 0;
+    font-weight: 700;
+}
+
+.wf-input-group {
+    margin-bottom: 1.1rem;
+}
+
+.wf-input-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 0.4rem;
+}
+
+.wf-input-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #D1D5DB;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #111827;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.wf-input-group input:focus {
+    border-color: #CC0000;
+    box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.12);
+}
+
+.wf-form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    font-size: 13px;
+}
+
+.wf-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #4B5563;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.wf-signon-btn {
+    background: #CC0000;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 0.85rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    width: 100%;
+}
+
+.wf-signon-btn:hover {
+    background: #E00000;
+    box-shadow: 0 6px 18px rgba(204, 0, 0, 0.35);
+}
+
+.wf-signon-sublinks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #E5E7EB;
+}
+
+.wf-signon-sublinks a {
+    color: #4B5563;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.wf-signon-sublinks a:hover {
+    color: #CC0000;
+    text-decoration: underline;
+}
+
+.wf-security-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #6B7280;
+    font-weight: 600;
+    margin-top: 0.8rem;
+}
+
+/* Wells Fargo Hero Editorial Showcase */
+.wf-hero-promo {
+    background: linear-gradient(135deg, #11141A 0%, #1A1E24 100%);
+    border-radius: 14px;
+    padding: 3.5rem 3rem;
+    color: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid #374151;
+}
+
+.wf-hero-promo-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.25;
+    filter: brightness(0.7) contrast(1.1);
+}
+
+.wf-hero-promo-content {
+    position: relative;
+    z-index: 2;
+    max-width: 650px;
+}
+
+.wf-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #FFB81C;
+    margin-bottom: 0.8rem;
+}
+
+.wf-hero-title {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+}
+
+.wf-hero-rate-box {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    background: rgba(204, 0, 0, 0.15);
+    border: 1px solid #CC0000;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    margin-bottom: 1.4rem;
+}
+
+.wf-hero-rate-num {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #FFFFFF;
+}
+
+.wf-hero-rate-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FCA5A5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Wells Fargo 6-Tile Action Wireframe Grid */
+.wf-actions-section {
+    padding: 4rem 1.5rem;
+    max-width: 1320px;
+    margin: 0 auto;
+}
+
+.wf-actions-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.wf-actions-header h2 {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.wf-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.wf-action-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 1.8rem;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.wf-action-card:hover {
+    border-color: #CC0000;
+    box-shadow: 0 10px 25px rgba(204, 0, 0, 0.1);
+    transform: translateY(-4px);
+}
+
+.wf-action-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: rgba(204, 0, 0, 0.08);
+    color: #CC0000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+}
+
+.wf-action-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.wf-action-card p {
+    color: #4B5563;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+    flex: 1;
+}
+
+.wf-action-link {
+    color: #CC0000;
+    font-weight: 700;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ==========================================================================
+   Wells Fargo Wireframe Setting: Audience Tabs, Rate Sheet, & Showcases
+   ========================================================================== */
+
+/* Audience Solution Tabs */
+.wf-tabs-section {
+    padding: 3.5rem 1.5rem;
+    max-width: 1320px;
+    margin: 0 auto;
+}
+
+.wf-tabs-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.wf-tabs-header h2 {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.wf-tabs-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #E5E7EB;
+    padding-bottom: 0.8rem;
+}
+
+.wf-tab-btn {
+    background: transparent;
+    border: none;
+    padding: 0.8rem 1.8rem;
+    font-size: 15px;
+    font-weight: 700;
+    color: #4B5563;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.wf-tab-btn:hover {
+    color: var(--brand-red);
+}
+
+.wf-tab-btn.active {
+    color: var(--brand-red);
+    background: rgba(204, 0, 0, 0.08);
+}
+
+.wf-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    background: var(--brand-red);
+    border-radius: 2px;
+}
+
+.wf-tab-panel {
+    display: none;
+}
+
+.wf-tab-panel.active {
+    display: block;
+}
+
+/* Wells Fargo Institutional Rate Sheet Table */
+.wf-rate-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    margin-top: 1.5rem;
+    width: 100%;
+}
+
+.wf-rate-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.wf-rate-table th {
+    background: #FAF9F6;
+    color: #111827;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 1.1rem 1.6rem;
+    border-bottom: 2px solid #E5E7EB;
+}
+
+.wf-rate-table td {
+    padding: 1.4rem 1.6rem;
+    border-bottom: 1px solid #F3F4F6;
+    vertical-align: middle;
+}
+
+.wf-rate-table tr:hover td {
+    background: #FCFCFD;
+}
+
+.wf-rate-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(204, 0, 0, 0.08);
+    color: #CC0000;
+    margin-bottom: 4px;
+}
+
+.wf-rate-num {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #059669;
+    font-family: var(--font-serif);
+}
+
+.wf-rate-product-name {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 3px;
+}
+
+/* Wells Fargo Split Feature Rows */
+.wf-split-feature {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    padding: 4.5rem 1.5rem;
+    max-width: 1320px;
+    margin: 0 auto;
+}
+
+.wf-split-feature.reverse {
+    direction: rtl;
+}
+
+.wf-split-feature.reverse > * {
+    direction: ltr;
+}
+
+.wf-feature-eyebrow {
+    color: #CC0000;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.6rem;
+}
+
+.wf-split-title {
+    font-family: var(--font-serif);
+    font-size: 2.3rem;
+    color: #111827;
+    line-height: 1.25;
+    margin-bottom: 1.2rem;
+}
+
+.wf-split-p {
+    color: #4B5563;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.8rem;
+}
+
+.wf-check-list {
+    list-style: none;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.wf-check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 15px;
+    color: #1F2937;
+    font-weight: 600;
+}
+
+.wf-check-item svg {
+    color: #CC0000;
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+.wf-split-img-box {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    position: relative;
+    background: #1B1B1B;
+}
+
+.wf-split-img-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+/* Wells Fargo Editorial Knowledge Hub */
+.wf-editorial-section {
+    background: #FAF9F6;
+    padding: 4.5rem 1.5rem;
+    border-top: 1px solid #E5E7EB;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.wf-editorial-container {
+    max-width: 1320px;
+    margin: 0 auto;
+}
+
+.wf-editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+
+.wf-editorial-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 2.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+}
+
+.wf-editorial-card:hover {
+    border-color: #CC0000;
+    box-shadow: 0 12px 25px rgba(204, 0, 0, 0.08);
+    transform: translateY(-4px);
+}
+
+.wf-editorial-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    color: #111827;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+}
+
+.wf-editorial-card p {
+    color: #4B5563;
+    font-size: 14.5px;
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+}
+
+.wf-editorial-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #6B7280;
+    border-top: 1px solid #F3F4F6;
+    padding-top: 1rem;
+}
+
+/* Auth Pages */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.2rem;
+    background: linear-gradient(135deg, #111317 0%, #1B1B1B 100%);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.auth-card {
+    background: var(--pure-white);
+    border-radius: var(--radius-xl);
+    padding: 3rem 2.2rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+    color: var(--text-dark);
+    box-sizing: border-box;
+}
+
+.auth-brand {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.85rem 1.1rem;
+    background: var(--surface-light);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-dark);
+    font-size: 15px;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.form-control:focus {
+    border-color: var(--brand-red);
+    background: var(--pure-white);
+    box-shadow: 0 0 0 4px rgba(204, 0, 0, 0.12);
+}
+
+/* App Dashboard Layout */
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    background: var(--off-white);
+    width: 100%;
+}
+
+.sidebar {
+    width: 280px;
+    background: #1B1B1B;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 900;
+    transition: transform 0.3s ease;
+    color: var(--pure-white);
+}
+
+.sidebar-brand {
+    padding: 1.8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-nav {
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sidebar-nav-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted-light);
+    padding: 1rem 0.8rem 0.4rem;
+    font-weight: 800;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-md);
+    color: var(--text-muted-light);
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.sidebar-nav a svg {
+    width: 18px;
+    height: 18px;
+}
+
+.sidebar-nav a:hover, .sidebar-nav a.active {
+    background: rgba(204, 0, 0, 0.15);
+    color: var(--pure-white);
+}
+
+.sidebar-nav a.active {
+    border-left: 4px solid var(--brand-red);
+    color: var(--pure-white);
+}
+
+.sidebar-footer {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.main-content {
+    margin-left: 280px;
+    flex: 1;
+    padding: 2.5rem;
+    max-width: 1380px;
+    width: calc(100% - 280px);
+    box-sizing: border-box;
+}
+
+.table-card {
+    background: var(--pure-white);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-top: 2rem;
+    box-shadow: var(--shadow-card);
+    width: 100%;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 600px;
+}
+
+th {
+    background: var(--surface-light);
+    color: var(--brand-dark);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 1rem 1.4rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+td {
+    padding: 1.2rem 1.4rem;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+.mobile-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--brand-red);
+    color: #fff;
+    border: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS (TABLETS & MOBILE SMARTPHONES)
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+    .nav-links {
+        display: none;
+    }
+    .nav-mobile-btn {
+        display: flex;
+    }
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+    }
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 2rem 1.2rem;
+    }
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .mobile-toggle {
+        display: flex;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar-right {
+        display: none;
+    }
+    .top-bar {
+        padding: 6px 1rem;
+        justify-content: center;
+    }
+    .top-bar-info {
+        justify-content: center;
+        gap: 1rem;
+    }
+    .nav-container {
+        padding: 0.6rem 1rem;
+    }
+    .header-cta .btn-nav {
+        display: none;
+    }
+    .hero-video-wrapper {
+        padding: 4rem 1rem 3rem;
+    }
+    .hero-content h1 {
+        font-size: 2.2rem;
+        letter-spacing: -0.3px;
+    }
+    .hero-content p {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1.8rem;
+    }
+    .showcase-split {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .auth-card {
+        padding: 2rem 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+    .section-container {
+        padding: 3.5rem 1rem;
+    }
+    .section-header h2 {
+        font-size: 1.7rem;
+    }
+    .brand-logo {
+        font-size: 18px;
+    }
+    .brand-logo-img {
+        height: 34px;
+    }
+    .btn-lg {
+        padding: 0.85rem 1.4rem;
+        font-size: 15px;
+        min-height: 48px;
+    }
+}
