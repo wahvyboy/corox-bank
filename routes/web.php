@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - Vera Bank USA Digital Banking Platform
+| Web Routes - Corox Bank Commercial & Digital Banking Platform
 |--------------------------------------------------------------------------
 */
 

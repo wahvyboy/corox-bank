@@ -1882,3 +1882,464 @@ td {
         min-height: 48px;
     }
 }
+
+/* ==========================================================================
+   Interactive Banking Widgets: Calculators, Cards, Tables, FAQs
+   ========================================================================== */
+
+/* Realistic Interactive Credit Card Visualizer */
+.card-visualizer-container {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 4rem;
+}
+
+@media (max-width: 992px) {
+    .card-visualizer-container {
+        grid-template-columns: 1fr;
+        padding: 2rem 1.5rem;
+    }
+}
+
+.card-stage {
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+}
+
+.realistic-card {
+    width: 100%;
+    max-width: 420px;
+    height: 250px;
+    border-radius: 16px;
+    padding: 1.8rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #FFFFFF;
+}
+
+.realistic-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* Card Themes */
+.card-theme-gold {
+    background: linear-gradient(135deg, #2A2111 0%, #151109 40%, #3D2E14 100%);
+    border: 1px solid rgba(221, 170, 0, 0.4);
+}
+.card-theme-gold .card-accent-strip {
+    background: linear-gradient(90deg, #DDAA00, #FFD700, #B8860B);
+}
+
+.card-theme-platinum {
+    background: linear-gradient(135deg, #1E232A 0%, #0F1216 50%, #2A303A 100%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.card-theme-platinum .card-accent-strip {
+    background: linear-gradient(90deg, #E5E7EB, #FFFFFF, #9CA3AF);
+}
+
+.card-theme-executive {
+    background: linear-gradient(135deg, #0A192F 0%, #030B17 50%, #172A45 100%);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+}
+.card-theme-executive .card-accent-strip {
+    background: linear-gradient(90deg, #3B82F6, #60A5FA, #1D4ED8);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-chip-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.card-chip {
+    width: 44px;
+    height: 32px;
+    background: linear-gradient(135deg, #E0A938 0%, #F5CE62 50%, #C98A1C 100%);
+    border-radius: 6px;
+    position: relative;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.card-chip::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border: 1px solid rgba(0,0,0,0.25);
+    border-radius: 3px;
+}
+
+.card-number {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.25rem;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    margin: 1.2rem 0 0.5rem;
+}
+
+.card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.card-holder-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+}
+
+.card-holder-name {
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: var(--font-sans);
+}
+
+.card-selector-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    background: #F3F4F6;
+    padding: 6px;
+    border-radius: var(--radius-md);
+}
+
+.card-selector-tab {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    font-weight: 700;
+    font-size: 13px;
+    color: #4B5563;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.card-selector-tab.active {
+    background: #FFFFFF;
+    color: var(--brand-red);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Calculators */
+.calc-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 2.5rem;
+    margin-bottom: 4rem;
+}
+
+.calc-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+@media (max-width: 992px) {
+    .calc-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+.calc-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.calc-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.calc-group-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.calc-group-value {
+    font-weight: 800;
+    color: var(--brand-red);
+}
+
+.calc-range {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #E5E7EB;
+    outline: none;
+    -webkit-appearance: none;
+    accent-color: var(--brand-red);
+}
+
+.calc-result-box {
+    background: linear-gradient(135deg, #1B1B1B 0%, #111317 100%);
+    color: #FFFFFF;
+    border-radius: var(--radius-md);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.calc-result-label {
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #9CA3AF;
+    margin-bottom: 0.5rem;
+}
+
+.calc-result-amount {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #FFD700;
+    font-family: var(--font-serif);
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+.calc-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    text-align: left;
+}
+
+.calc-breakdown-item span {
+    display: block;
+    font-size: 11px;
+    color: #9CA3AF;
+    text-transform: uppercase;
+}
+
+.calc-breakdown-item strong {
+    font-size: 16px;
+    color: #FFFFFF;
+}
+
+/* Comparison Tables */
+.comparison-table-wrapper {
+    overflow-x: auto;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 4rem;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+}
+
+.comparison-table th {
+    background: #F9FAFB;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 2px solid #E5E7EB;
+    font-weight: 800;
+    color: #111827;
+}
+
+.comparison-table th.highlight-col {
+    background: #FEF2F2;
+    color: var(--brand-red);
+    border-top: 3px solid var(--brand-red);
+}
+
+.comparison-table td {
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid #E5E7EB;
+    color: #4B5563;
+}
+
+.comparison-table tr:hover td {
+    background: #F9FAFB;
+}
+
+.comparison-table td.highlight-col {
+    background: #FFFBFB;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Process Steps */
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.process-step-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: var(--radius-md);
+    padding: 2rem 1.5rem;
+    position: relative;
+    box-shadow: var(--shadow-card);
+}
+
+.process-step-num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--brand-red-subtle);
+    color: var(--brand-red);
+    font-weight: 900;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    border: 2px solid var(--brand-red);
+}
+
+.process-step-card h4 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.process-step-card p {
+    font-size: 13.5px;
+    color: #4B5563;
+    line-height: 1.6;
+}
+
+/* Accordion FAQs */
+.faq-container {
+    max-width: 900px;
+    margin: 0 auto 4rem;
+}
+
+.faq-item {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.faq-question {
+    padding: 1.4rem 1.8rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111827;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+
+.faq-question:hover {
+    color: var(--brand-red);
+}
+
+.faq-icon {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--brand-red);
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease;
+    padding: 0 1.8rem;
+    color: #4B5563;
+    line-height: 1.7;
+    font-size: 14.5px;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 500px;
+    padding: 0 1.8rem 1.5rem;
+}
+
+/* Institutional Stat Grid */
+.stat-strip {
+    background: linear-gradient(135deg, #1B1B1B 0%, #111317 100%);
+    color: #FFFFFF;
+    border-radius: var(--radius-lg);
+    padding: 3rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    text-align: center;
+    margin-bottom: 4rem;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.stat-strip-num {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #FFD700;
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
+}
+
+.stat-strip-label {
+    font-size: 13px;
+    color: #D1D5DB;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
