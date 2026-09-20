@@ -460,65 +460,114 @@ img {
    ========================================================================== */
 .nav-mobile-btn {
     display: none;
-    background: #F3F4F6;
-    border: 1.5px solid #E5E7EB;
-    border-radius: var(--radius-md);
-    color: var(--brand-dark);
+    background: #FFFFFF;
+    border: 1.5px solid #D1D5DB;
+    border-radius: 6px;
+    color: #1F2937;
     cursor: pointer;
-    width: 44px;
-    height: 44px;
-    padding: 0;
+    padding: 6px 11px;
+    height: 38px;
     align-items: center;
     justify-content: center;
+    gap: 6px;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-tap-highlight-color: transparent;
     flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    user-select: none;
 }
 
 .nav-mobile-btn:hover {
-    background: #E5E7EB;
-    border-color: #D1D5DB;
+    background: #F9FAFB;
+    border-color: #9CA3AF;
+    color: var(--brand-red);
 }
 
 .nav-mobile-btn:active {
-    transform: scale(0.94);
+    transform: scale(0.96);
+    background: #F3F4F6;
 }
 
-.hamburger-box {
-    width: 22px;
-    height: 16px;
-    display: inline-block;
-    position: relative;
+.nav-mobile-btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
 }
 
-.hamburger-inner,
-.hamburger-inner::before,
-.hamburger-inner::after {
-    width: 22px;
-    height: 2.2px;
-    background-color: #1B1B1B;
-    border-radius: 2px;
-    position: absolute;
-    transition: transform 0.25s ease, background-color 0.25s ease;
+.nav-mobile-btn-text {
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: currentColor;
+    line-height: 1;
 }
 
-.hamburger-inner {
-    top: 50%;
-    transform: translateY(-50%);
+/* Drawer Banking Division Segments */
+.drawer-segments-wrapper {
+    padding: 0.9rem 1.4rem;
+    background: #151515;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
 }
 
-.hamburger-inner::before,
-.hamburger-inner::after {
-    content: '';
-    display: block;
+.drawer-segments-title {
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    color: #9CA3AF;
+    margin-bottom: 0.6rem;
 }
 
-.hamburger-inner::before {
-    top: -7px;
+.drawer-segments-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
 }
 
-.hamburger-inner::after {
-    bottom: -7px;
+.drawer-segment-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.55rem 0.75rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #D1D5DB;
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.drawer-segment-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.drawer-segment-pill:active {
+    transform: scale(0.97);
+}
+
+.drawer-segment-pill.active {
+    background: var(--brand-red);
+    color: #FFFFFF;
+    border-color: var(--brand-red);
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(204, 0, 0, 0.4);
+}
+
+.drawer-segment-pill svg {
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+
+.drawer-segment-pill.active svg {
+    opacity: 1;
 }
 
 /* Mobile Nav Drawer Backdrop */
@@ -2208,46 +2257,9 @@ td {
         padding-bottom: calc(62px + env(safe-area-inset-bottom));
     }
 
-    /* Utility Bar Mobile Scrollable Strip with Visual Mask */
+    /* Hide Wells Fargo Utility Bar entirely on Mobile Devices (< 769px) */
     .wf-utility-bar {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        background: #F9FAFB;
-        -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
-        mask-image: linear-gradient(to right, black 85%, transparent 100%);
-    }
-    .wf-utility-bar::-webkit-scrollbar {
-        display: none;
-    }
-    .wf-utility-inner {
-        padding: 0 1.2rem 0 0.8rem;
-        flex-wrap: nowrap;
-        min-height: 36px;
-        justify-content: flex-start;
-        gap: 0.5rem;
-        width: max-content;
-    }
-    .wf-segments {
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-    .wf-segment {
-        padding: 6px 12px;
-        font-size: 12px;
-        white-space: nowrap;
-        border-radius: var(--radius-sm);
-        border-bottom: none;
-    }
-    .wf-segment.active {
-        background: var(--brand-red);
-        color: #FFFFFF;
-        border-bottom: none;
-    }
-    .wf-quick-links {
-        display: none;
+        display: none !important;
     }
 
     /* Header Mobile Optimization */

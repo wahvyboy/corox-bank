@@ -69,9 +69,14 @@
                     <a href="{{ route('register') }}" class="btn btn-primary btn-nav header-btn-register">Open Account</a>
                 @endauth
                 <button class="nav-mobile-btn" id="mobileMenuToggle" onclick="openMobileDrawer()" aria-label="Open Navigation Menu" aria-expanded="false" aria-controls="mobileDrawer">
-                    <span class="hamburger-box">
-                        <span class="hamburger-inner"></span>
+                    <span class="nav-mobile-btn-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
                     </span>
+                    <span class="nav-mobile-btn-text">MENU</span>
                 </button>
             </div>
         </div>
@@ -127,8 +132,31 @@
                 <img src="/images/corox_logo_white_text.png" alt="Corox Bank Logo" class="brand-logo-img" style="height: 38px;">
             </a>
             <button class="mobile-drawer-close" onclick="closeMobileDrawer()" aria-label="Close Navigation Menu">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
+        </div>
+
+        <!-- Banking Segments Selector (Moved from header on mobile) -->
+        <div class="drawer-segments-wrapper">
+            <div class="drawer-segments-title">Select Banking Division</div>
+            <div class="drawer-segments-grid">
+                <a href="{{ route('home') }}" class="drawer-segment-pill {{ request()->routeIs('home') || request()->routeIs('personal') ? 'active' : '' }}">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    <span>Personal</span>
+                </a>
+                <a href="{{ route('business') }}" class="drawer-segment-pill {{ request()->routeIs('business') ? 'active' : '' }}">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    <span>Small Business</span>
+                </a>
+                <a href="{{ route('business') }}" class="drawer-segment-pill">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <span>Commercial</span>
+                </a>
+                <a href="{{ route('wealth') }}" class="drawer-segment-pill {{ request()->routeIs('wealth') ? 'active' : '' }}">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    <span>Wealth Mgmt</span>
+                </a>
+            </div>
         </div>
 
         <!-- Mobile Quick Action Portal Buttons -->
