@@ -56,12 +56,12 @@
                 @csrf
                 <div class="form-group">
                     <label for="name" class="form-label">User ID / Username</label>
-                    <input type="text" name="name" id="name" class="form-control" required autofocus placeholder="Enter your User ID">
+                    <input type="text" name="name" id="name" class="form-control" required autofocus placeholder="Enter your User ID" autocapitalize="none" autocomplete="username" spellcheck="false">
                 </div>
                 
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" name="password" id="password" class="form-control" required placeholder="••••••••">
+                    <input type="password" name="password" id="password" class="form-control" required placeholder="••••••••" autocomplete="current-password">
                 </div>
                 
                 <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 1rem;">Sign In to Account</button>

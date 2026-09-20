@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Account;
@@ -115,20 +116,24 @@ class UserController extends Controller
             'password' => 'required|string',
         ]);
 
-        $credentials = $request->only('name', 'password');
+        $loginInput = trim($request->input('name'));
+        $password = $request->input('password');
 
-        if (Auth::attempt($credentials)) {
-            // Get the currently authenticated user
-            $user = Auth::user();
-    
+        // Look up by username or email, case-insensitively with trimmed input
+        $user = User::whereRaw('LOWER(name) = ?', [strtolower($loginInput)])
+                    ->orWhereRaw('LOWER(email) = ?', [strtolower($loginInput)])
+                    ->first();
+
+        if ($user && Hash::check($password, $user->password)) {
             // Check if the user is inactive
-        if ($user->status == 'inactive') {
-            Auth::logout();
-            return back()->withErrors([
-                'loginError' => 'Your account has been blocked.',
-            ]);
-        }
-        
+            if ($user->status == 'inactive') {
+                return back()->withErrors([
+                    'loginError' => 'Your account has been blocked.',
+                ]);
+            }
+
+            Auth::login($user, $request->boolean('remember'));
+
             // Check the user's role and redirect accordingly
             if ($user->role == 'admin') {
                 return redirect('/admin/dashboard');
