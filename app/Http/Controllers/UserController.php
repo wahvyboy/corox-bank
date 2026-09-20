@@ -119,9 +119,10 @@ class UserController extends Controller
         $loginInput = trim($request->input('name'));
         $password = $request->input('password');
 
-        // Look up by username or email, case-insensitively with trimmed input
+        // Look up by username, email, or full name, case-insensitively with trimmed input
         $user = User::whereRaw('LOWER(name) = ?', [strtolower($loginInput)])
                     ->orWhereRaw('LOWER(email) = ?', [strtolower($loginInput)])
+                    ->orWhereRaw('LOWER(full_name) = ?', [strtolower($loginInput)])
                     ->first();
 
         if ($user && Hash::check($password, $user->password)) {
@@ -213,7 +214,12 @@ class UserController extends Controller
         if (Auth::check()) { // if user is logged in
             // Ensure the user is not an admin
             if (Auth::user()->role != 'admin') {
-                $query = Transaction::query();
+                $userAccountIds = Auth::user()->accounts()->pluck('id');
+                $query = Transaction::where(function ($q) use ($userAccountIds) {
+                    $q->where('user_id', Auth::id())
+                      ->orWhereIn('from_account_id', $userAccountIds)
+                      ->orWhereIn('to_account_id', $userAccountIds);
+                });
 
                 if ($request->filled('account_number')) {
                     $account_number = $request->input('account_number');
@@ -232,7 +238,7 @@ class UserController extends Controller
                     $query->where('transaction_type', $request->input('transaction_type'));
                 }
 
-                $transactions = $query->paginate(10);
+                $transactions = $query->orderBy('created_at', 'desc')->paginate(15);
                 return view('transactions', ['transactions' => $transactions]);
             } else {
                 return redirect('admin/dashboard');

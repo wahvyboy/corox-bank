@@ -72,5 +72,16 @@
             </tbody>
         </table>
     </div>
+
+    @if($transactions->hasPages())
+        <div style="padding: 1.25rem 1.5rem; border-top: 1px solid #E5E7EB; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div style="font-size: 13px; color: var(--text-secondary); font-weight: 600;">
+                Showing transactions {{ $transactions->firstItem() ?? 0 }}–{{ $transactions->lastItem() ?? 0 }} of {{ $transactions->total() }}
+            </div>
+            <div class="pagination-wrapper">
+                {{ $transactions->links() }}
+            </div>
+        </div>
+    @endif
 </div>
 @endsection
