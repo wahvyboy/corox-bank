@@ -150,11 +150,57 @@
         </main>
     </div>
 
+    <!-- Authenticated Mobile Bottom Navigation Bar -->
+    <nav class="mobile-bottom-bar app-bottom-bar" aria-label="Portal Navigation">
+        @auth
+            @if(Auth::user()->role === 'admin')
+                <a href="{{ route('admin.dashboard') }}" class="mobile-bottom-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ route('show.users') }}" class="mobile-bottom-item {{ request()->routeIs('show.users') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span>Users</span>
+                </a>
+                <a href="{{ route('show.requests') }}" class="mobile-bottom-item {{ request()->routeIs('show.requests') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                    <span>Requests</span>
+                </a>
+                <a href="{{ route('show.admin.transfer.form') }}" class="mobile-bottom-item {{ request()->routeIs('show.admin.transfer.form') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4-4m-4 4l4 4"/></svg>
+                    <span>Wire</span>
+                </a>
+            @else
+                <a href="{{ route('user.dashboard') }}" class="mobile-bottom-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+                    <span>Home</span>
+                </a>
+                <a href="{{ route('show.bank.accounts') }}" class="mobile-bottom-item {{ request()->routeIs('show.bank.accounts') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                    <span>Accounts</span>
+                </a>
+                <a href="{{ route('show.transfer.form') }}" class="mobile-bottom-item {{ request()->routeIs('show.transfer.form') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4-4m-4 4l4 4"/></svg>
+                    <span>Send Wire</span>
+                </a>
+                <a href="{{ route('show.transaction.history') }}" class="mobile-bottom-item {{ request()->routeIs('show.transaction.history') ? 'active' : '' }}">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    <span>History</span>
+                </a>
+            @endif
+        @endauth
+        <button type="button" class="mobile-bottom-item" onclick="toggleSidebar()" aria-label="Open Sidebar Menu">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <span>Menu</span>
+        </button>
+    </nav>
+
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const backdrop = document.getElementById('sidebarBackdrop');
             if (sidebar && backdrop) {
+                sidebar.style.transform = '';
                 const isOpen = sidebar.classList.toggle('open');
                 backdrop.classList.toggle('open', isOpen);
                 document.body.classList.toggle('sidebar-open', isOpen);
@@ -166,12 +212,53 @@
                 const sidebar = document.getElementById('sidebar');
                 const backdrop = document.getElementById('sidebarBackdrop');
                 if (sidebar && sidebar.classList.contains('open')) {
+                    sidebar.style.transform = '';
                     sidebar.classList.remove('open');
                     if (backdrop) backdrop.classList.remove('open');
                     document.body.classList.remove('sidebar-open');
                 }
             }
         });
+
+        // Swipe-to-dismiss (swipe left) on Sidebar
+        (function initSidebarSwipe() {
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
+
+            let startX = 0;
+            let currentX = 0;
+            let isSwiping = false;
+
+            sidebar.addEventListener('touchstart', function(e) {
+                if (!sidebar.classList.contains('open')) return;
+                startX = e.touches[0].clientX;
+                currentX = startX;
+                isSwiping = true;
+                sidebar.style.transition = 'none';
+            }, { passive: true });
+
+            sidebar.addEventListener('touchmove', function(e) {
+                if (!isSwiping) return;
+                currentX = e.touches[0].clientX;
+                const deltaX = currentX - startX;
+                // Only allow dragging to the left (dismiss direction for left-sided sidebar)
+                if (deltaX < 0) {
+                    sidebar.style.transform = `translateX(${deltaX}px)`;
+                }
+            }, { passive: true });
+
+            sidebar.addEventListener('touchend', function(e) {
+                if (!isSwiping) return;
+                isSwiping = false;
+                sidebar.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+                const deltaX = currentX - startX;
+                if (deltaX < -70) {
+                    toggleSidebar();
+                } else {
+                    sidebar.style.transform = '';
+                }
+            }, { passive: true });
+        })();
     </script>
     @yield('scripts')
 </body>

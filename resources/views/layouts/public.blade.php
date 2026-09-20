@@ -259,6 +259,37 @@
         @yield('content')
     </main>
 
+    <!-- Mobile Bottom Navigation Bar (Thumb Zone) -->
+    <nav class="mobile-bottom-bar" aria-label="Mobile Bottom Navigation">
+        <a href="{{ route('home') }}" class="mobile-bottom-item {{ request()->routeIs('home') ? 'active' : '' }}">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+            <span>Home</span>
+        </a>
+        <a href="{{ route('personal') }}" class="mobile-bottom-item {{ request()->routeIs('personal') ? 'active' : '' }}">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+            <span>Banking</span>
+        </a>
+        <a href="{{ route('cards') }}" class="mobile-bottom-item {{ request()->routeIs('cards') ? 'active' : '' }}">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Cards</span>
+        </a>
+        @auth
+            <a href="{{ Auth::user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}" class="mobile-bottom-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <span>Portal</span>
+            </a>
+        @else
+            <a href="{{ route('login') }}" class="mobile-bottom-item {{ request()->routeIs('login') ? 'active' : '' }}">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span>Sign On</span>
+            </a>
+        @endauth
+        <button type="button" class="mobile-bottom-item" onclick="openMobileDrawer()" aria-label="Open Navigation Menu">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <span>Menu</span>
+        </button>
+    </nav>
+
     <!-- Site Footer in Corox Brand Red (#CC0000) -->
     <footer class="site-footer">
         <div class="footer-grid">
@@ -270,7 +301,7 @@
                     Corox Bank provides commercial clearing, digital financial solutions, FedWire/ACH payment rails, and private wealth management for individuals and corporations nationwide.
                 </p>
                 <p style="color: #FFFFFF; font-size: 13px; font-weight: 700; margin-bottom: 1rem;">
-                    FedWire & ACH Routing Number: 026009593
+                    FedWire &amp; ACH Routing Number: 026009593
                 </p>
 
                 <!-- Social Media Links -->
@@ -293,12 +324,12 @@
                     <li><a href="{{ route('personal') }}">Commercial Checking</a></li>
                     <li><a href="{{ route('personal') }}">High-Yield Savings (5.15% APY)</a></li>
                     <li><a href="{{ route('business') }}">Corporate Treasury Clearing</a></li>
-                    <li><a href="{{ route('wealth') }}">Private Wealth & Advisory</a></li>
+                    <li><a href="{{ route('wealth') }}">Private Wealth &amp; Advisory</a></li>
                 </ul>
             </div>
 
             <div class="footer-col">
-                <h4>Financing & Cards</h4>
+                <h4>Financing &amp; Cards</h4>
                 <ul class="footer-links">
                     <li><a href="{{ route('cards') }}">Corox Infinite Metal Cards</a></li>
                     <li><a href="{{ route('loans') }}">Fixed Rate Mortgages</a></li>
@@ -308,12 +339,12 @@
             </div>
 
             <div class="footer-col">
-                <h4>Security & Regulatory</h4>
+                <h4>Security &amp; Regulatory</h4>
                 <ul class="footer-links">
                     <li><a href="{{ route('security') }}">Member FDIC ($250,000 Protection)</a></li>
                     <li><a href="{{ route('security') }}">256-Bit Financial Encryption</a></li>
                     <li><a href="{{ route('about') }}">About Corox Bank</a></li>
-                    <li><a href="{{ route('contact') }}">Customer Support & Wire Desk</a></li>
+                    <li><a href="{{ route('contact') }}">Customer Support &amp; Wire Desk</a></li>
                 </ul>
             </div>
         </div>
@@ -323,7 +354,7 @@
         </div>
     </footer>
 
-    <!-- Live Financial Ticker Script -->
+    <!-- Financial Ticker & Mobile Drawer Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const marketAssets = {
@@ -356,19 +387,57 @@
                 });
             }
 
-            setInterval(updatePrices, 3500);
+            // Optimize Ticker Animation & Battery Usage with IntersectionObserver
+            const tickerBar = document.getElementById('heroTickerBar');
+            const tickerTrack = document.getElementById('tickerTrack');
+            let tickerInterval = null;
+
+            function startTickerUpdates() {
+                if (!tickerInterval) {
+                    tickerInterval = setInterval(updatePrices, 3500);
+                    if (tickerTrack) tickerTrack.style.animationPlayState = 'running';
+                }
+            }
+
+            function stopTickerUpdates() {
+                if (tickerInterval) {
+                    clearInterval(tickerInterval);
+                    tickerInterval = null;
+                    if (tickerTrack) tickerTrack.style.animationPlayState = 'paused';
+                }
+            }
+
+            if (tickerBar && 'IntersectionObserver' in window) {
+                const tickerObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            startTickerUpdates();
+                        } else {
+                            stopTickerUpdates();
+                        }
+                    });
+                }, { threshold: 0.05 });
+                tickerObserver.observe(tickerBar);
+            } else {
+                startTickerUpdates();
+            }
         });
 
-        // Mobile Navigation Drawer Handlers
+        // Mobile Navigation Drawer Handlers with Focus Trapping (inert)
         function openMobileDrawer() {
             const drawer = document.getElementById('mobileDrawer');
             const backdrop = document.getElementById('mobileDrawerBackdrop');
             const toggleBtn = document.getElementById('mobileMenuToggle');
+            const mainEl = document.querySelector('main');
+
             if (drawer && backdrop) {
+                drawer.style.transform = '';
                 drawer.classList.add('open');
                 backdrop.classList.add('open');
                 document.body.classList.add('drawer-open');
                 if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
+                if (mainEl) mainEl.inert = true;
+                drawer.focus();
             }
         }
 
@@ -376,11 +445,18 @@
             const drawer = document.getElementById('mobileDrawer');
             const backdrop = document.getElementById('mobileDrawerBackdrop');
             const toggleBtn = document.getElementById('mobileMenuToggle');
+            const mainEl = document.querySelector('main');
+
             if (drawer && backdrop) {
+                drawer.style.transform = '';
                 drawer.classList.remove('open');
                 backdrop.classList.remove('open');
                 document.body.classList.remove('drawer-open');
-                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+                if (toggleBtn) {
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                    toggleBtn.focus();
+                }
+                if (mainEl) mainEl.inert = false;
             }
         }
 
@@ -390,6 +466,45 @@
                 closeMobileDrawer();
             }
         });
+
+        // Touch Swipe-to-Dismiss Gesture
+        (function initDrawerSwipe() {
+            const drawer = document.getElementById('mobileDrawer');
+            if (!drawer) return;
+
+            let startX = 0;
+            let currentX = 0;
+            let isSwiping = false;
+
+            drawer.addEventListener('touchstart', function(e) {
+                startX = e.touches[0].clientX;
+                currentX = startX;
+                isSwiping = true;
+                drawer.style.transition = 'none';
+            }, { passive: true });
+
+            drawer.addEventListener('touchmove', function(e) {
+                if (!isSwiping) return;
+                currentX = e.touches[0].clientX;
+                const deltaX = currentX - startX;
+                // Only allow dragging to the right (dismiss direction)
+                if (deltaX > 0) {
+                    drawer.style.transform = `translateX(${deltaX}px)`;
+                }
+            }, { passive: true });
+
+            drawer.addEventListener('touchend', function(e) {
+                if (!isSwiping) return;
+                isSwiping = false;
+                drawer.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+                const deltaX = currentX - startX;
+                if (deltaX > 75) {
+                    closeMobileDrawer();
+                } else {
+                    drawer.style.transform = '';
+                }
+            }, { passive: true });
+        })();
     </script>
     @yield('scripts')
 </body>
