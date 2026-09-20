@@ -60,16 +60,18 @@
             <div class="header-cta">
                 @auth
                     @if(Auth::user()->role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}" class="btn btn-primary btn-nav">Online Banking</a>
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-primary btn-nav header-btn-portal">Online Banking</a>
                     @else
-                        <a href="{{ route('user.dashboard') }}" class="btn btn-primary btn-nav">Online Banking</a>
+                        <a href="{{ route('user.dashboard') }}" class="btn btn-primary btn-nav header-btn-portal">Online Banking</a>
                     @endif
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-outline btn-nav">Sign On</a>
-                    <a href="{{ route('register') }}" class="btn btn-primary btn-nav">Open Account</a>
+                    <a href="{{ route('login') }}" class="btn btn-outline btn-nav header-btn-signon">Sign On</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary btn-nav header-btn-register">Open Account</a>
                 @endauth
-                <button class="nav-mobile-btn" onclick="document.getElementById('mobileDrawer').classList.add('open')" aria-label="Open Mobile Menu">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <button class="nav-mobile-btn" id="mobileMenuToggle" onclick="openMobileDrawer()" aria-label="Open Navigation Menu" aria-expanded="false" aria-controls="mobileDrawer">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
                 </button>
             </div>
         </div>
@@ -115,38 +117,142 @@
         </div>
     </div>
 
+    <!-- Mobile Navigation Drawer Backdrop -->
+    <div class="mobile-nav-backdrop" id="mobileDrawerBackdrop" onclick="closeMobileDrawer()" aria-hidden="true"></div>
+
     <!-- Mobile Navigation Drawer -->
-    <div class="mobile-nav-drawer" id="mobileDrawer">
+    <aside class="mobile-nav-drawer" id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu">
         <div class="mobile-nav-header">
-            <div class="brand-logo">
-                <img src="/images/corox_logo_white_text.png" alt="Corox Bank Logo" class="brand-logo-img" style="height: 42px;" loading="eager">
-            </div>
-            <button style="background:none; border:none; color:#fff; cursor:pointer;" onclick="document.getElementById('mobileDrawer').classList.remove('open')">
-                <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+            <a href="{{ route('home') }}" class="mobile-nav-brand">
+                <img src="/images/corox_logo_white_text.png" alt="Corox Bank Logo" class="brand-logo-img" style="height: 38px;">
+            </a>
+            <button class="mobile-drawer-close" onclick="closeMobileDrawer()" aria-label="Close Navigation Menu">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
 
-        <ul class="mobile-nav-list">
-            <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
-            <li><a href="{{ route('personal') }}" class="{{ request()->routeIs('personal') ? 'active' : '' }}">Personal Banking</a></li>
-            <li><a href="{{ route('business') }}" class="{{ request()->routeIs('business') ? 'active' : '' }}">Business & Treasury</a></li>
-            <li><a href="{{ route('loans') }}" class="{{ request()->routeIs('loans') ? 'active' : '' }}">Loans & Mortgages</a></li>
-            <li><a href="{{ route('cards') }}" class="{{ request()->routeIs('cards') ? 'active' : '' }}">Credit Cards</a></li>
-            <li><a href="{{ route('wealth') }}" class="{{ request()->routeIs('wealth') ? 'active' : '' }}">Wealth Management</a></li>
-            <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About Corox Bank</a></li>
-            <li><a href="{{ route('security') }}" class="{{ request()->routeIs('security') ? 'active' : '' }}">Security & FDIC</a></li>
-            <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact Desk</a></li>
-        </ul>
-
-        <div style="display:flex; flex-direction:column; gap:1rem; margin-top:2rem;">
+        <!-- Mobile Quick Action Portal Buttons -->
+        <div class="mobile-drawer-cta">
             @auth
-                <a href="{{ Auth::user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}" class="btn btn-primary btn-block btn-lg">Online Banking Portal</a>
+                <a href="{{ Auth::user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}" class="btn btn-primary btn-block">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+                    Online Banking Portal
+                </a>
             @else
-                <a href="{{ route('login') }}" class="btn btn-secondary btn-block btn-lg">Sign On</a>
-                <a href="{{ route('register') }}" class="btn btn-primary btn-block btn-lg">Open Account</a>
+                <a href="{{ route('login') }}" class="btn btn-secondary btn-block">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    Sign On to Account
+                </a>
+                <a href="{{ route('register') }}" class="btn btn-primary btn-block">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                    Open New Account
+                </a>
             @endauth
         </div>
-    </div>
+
+        <!-- Organized Categorized Navigation Groups -->
+        <div class="mobile-drawer-content">
+            <div class="mobile-nav-group">
+                <div class="mobile-nav-group-title">Personal &amp; Commercial Banking</div>
+                <ul class="mobile-nav-list">
+                    <li>
+                        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                            <span class="mobile-nav-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+                            </span>
+                            <span>Home Overview</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('personal') }}" class="{{ request()->routeIs('personal') ? 'active' : '' }}">
+                            <span class="mobile-nav-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                            </span>
+                            <span>Banking &amp; Checking</span>
+                            <span class="mobile-nav-badge">5.15% APY</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('cards') }}" class="{{ request()->routeIs('cards') ? 'active' : '' }}">
+                            <span class="mobile-nav-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                            </span>
+                            <span>Credit Cards (Infinite Metal)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('loans') }}" class="{{ request()->routeIs('loans') ? 'active' : '' }}">
+                            <span class="mobile-nav-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                            </span>
+                            <span>Loans &amp; Mortgages</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mobile-nav-group">
+                <div class="mobile-nav-group-title">Corporate &amp; Wealth Solutions</div>
+                <ul class="mobile-nav-list">
+                    <li>
+                        <a href="{{ route('business') }}" class="{{ request()->routeIs('business') ? 'active' : '' }}">
+                            <span class="mobile-nav-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </span>
+                            <span>Business &amp; Treasury Clearing</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('wealth') }}" class="{{ request()->routeIs('wealth') ? 'active' : '' }}">
+                            <span class="mobile-nav-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                            </span>
+                            <span>Private Wealth &amp; Advisory</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mobile-nav-group">
+                <div class="mobile-nav-group-title">Security, Support &amp; Information</div>
+                <ul class="mobile-nav-list">
+                    <li>
+                        <a href="{{ route('security') }}" class="{{ request()->routeIs('security') ? 'active' : '' }}">
+                            <span class="mobile-nav-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            </span>
+                            <span>Security Guarantee &amp; FDIC</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">
+                            <span class="mobile-nav-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                            </span>
+                            <span>About Corox Bank</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">
+                            <span class="mobile-nav-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            </span>
+                            <span>Customer Support Desk</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Drawer Institutional Regulatory Footer -->
+        <div class="mobile-drawer-footer">
+            <div class="drawer-support-card">
+                <div class="drawer-support-title">Direct Wire Desk</div>
+                <div class="drawer-support-phone">1-800-COROX-BK</div>
+                <div class="drawer-support-sub">Routing No: 026009593 • Member FDIC</div>
+            </div>
+        </div>
+    </aside>
 
     <!-- Main Content -->
     <main>
@@ -251,6 +357,38 @@
             }
 
             setInterval(updatePrices, 3500);
+        });
+
+        // Mobile Navigation Drawer Handlers
+        function openMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const backdrop = document.getElementById('mobileDrawerBackdrop');
+            const toggleBtn = document.getElementById('mobileMenuToggle');
+            if (drawer && backdrop) {
+                drawer.classList.add('open');
+                backdrop.classList.add('open');
+                document.body.classList.add('drawer-open');
+                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        function closeMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const backdrop = document.getElementById('mobileDrawerBackdrop');
+            const toggleBtn = document.getElementById('mobileMenuToggle');
+            if (drawer && backdrop) {
+                drawer.classList.remove('open');
+                backdrop.classList.remove('open');
+                document.body.classList.remove('drawer-open');
+                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        // Close mobile drawer on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.key === 'Esc') {
+                closeMobileDrawer();
+            }
         });
     </script>
     @yield('scripts')

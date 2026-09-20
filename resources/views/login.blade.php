@@ -68,7 +68,7 @@
             </form>
 
             <div style="text-align: center; margin-top: 2rem; font-size: 14px;">
-                <p style="color: var(--text-muted-dark);">Don't have an online banking account yet? <a href="{{ route('register') }}" style="color: var(--brand-blue-accent); font-weight:800;">Open USD Account</a></p>
+                <p style="color: var(--text-muted-dark);">Don't have an online banking account yet? <a href="{{ route('register') }}" style="color: var(--brand-red); font-weight:800;">Open USD Account</a></p>
             </div>
         </div>
     </div>

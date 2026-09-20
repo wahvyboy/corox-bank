@@ -16,9 +16,23 @@
 </head>
 <body>
 
-    <button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Toggle Navigation">
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
+    <!-- Mobile Portal Top Bar -->
+    <header class="app-mobile-topbar">
+        <a href="{{ route('home') }}" class="app-mobile-brand">
+            <img src="/images/corox_logo_white_text.png" alt="Corox Bank Logo" style="height: 32px; width: auto; object-fit: contain;">
+        </a>
+        <div style="display: flex; align-items: center; gap: 0.8rem;">
+            @auth
+                <span class="app-mobile-user-badge">{{ Auth::user()->name }}</span>
+            @endauth
+            <button class="app-mobile-nav-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation Menu">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar Backdrop for Mobile -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()" aria-hidden="true"></div>
 
     <div class="app-layout">
         <!-- Sidebar -->
@@ -27,6 +41,9 @@
                 <a href="{{ route('home') }}" style="display: flex; align-items: center; text-decoration: none;">
                     <img src="/images/corox_logo_white_text.png" alt="Corox Bank Logo" style="height: 42px; width: auto; object-fit: contain;">
                 </a>
+                <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close Sidebar">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
             </div>
 
             <nav class="sidebar-nav">
@@ -133,6 +150,29 @@
         </main>
     </div>
 
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            if (sidebar && backdrop) {
+                const isOpen = sidebar.classList.toggle('open');
+                backdrop.classList.toggle('open', isOpen);
+                document.body.classList.toggle('sidebar-open', isOpen);
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.key === 'Esc') {
+                const sidebar = document.getElementById('sidebar');
+                const backdrop = document.getElementById('sidebarBackdrop');
+                if (sidebar && sidebar.classList.contains('open')) {
+                    sidebar.classList.remove('open');
+                    if (backdrop) backdrop.classList.remove('open');
+                    document.body.classList.remove('sidebar-open');
+                }
+            }
+        });
+    </script>
     @yield('scripts')
 </body>
 </html>
