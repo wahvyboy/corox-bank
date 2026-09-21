@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="wf-dashboard-wrapper">
-    <!-- Wells Fargo Desktop Top Red Bar (Image 4) -->
+    <!-- Corox Institutional Top Red Bar -->
     <div class="wf-desktop-topbar">
         <div class="wf-desktop-topbar-brand">
             <span>COROX BANK</span>
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <!-- Account Summary Header Bar (Images 1, 2, 4) -->
+    <!-- Account Summary Header Bar -->
     <div class="wf-summary-bar">
         <div class="wf-summary-selector">
             <h1 class="wf-summary-title">Account Summary</h1>
@@ -48,16 +48,16 @@
             </div>
             <div class="wf-meta-badge">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                ABA 026009593 • FDIC Insured
+                ABA 026009593 • Member FDIC
             </div>
         </div>
     </div>
 
-    <!-- Wells Fargo 2-Column Desktop Grid / 1-Column Mobile Layout (Image 4) -->
+    <!-- Corox Institutional 2-Column Desktop Grid / 1-Column Mobile Layout -->
     <div class="wf-dashboard-grid">
         <!-- Left Main Accounts Column (~68%) -->
         <div class="wf-accounts-column">
-            <!-- Account Cards (Images 1, 2, 4) -->
+            <!-- Account Cards -->
             <div class="wf-account-cards-list">
                 @forelse($accounts as $index => $acc)
                     <div class="wf-account-card">
@@ -89,15 +89,15 @@
                             </div>
 
                             <div class="wf-account-card-menu">
-                                <button class="wf-dots-btn" type="button" aria-label="Account actions">
+                                <a href="{{ route('show.bank.accounts') }}" class="wf-dots-btn" aria-label="Account details">
                                     <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-                                </button>
+                                </a>
                             </div>
                         </div>
 
-                        <!-- Card Quick Action Links (Image 4) -->
+                        <!-- Card Quick Action Links -->
                         <div class="wf-account-quick-links">
-                            <a href="{{ route('show.transfer.form') }}?from={{ $acc->account_number }}" class="wf-quick-link">
+                            <a href="{{ route('show.transfer.form') }}" class="wf-quick-link">
                                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4-4m-4 4l4 4"/></svg>
                                 Send Wire Transfer
                             </a>
@@ -105,14 +105,14 @@
                                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg>
                                 Deposit USD
                             </a>
-                            <a href="{{ route('show.transaction.history') }}?account_number={{ $acc->account_number }}" class="wf-quick-link">
+                            <a href="{{ route('show.transaction.history') }}" class="wf-quick-link">
                                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                                 View Activity &amp; Statements
                             </a>
                         </div>
                     </div>
 
-                    <!-- In-between Promotional Banner (Image 1 & 2) -->
+                    <!-- In-between Promotional Banner -->
                     @if($loop->first)
                         <div class="wf-promo-card">
                             <div class="wf-promo-content">
@@ -121,7 +121,7 @@
                                 </div>
                                 <span class="wf-promo-text">Earn 5.15% APY with Corox Commercial High-Yield Market Savings</span>
                             </div>
-                            <a href="{{ route('show.deposit.form') }}" class="wf-promo-action">View Yield Rates →</a>
+                            <a href="{{ route('show.deposit.form') }}" class="wf-promo-action">Deposit to Earn Yield &rarr;</a>
                         </div>
                     @endif
                 @empty
@@ -132,21 +132,21 @@
                 @endforelse
             </div>
 
-            <!-- In-Between Promo Banner 2: Wealth Advisory (Image 2) -->
+            <!-- In-Between Promo Banner 2: Wealth Advisory -->
             <div class="wf-advisory-banner">
                 <div class="wf-advisory-left">
                     <div class="wf-advisory-pie">
                         <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
                     </div>
                     <div>
-                        <div class="wf-advisory-title">Corox Advisors / Private Wealth Management</div>
+                        <div class="wf-advisory-title">Corox Advisors &bull; Private Wealth Management</div>
                         <div class="wf-advisory-sub">Institutional asset allocation, fixed income treasuries, and bespoke estate planning.</div>
                     </div>
                 </div>
-                <a href="{{ route('wealth') }}" class="wf-advisory-btn">Explore Wealth Portal</a>
+                <a href="{{ route('show.transfer.form') }}" class="wf-advisory-btn">Manage Capital</a>
             </div>
 
-            <!-- Recent Activity Section (Last Transaction: 3 years ago) -->
+            <!-- Recent Activity Section -->
             <div class="wf-activity-card">
                 <div class="wf-activity-header">
                     <div>
@@ -154,7 +154,7 @@
                         <div class="wf-activity-sub">Last settlement recorded: September 18, 2023 (3 years ago)</div>
                     </div>
                     <a href="{{ route('show.transaction.history') }}" class="btn btn-secondary btn-sm" style="font-size: 13px; font-weight: 700;">
-                        View All 720 Transactions →
+                        View All Transactions &rarr;
                     </a>
                 </div>
 
@@ -202,7 +202,7 @@
                 </div>
             </div>
 
-            <!-- Account Disclosures (Image 4) -->
+            <!-- Account Disclosures -->
             <div class="wf-disclosures-box">
                 <div class="wf-disclosures-title">* Account Disclosures</div>
                 <p>Deposit products offered by Corox Bank, N.A. Member FDIC. Equal Housing Lender. Investment and insurance products are not FDIC insured, not bank guaranteed, and may lose value.</p>
@@ -210,9 +210,9 @@
             </div>
         </div>
 
-        <!-- Right Sidebar Widgets Column (~32% - Image 4) -->
+        <!-- Right Sidebar Widgets Column (~32%) -->
         <div class="wf-sidebar-column">
-            <!-- User Greeting & Sign Off Card (Image 4) -->
+            <!-- User Greeting & Sign Off Card -->
             <div class="wf-user-widget">
                 <div class="wf-user-greeting">
                     Welcome, {{ strtoupper(Auth::user()->full_name ?? Auth::user()->name) }}
@@ -222,7 +222,7 @@
                 </div>
                 <div class="wf-user-actions">
                     <a href="{{ route('show.bank.accounts') }}" class="wf-user-action-link">
-                        <span>View or send messages</span>
+                        <span>View USD Accounts</span>
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                     </a>
                     <form method="POST" action="{{ route('logout') }}" style="margin-top: 0.5rem;">
@@ -253,7 +253,7 @@
                     </div>
                     <div class="wf-tool-detail">
                         <span>Status:</span>
-                        <strong style="color: var(--success);">Operational • Real-Time Settlement</strong>
+                        <strong style="color: var(--success);">Operational &bull; Real-Time Settlement</strong>
                     </div>
                     <a href="{{ route('show.transfer.form') }}" class="btn btn-primary btn-block" style="margin-top: 0.8rem; font-size: 13px; font-weight: 700;">
                         Initiate Outward Wire
@@ -261,59 +261,65 @@
                 </div>
             </div>
 
-            <!-- Planning & Tools Accordion (Image 4) -->
+            <!-- Client Banking Operations Accordion -->
             <div class="wf-accordion-card">
                 <div class="wf-accordion-header">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                    Planning &amp; Tools
+                    Account Operations
                 </div>
                 <ul class="wf-accordion-list">
                     <li>
-                        <a href="{{ route('personal') }}">
-                            <span>Calculate debt-to-income ratio</span>
+                        <a href="{{ route('show.bank.accounts') }}">
+                            <span>View All USD Accounts</span>
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('wealth') }}">
-                            <span>View My Retirement Plan&reg;</span>
+                        <a href="{{ route('show.transfer.form') }}">
+                            <span>Execute Wire / ACH Transfer</span>
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('cards') }}">
-                            <span>View My Credit Options Guide</span>
+                        <a href="{{ route('show.deposit.form') }}">
+                            <span>Deposit USD Funds</span>
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('security') }}">
-                            <span>FDIC $250k Coverage Certificate</span>
+                        <a href="{{ route('show.withdraw.form') }}">
+                            <span>Withdraw Funds</span>
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('create.bank.account') }}">
+                            <span>Request New Bank Account</span>
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </li>
                 </ul>
             </div>
 
-            <!-- Service Offers & Feedback (Image 4) -->
+            <!-- Statements & Activity Card -->
             <div class="wf-offers-card">
-                <div class="wf-offers-title">Commercial Service Offers</div>
+                <div class="wf-offers-title">Statements &amp; Reporting</div>
                 <ul class="wf-offers-list">
                     <li>
-                        <a href="{{ route('business') }}">
-                            <span>Set up corporate direct deposit</span>
+                        <a href="{{ route('show.transaction.history') }}">
+                            <span>All Transaction History</span>
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('personal') }}">
-                            <span>High-Yield Liquidity APY (5.15%)</span>
+                        <a href="{{ route('show.transaction.history') }}?transaction_type=deposit">
+                            <span>Deposits Ledger</span>
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('contact') }}">
-                            <span>Give Feedback to Settlement Desk</span>
+                        <a href="{{ route('show.transaction.history') }}?transaction_type=withdraw">
+                            <span>Withdrawals &amp; Outward Wires</span>
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </li>
@@ -324,3 +330,4 @@
 </div>
 
 @endsection
+

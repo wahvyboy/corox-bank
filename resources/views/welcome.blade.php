@@ -3,7 +3,7 @@
 @section('title', 'Premier Commercial & Digital Banking Solutions')
 
 @section('content')
-<!-- Wells Fargo Signature Wireframe Hero Section with Embedded Sign-On -->
+<!-- Corox Institutional Wireframe Hero Section with Embedded Sign-On -->
 <section class="wf-hero-wrapper">
     <div class="wf-hero-grid">
         <!-- Left: Signature Embedded Sign-On Box -->
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <!-- Right: Wells Fargo Hero Promo Showcase -->
+        <!-- Right: Corox Institutional Hero Promo Showcase -->
         <div class="wf-hero-promo">
             <img src="/images/corox_hero_bg.jpg" alt="Corox Bank Institutional Building" class="wf-hero-promo-bg">
             <div class="wf-hero-promo-content">
@@ -97,7 +97,7 @@
     </div>
 </section>
 
-<!-- Wells Fargo 6-Tile "What Can We Help You With?" Action Wireframe -->
+<!-- Corox 6-Tile "What Can We Help You With?" Action Wireframe -->
 <section class="wf-actions-section">
     <div class="wf-actions-header">
         <span style="color: var(--brand-red); font-weight: 800; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">WHAT CAN WE HELP YOU WITH TODAY?</span>
@@ -168,7 +168,7 @@
     </div>
 </section>
 
-<!-- Wells Fargo Institutional Rates Sheet Table -->
+<!-- Corox Institutional Rates Sheet Table -->
 <section style="background: #FFFFFF; padding: 4.5rem 1.5rem; border-top: 1px solid #E5E7EB; border-bottom: 1px solid #E5E7EB;">
     <div style="max-width: 1320px; margin: 0 auto;">
         <div style="text-align: center; margin-bottom: 2.5rem;">
@@ -257,7 +257,7 @@
     </div>
 </section>
 
-<!-- Wells Fargo Split Feature Showcase 1: Credit Cards -->
+<!-- Corox Split Feature Showcase 1: Credit Cards -->
 <section class="wf-split-feature">
     <div>
         <span class="wf-feature-eyebrow">EXCLUSIVE INSTITUTIONAL CARDS</span>
@@ -292,7 +292,7 @@
     </div>
 </section>
 
-<!-- Wells Fargo Split Feature Showcase 2: Security & FDIC -->
+<!-- Corox Split Feature Showcase 2: Security & FDIC -->
 <section class="wf-split-feature reverse" style="background: #FAF9F6; border-top: 1px solid #E5E7EB; border-bottom: 1px solid #E5E7EB;">
     <div>
         <span class="wf-feature-eyebrow">REGULATORY SECURITY &amp; INTEGRITY</span>
@@ -327,7 +327,7 @@
     </div>
 </section>
 
-<!-- Wells Fargo Financial Insights & Editorial Knowledge Hub -->
+<!-- Corox Financial Insights & Editorial Knowledge Hub -->
 <section class="wf-editorial-section">
     <div class="wf-editorial-container">
         <div style="text-align: center;">
@@ -376,7 +376,7 @@
     </div>
 </section>
 
-<!-- Wells Fargo Style Institutional Trust & Regulatory Ribbon -->
+<!-- Corox Institutional Trust & Regulatory Ribbon -->
 <div style="background: #FFFFFF; padding: 3.5rem 1.5rem; border-bottom: 1px solid #E5E7EB;">
     <div style="max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; text-align: center;">
         <div style="padding: 1rem;">

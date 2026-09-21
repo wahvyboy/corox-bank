@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="Corox Bank — Leading Commercial & Digital Banking Solutions. Member FDIC.">
+    <meta name="application-name" content="Corox Bank">
+    <meta name="robots" content="noindex, nofollow">
 
     <title>Corox Bank | @yield('title', 'Premier Commercial & Digital Banking')</title>
 
@@ -17,7 +19,7 @@
 </head>
 <body>
 
-    <!-- Wells Fargo Style Top Utility Bar -->
+    <!-- Corox Institutional Top Utility Bar -->
     <div class="wf-utility-bar">
         <div class="wf-utility-inner">
             <div class="wf-segments">
@@ -82,7 +84,7 @@
         </div>
     </header>
 
-    <!-- Moving Live Ticker Bar (Pure White Wells Fargo Style) -->
+    <!-- Moving Live Ticker Bar (Pure White Institutional Style) -->
     <div class="ticker-bar" id="heroTickerBar">
         <div class="ticker-container">
             <div class="ticker-badge">

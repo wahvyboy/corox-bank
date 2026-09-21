@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="application-name" content="Corox Bank">
+    <meta name="description" content="Corox Bank Commercial Banking &amp; Digital Wealth Management Platform">
 
     <title>Corox Bank | @yield('title', 'Dashboard')</title>
 
@@ -16,7 +19,7 @@
 </head>
 <body>
 
-    <!-- Wells Fargo Style Mobile Portal Top Bar (Red Header) -->
+    <!-- Corox Institutional Mobile Portal Top Bar (Red Header) -->
     <header class="app-mobile-topbar">
         <button class="app-mobile-user-btn" onclick="toggleSidebar()" aria-label="User Account">
             <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -148,7 +151,7 @@
         </main>
     </div>
 
-    <!-- Authenticated Mobile Bottom Navigation Bar (Wells Fargo Style - Image 1) -->
+    <!-- Authenticated Mobile Bottom Navigation Bar (Corox Institutional Mobile Tab Bar) -->
     <nav class="mobile-bottom-bar app-bottom-bar" aria-label="Portal Navigation">
         @auth
             @if(Auth::user()->role === 'admin')

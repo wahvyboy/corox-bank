@@ -1,6 +1,6 @@
 /* ==========================================================================
    COROX BANK — Official Responsive Design System
-   Wells Fargo Institutional Architecture & Wireframe Framework
+   Corox Institutional Institutional Architecture & Wireframe Framework
    Signature Brand Palette: Corox Crimson Red (#CC0000), Onyx Carbon (#1B1B1B), 
    Pure Crisp White (#FFFFFF), Warm Gold (#DDAA00), and Soft Neutral Canvas
    ========================================================================== */
@@ -8,7 +8,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
 :root {
-    /* Wells Fargo Institutional Typography System */
+    /* Corox Institutional Institutional Typography System */
     --font-serif: 'Merriweather', 'Playfair Display', Georgia, 'Times New Roman', serif;
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-primary: var(--font-sans);
@@ -21,7 +21,7 @@
     --brand-red-subtle: rgba(204, 0, 0, 0.08);
 
     --brand-gold: #DDAA00;          /* Warm Institutional Gold Accent */
-    --brand-gold-accent: #FFB81C;   /* Wells Fargo Stagecoach Gold */
+    --brand-gold-accent: #FFB81C;   /* Corox Institutional Stagecoach Gold */
     --brand-gold-dark: #B8860B;
 
     --brand-dark: #1B1B1B;          /* Carbon Onyx from logo */
@@ -105,7 +105,7 @@ img {
 }
 
 /* ==========================================================================
-   Wells Fargo Style Utility Navigation Bar
+   Corox Institutional Style Utility Navigation Bar
    ========================================================================== */
 .wf-utility-bar {
     background: #F3F4F6;
@@ -182,7 +182,7 @@ img {
 }
 
 /* ==========================================================================
-   Main Institutional Header (Crisp White Wells Fargo Style)
+   Main Institutional Header (Crisp White Corox Institutional Style)
    ========================================================================== */
 .site-header {
     position: sticky;
@@ -282,7 +282,7 @@ img {
 }
 
 /* ==========================================================================
-   Continuous Moving Marquee Ticker — Pure Crisp White Wells Fargo Style
+   Continuous Moving Marquee Ticker — Pure Crisp White Corox Institutional Style
    ========================================================================== */
 .ticker-bar {
     background: #FFFFFF !important;
@@ -1176,7 +1176,7 @@ body.sidebar-open {
 }
 
 /* ==========================================================================
-   Footer — Corox Brand Red Wells Fargo Style
+   Footer — Corox Brand Red Corox Institutional Style
    ========================================================================== */
 .site-footer {
     background: #CC0000 !important;
@@ -1264,7 +1264,7 @@ body.sidebar-open {
 }
 
 /* ==========================================================================
-   Wells Fargo Wireframe Setting & UI/UX Components
+   Corox Institutional Wireframe Setting & UI/UX Components
    ========================================================================== */
 .wf-hero-wrapper {
     background: #FAF9F6;
@@ -1289,7 +1289,7 @@ body.sidebar-open {
     }
 }
 
-/* Wells Fargo Signature Embedded Sign-On Card */
+/* Corox Institutional Signature Embedded Sign-On Card */
 .wf-signon-card {
     background: #FFFFFF;
     border: 1px solid #D1D5DB;
@@ -1415,7 +1415,7 @@ body.sidebar-open {
     margin-top: 0.8rem;
 }
 
-/* Wells Fargo Hero Editorial Showcase */
+/* Corox Institutional Hero Editorial Showcase */
 .wf-hero-promo {
     background: linear-gradient(135deg, #11141A 0%, #1A1E24 100%);
     border-radius: 14px;
@@ -1492,7 +1492,7 @@ body.sidebar-open {
     letter-spacing: 0.5px;
 }
 
-/* Wells Fargo 6-Tile Action Wireframe Grid */
+/* Corox Institutional 6-Tile Action Wireframe Grid */
 .wf-actions-section {
     padding: 4rem 1.5rem;
     max-width: 1320px;
@@ -1572,7 +1572,7 @@ body.sidebar-open {
 }
 
 /* ==========================================================================
-   Wells Fargo Wireframe Setting: Audience Tabs, Rate Sheet, & Showcases
+   Corox Institutional Wireframe Setting: Audience Tabs, Rate Sheet, & Showcases
    ========================================================================== */
 
 /* Audience Solution Tabs */
@@ -1645,7 +1645,7 @@ body.sidebar-open {
     display: block;
 }
 
-/* Wells Fargo Institutional Rate Sheet Table */
+/* Corox Institutional Institutional Rate Sheet Table */
 .wf-rate-card {
     background: #FFFFFF;
     border: 1px solid #E5E7EB;
@@ -1711,7 +1711,7 @@ body.sidebar-open {
     margin-bottom: 3px;
 }
 
-/* Wells Fargo Split Feature Rows */
+/* Corox Institutional Split Feature Rows */
 .wf-split-feature {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1794,7 +1794,7 @@ body.sidebar-open {
     object-fit: cover;
 }
 
-/* Wells Fargo Editorial Knowledge Hub */
+/* Corox Institutional Editorial Knowledge Hub */
 .wf-editorial-section {
     background: #FAF9F6;
     padding: 4.5rem 1.5rem;
@@ -2044,7 +2044,7 @@ td {
     color: var(--text-dark);
 }
 
-/* Authenticated Portal Mobile Topbar & Sidebar Backdrop (Wells Fargo Style) */
+/* Authenticated Portal Mobile Topbar & Sidebar Backdrop (Corox Institutional Style) */
 .app-mobile-topbar {
     display: none;
     position: sticky;
@@ -2149,7 +2149,7 @@ td {
 }
 
 /* ==========================================================================
-   Mobile Bottom Navigation Bar (Thumb Zone - Wells Fargo Style)
+   Mobile Bottom Navigation Bar (Thumb Zone - Corox Institutional Style)
    ========================================================================== */
 .mobile-bottom-bar {
     display: none;
@@ -2205,7 +2205,7 @@ td {
     stroke: var(--brand-red);
 }
 
-/* Authenticated Portal Bottom Bar Theme (Wells Fargo Style - White & Red) */
+/* Authenticated Portal Bottom Bar Theme (Corox Institutional Style - White & Red) */
 .app-bottom-bar {
     background: #FFFFFF;
     border-top: 1px solid #E5E7EB;
@@ -2270,7 +2270,7 @@ td {
         padding-bottom: calc(62px + env(safe-area-inset-bottom));
     }
 
-    /* Hide Wells Fargo Utility Bar entirely on Mobile Devices (< 769px) */
+    /* Hide Corox Institutional Utility Bar entirely on Mobile Devices (< 769px) */
     .wf-utility-bar {
         display: none !important;
     }
@@ -3124,7 +3124,7 @@ td {
 }
 
 /* ==========================================================================
-   WELLS FARGO DASHBOARD ARCHITECTURE & COROX BRAND STYLING
+   Corox Institutional DASHBOARD ARCHITECTURE & COROX BRAND STYLING
    ========================================================================== */
 
 .wf-dashboard-wrapper {
@@ -3333,11 +3333,11 @@ td {
     gap: 1rem;
 }
 
-/* Wells Fargo Account Card (Images 1, 2, 4) */
+/* Corox Institutional Account Card (Images 1, 2, 4) */
 .wf-account-card {
     background: #FFFFFF;
     border: 1px solid #E5E7EB;
-    border-left: 4.5px solid var(--brand-red); /* Wells Fargo Iconic Red Stripe */
+    border-left: 4.5px solid var(--brand-red); /* Corox Institutional Iconic Red Stripe */
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     overflow: hidden;
@@ -3383,7 +3383,7 @@ td {
     font-family: var(--font-serif);
     font-size: 15px;
     font-weight: 700;
-    color: #8B0000; /* Dark Crimson Wells Fargo Style */
+    color: #8B0000; /* Dark Crimson Corox Institutional Style */
     letter-spacing: 0.5px;
     text-transform: uppercase;
     margin: 0 0 3px 0;
@@ -3868,7 +3868,7 @@ td {
     color: #9CA3AF;
 }
 
-/* Responsive Breakpoints for Wells Fargo Dashboard */
+/* Responsive Breakpoints for Corox Institutional Dashboard */
 @media (max-width: 992px) {
     .wf-dashboard-grid {
         grid-template-columns: 1fr;

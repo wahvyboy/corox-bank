@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/Laravel-8.83-FF2D20.svg" alt="Laravel 8">
   <img src="https://img.shields.io/badge/PHP-8.3-777BB4.svg" alt="PHP 8.3">
   <img src="https://img.shields.io/badge/Database-SQLite-003B57.svg" alt="SQLite">
-  <img src="https://img.shields.io/badge/Design-Wells%20Fargo%20System-CC0000.svg" alt="Wells Fargo Design System">
+  <img src="https://img.shields.io/badge/Design-Wells%20Fargo%20System-CC0000.svg" alt="Corox Institutional Design System">
   <img src="https://img.shields.io/badge/FDIC-Insured%20$250K-059669.svg" alt="Member FDIC">
 </p>
 
@@ -20,21 +20,21 @@
 
 ## 🏛️ Executive Summary
 
-**Corox Bank** is an enterprise-grade full-stack digital banking web application built with Laravel and PHP 8. It features an institutional front-end inspired by the signature **Wells Fargo wireframe architecture**, Google Fonts typography (`Merriweather` serif + `Inter` sans-serif), live infinite ticker bar, Corox Crimson Red (`#CC0000`) and Carbon Onyx branding, comprehensive client and administrator portals, and direct simulated FedWire clearing.
+**Corox Bank** is an enterprise-grade full-stack digital banking web application built with Laravel and PHP 8. It features an institutional front-end inspired by the signature **Corox Institutional wireframe architecture**, Google Fonts typography (`Merriweather` serif + `Inter` sans-serif), live infinite ticker bar, Corox Crimson Red (`#CC0000`) and Carbon Onyx branding, comprehensive client and administrator portals, and direct simulated FedWire clearing.
 
 - **Institution**: Corox Commercial Bank
 - **ABA / FedWire Routing**: `026009593`
 - **Deposit Insurance**: Member FDIC (Protected up to $250,000 per depositor)
 - **Primary Color**: Corox Crimson (`#CC0000`)
-- **Accent Palette**: Wells Fargo Stagecoach Gold (`#DDAA00` / `#FFB81C`) & Onyx Carbon (`#1B1B1B`)
+- **Accent Palette**: Corox Institutional Stagecoach Gold (`#DDAA00` / `#FFB81C`) & Onyx Carbon (`#1B1B1B`)
 
 ---
 
 ## ✨ Features & Capabilities
 
-### 🌐 Public Institutional Portal (Wells Fargo Architecture)
+### 🌐 Public Institutional Portal (Corox Institutional Architecture)
 - **Top Segment Utility Bar**: Audiences separated into `Personal`, `Small Business`, `Commercial`, and `Wealth Management` with direct wire desk access.
-- **Embedded Sign-On Hero**: Authentic Wells Fargo 2-column wireframe with direct quick-login card on the left and high-yield savings promotion on the right (**5.15% APY**).
+- **Embedded Sign-On Hero**: Authentic Corox Institutional 2-column wireframe with direct quick-login card on the left and high-yield savings promotion on the right (**5.15% APY**).
 - **Pure White Continuous Ticker**: Real-time market data (S&P 500, NASDAQ, DOW, Gold, 10-Yr Treasury) and institutional deposit rates.
 - **6-Tile Action Wireframe Grid**: Rapid navigation for Checking, Savings, Credit Cards, Mortgages, Commercial Treasury, and Wealth Management.
 - **Transparent Institutional Rate Sheet**: Interactive rate table comparing APYs, minimum opening balances, and deposit terms.
@@ -132,7 +132,7 @@ corox-bank/
 │   ├── seeders/               # Database seeder with pre-configured users
 │   └── database.sqlite        # Portable local SQLite database
 ├── public/
-│   ├── css/style.css          # Corox Bank Wells Fargo CSS Design System
+│   ├── css/style.css          # Corox Bank Corox Institutional CSS Design System
 │   └── images/                # Corox logos, cards, building hero, and security vault
 ├── resources/
 │   └── views/
@@ -143,7 +143,7 @@ corox-bank/
 │       ├── business.blade.php # Corporate treasury & ACH
 │       ├── wealth.blade.php   # Private wealth management
 │       ├── security.blade.php # FDIC protection & security center
-│       ├── welcome.blade.php  # Wells Fargo signature homepage wireframe
+│       ├── welcome.blade.php  # Corox Institutional signature homepage wireframe
 │       └── ...                # Client & Admin dashboards
 ├── routes/
 │   └── web.php                # Web routes & route definitions

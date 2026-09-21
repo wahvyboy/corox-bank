@@ -68,7 +68,7 @@
             '026009593': 'Corox Bank (Internal Clearing)',
             '021000021': 'JPMorgan Chase Bank, N.A.',
             '026009593': 'Bank of America, N.A.',
-            '121000248': 'Wells Fargo Bank, N.A.',
+            '121000248': 'WF National Bank, N.A.',
             '021000089': 'Citibank, N.A.',
             '031000053': 'PNC Bank, N.A.',
             '122000496': 'U.S. Bank, N.A.',
