@@ -159,7 +159,14 @@ class UserController extends Controller
         if (Auth::check()) { // if user is logged in
             // Ensure the user is not an admin
             if (Auth::user()->role != 'admin') {
-                return view('userDashboard');
+                $user = Auth::user();
+                $accounts = $user->accounts()->where('status', 'active')->get();
+                $totalBalance = $accounts->sum('balance');
+                $recentTransactions = Transaction::where('user_id', $user->id)
+                    ->orderBy('created_at', 'desc')
+                    ->take(5)
+                    ->get();
+                return view('userDashboard', compact('accounts', 'totalBalance', 'recentTransactions'));
             } else {
                 return redirect('admin/dashboard');
             }

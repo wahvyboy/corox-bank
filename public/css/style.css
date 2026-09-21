@@ -2044,52 +2044,64 @@ td {
     color: var(--text-dark);
 }
 
-/* Authenticated Portal Mobile Topbar & Sidebar Backdrop */
+/* Authenticated Portal Mobile Topbar & Sidebar Backdrop (Wells Fargo Style) */
 .app-mobile-topbar {
     display: none;
     position: sticky;
     top: 0;
     z-index: 800;
-    background: #1B1B1B;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 0.75rem 1.2rem;
+    background: var(--brand-red);
+    border-bottom: 2px solid #B30000;
+    padding: 0.65rem 1rem;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
-.app-mobile-brand {
+.app-mobile-brand-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    text-decoration: none;
+    letter-spacing: 0.8px;
     display: flex;
     align-items: center;
+    gap: 6px;
 }
 
-.app-mobile-user-badge {
-    font-size: 12px;
-    font-weight: 700;
-    color: #FFB81C;
-    background: rgba(255, 184, 28, 0.12);
-    border: 1px solid rgba(255, 184, 28, 0.25);
-    padding: 4px 10px;
-    border-radius: var(--radius-pill);
-    max-width: 130px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.app-mobile-nav-toggle {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-sm);
+.app-mobile-user-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
     color: #FFFFFF;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
+}
+
+.app-mobile-user-btn:active {
+    transform: scale(0.92);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.app-mobile-nav-toggle {
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
 .app-mobile-nav-toggle:active {
@@ -2137,7 +2149,7 @@ td {
 }
 
 /* ==========================================================================
-   Mobile Bottom Navigation Bar (Thumb Zone)
+   Mobile Bottom Navigation Bar (Thumb Zone - Wells Fargo Style)
    ========================================================================== */
 .mobile-bottom-bar {
     display: none;
@@ -2161,7 +2173,7 @@ td {
     align-items: center;
     justify-content: center;
     gap: 3px;
-    color: #6B7280;
+    color: #4B5563;
     font-size: 11px;
     font-weight: 600;
     text-decoration: none;
@@ -2193,24 +2205,25 @@ td {
     stroke: var(--brand-red);
 }
 
-/* Authenticated Portal Bottom Bar Theme */
+/* Authenticated Portal Bottom Bar Theme (Wells Fargo Style - White & Red) */
 .app-bottom-bar {
-    background: #1B1B1B;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.3);
+    background: #FFFFFF;
+    border-top: 1px solid #E5E7EB;
+    box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.06);
 }
 
 .app-bottom-bar .mobile-bottom-item {
-    color: #9CA3AF;
+    color: #4B5563;
 }
 
 .app-bottom-bar .mobile-bottom-item:hover,
 .app-bottom-bar .mobile-bottom-item.active {
-    color: #FFB81C;
+    color: var(--brand-red);
+    font-weight: 800;
 }
 
 .app-bottom-bar .mobile-bottom-item.active svg {
-    stroke: #FFB81C;
+    stroke: var(--brand-red);
 }
 
 /* ==========================================================================
@@ -3108,4 +3121,791 @@ td {
     color: #D1D5DB;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   WELLS FARGO DASHBOARD ARCHITECTURE & COROX BRAND STYLING
+   ========================================================================== */
+
+.wf-dashboard-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Desktop Red Top Bar (Image 4) */
+.wf-desktop-topbar {
+    background: var(--brand-red);
+    color: #FFFFFF;
+    padding: 0.75rem 1.4rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 3px 10px rgba(204, 0, 0, 0.15);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.wf-desktop-topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.wf-desktop-topbar-brand span:first-child {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+    color: #FFFFFF;
+}
+
+.wf-desktop-topbar-tagline {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    padding-left: 10px;
+    font-weight: 500;
+}
+
+.wf-desktop-topbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.wf-desktop-topbar-links a {
+    color: #FFFFFF;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: opacity 0.2s ease;
+}
+
+.wf-desktop-topbar-links a:hover {
+    opacity: 0.85;
+    text-decoration: underline;
+}
+
+.wf-desktop-topbar-wire {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.wf-desktop-topbar-signoff {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #FFFFFF;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.wf-desktop-topbar-signoff:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #FFFFFF;
+}
+
+/* Account Summary Subheader (Images 1, 2, 4) */
+.wf-summary-bar {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 1.1rem 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.wf-summary-selector {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.wf-summary-title {
+    font-family: var(--font-serif);
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #111827;
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.wf-account-filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #F9FAFB;
+    border: 1px solid #D1D5DB;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wf-account-filter-pill:hover {
+    background: #F3F4F6;
+    border-color: #9CA3AF;
+}
+
+.wf-summary-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.wf-meta-item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.wf-meta-label {
+    font-size: 12.5px;
+    color: #6B7280;
+    font-weight: 600;
+}
+
+.wf-meta-val {
+    font-family: 'Plus Jakarta Sans', var(--font-sans);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.wf-meta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #ECFDF5;
+    color: #065F46;
+    border: 1px solid #A7F3D0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* 2-Column Dashboard Grid (Image 4) */
+.wf-dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.wf-accounts-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.wf-account-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Wells Fargo Account Card (Images 1, 2, 4) */
+.wf-account-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-left: 4.5px solid var(--brand-red); /* Wells Fargo Iconic Red Stripe */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.wf-account-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-color: #D1D5DB;
+    border-left-color: var(--brand-red);
+}
+
+.wf-account-card-main {
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.wf-account-card-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.wf-account-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: rgba(204, 0, 0, 0.06);
+    color: var(--brand-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.wf-account-name {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 700;
+    color: #8B0000; /* Dark Crimson Wells Fargo Style */
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 0 0 3px 0;
+    line-height: 1.3;
+}
+
+.wf-account-number {
+    font-size: 13px;
+    color: #6B7280;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.wf-account-routing {
+    font-size: 11.5px;
+    color: #9CA3AF;
+    font-weight: 500;
+    background: #F3F4F6;
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.wf-account-card-right {
+    text-align: right;
+}
+
+.wf-balance-amount {
+    font-family: 'Plus Jakarta Sans', var(--font-sans);
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+}
+
+.wf-balance-label {
+    font-size: 11.5px;
+    color: #6B7280;
+    font-weight: 500;
+    margin-top: 3px;
+}
+
+.wf-account-card-menu {
+    display: flex;
+    align-items: center;
+}
+
+.wf-dots-btn {
+    background: transparent;
+    border: none;
+    color: #9CA3AF;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.wf-dots-btn:hover {
+    background: #F3F4F6;
+    color: #1F2937;
+}
+
+/* Card Quick Links Row (Image 4) */
+.wf-account-quick-links {
+    background: #FAFAFA;
+    border-top: 1px solid #F3F4F6;
+    padding: 0.65rem 1.4rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.wf-quick-link {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #4B5563;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s ease;
+}
+
+.wf-quick-link:hover {
+    color: var(--brand-red);
+    text-decoration: underline;
+}
+
+.wf-quick-link svg {
+    color: #9CA3AF;
+}
+
+/* In-Between Promotional Banner (Images 1 & 2) */
+.wf-promo-card {
+    background: #F9FAFB;
+    border: 1px dashed #D1D5DB;
+    border-radius: 8px;
+    padding: 0.85rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.wf-promo-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wf-promo-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(204, 0, 0, 0.08);
+    color: var(--brand-red);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.wf-promo-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.wf-promo-action {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--brand-red);
+    text-decoration: none;
+}
+
+.wf-promo-action:hover {
+    text-decoration: underline;
+}
+
+/* Advisory Banner (Image 2) */
+.wf-advisory-banner {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.wf-advisory-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 240px;
+}
+
+.wf-advisory-pie {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #EFF6FF;
+    color: #2563EB;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.wf-advisory-title {
+    font-family: var(--font-serif);
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1E3A8A;
+    margin-bottom: 2px;
+}
+
+.wf-advisory-sub {
+    font-size: 12.5px;
+    color: #6B7280;
+    line-height: 1.4;
+}
+
+.wf-advisory-btn {
+    background: #1E3A8A;
+    color: #FFFFFF;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+}
+
+.wf-advisory-btn:hover {
+    background: #172554;
+}
+
+/* Recent Activity Section */
+.wf-activity-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 1.4rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.wf-activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-bottom: 1px solid #F3F4F6;
+    padding-bottom: 1rem;
+}
+
+.wf-activity-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #111827;
+    margin: 0 0 3px 0;
+}
+
+.wf-activity-sub {
+    font-size: 12.5px;
+    color: #6B7280;
+    font-weight: 500;
+}
+
+.wf-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.wf-table th {
+    background: #F9FAFB;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #4B5563;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.wf-table td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid #F3F4F6;
+    vertical-align: middle;
+}
+
+.wf-disclosures-box {
+    padding: 1.2rem 0;
+    font-size: 11.5px;
+    color: #6B7280;
+    line-height: 1.65;
+}
+
+.wf-disclosures-title {
+    font-weight: 700;
+    color: #4B5563;
+    margin-bottom: 4px;
+}
+
+/* Right Sidebar Column (Image 4) */
+.wf-sidebar-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+/* User Greeting Card (Image 4) */
+.wf-user-widget {
+    background: #1B1B1B;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    border-radius: 8px;
+    padding: 1.4rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.wf-user-greeting {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+}
+
+.wf-last-signon {
+    font-size: 12px;
+    color: #9CA3AF;
+    margin-bottom: 1.1rem;
+}
+
+.wf-user-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 0.8rem;
+}
+
+.wf-user-action-link {
+    color: #E5E7EB;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    transition: color 0.2s ease;
+}
+
+.wf-user-action-link:hover {
+    color: #FFB81C;
+}
+
+.wf-signoff-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    padding: 0.55rem 1rem;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.wf-signoff-btn:hover {
+    background: var(--brand-red);
+    border-color: var(--brand-red);
+}
+
+/* Tool / Wire Desk Card */
+.wf-tool-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 1.2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.wf-tool-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.wf-tool-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(204, 0, 0, 0.08);
+    color: var(--brand-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.wf-tool-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #6B7280;
+    font-weight: 700;
+}
+
+.wf-tool-phone {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.wf-tool-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.wf-tool-detail {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: #4B5563;
+}
+
+/* Planning & Tools Accordion Menu (Image 4) */
+.wf-accordion-card,
+.wf-offers-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.wf-accordion-header,
+.wf-offers-title {
+    background: #F9FAFB;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 0.85rem 1.2rem;
+    font-family: var(--font-serif);
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #1F2937;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wf-accordion-header svg {
+    color: var(--brand-red);
+}
+
+.wf-accordion-list,
+.wf-offers-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.wf-accordion-list li,
+.wf-offers-list li {
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.wf-accordion-list li:last-child,
+.wf-offers-list li:last-child {
+    border-bottom: none;
+}
+
+.wf-accordion-list a,
+.wf-offers-list a {
+    padding: 0.75rem 1.2rem;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #374151;
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.wf-accordion-list a:hover,
+.wf-offers-list a:hover {
+    background: #F9FAFB;
+    color: var(--brand-red);
+    padding-left: 1.4rem;
+}
+
+.wf-accordion-list a svg,
+.wf-offers-list a svg {
+    color: #9CA3AF;
+}
+
+/* Responsive Breakpoints for Wells Fargo Dashboard */
+@media (max-width: 992px) {
+    .wf-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    .wf-desktop-topbar {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .wf-account-card-main {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.9rem;
+    }
+    .wf-account-card-right {
+        text-align: left;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+    .wf-account-card-menu {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+    .wf-account-card {
+        position: relative;
+    }
+    .wf-summary-bar {
+        padding: 0.9rem 1rem;
+    }
+    .wf-summary-title {
+        font-size: 1.35rem;
+    }
+    .wf-balance-amount {
+        font-size: 1.4rem;
+    }
 }
