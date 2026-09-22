@@ -158,7 +158,8 @@
                     </a>
                 </div>
 
-                <div class="table-responsive" style="margin-top: 1rem;">
+                <!-- Desktop Table View -->
+                <div class="table-responsive wf-desktop-table" style="margin-top: 1rem;">
                     <table class="wf-table">
                         <thead>
                             <tr>
@@ -199,6 +200,36 @@
                             @endif
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Mobile Native Transaction Feed View -->
+                <div class="wf-mobile-tx-list">
+                    @if(isset($recentTransactions) && $recentTransactions->count() > 0)
+                        @foreach($recentTransactions as $tx)
+                            <div class="wf-mobile-tx-item">
+                                <div class="wf-mobile-tx-left">
+                                    <div class="wf-mobile-tx-desc">{{ $tx->description ?? 'FedWire Settlement' }}</div>
+                                    <div class="wf-mobile-tx-date">{{ $tx->created_at->format('M d, Y') }}</div>
+                                </div>
+                                <div class="wf-mobile-tx-right">
+                                    <div class="wf-mobile-tx-amount" style="color: {{ $tx->transaction_type === 'deposit' ? 'var(--success)' : ($tx->transaction_type === 'withdraw' ? 'var(--brand-red)' : '#1F2937') }};">
+                                        {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}${{ number_format($tx->amount, 2) }}
+                                    </div>
+                                    <div class="wf-mobile-tx-badge">
+                                        @if($tx->transaction_type === 'deposit')
+                                            <span class="badge badge-deposit" style="font-size: 10px; padding: 2px 6px;">Deposit</span>
+                                        @elseif($tx->transaction_type === 'withdraw')
+                                            <span class="badge badge-withdraw" style="font-size: 10px; padding: 2px 6px;">Wire Debit</span>
+                                        @else
+                                            <span class="badge badge-transfer" style="font-size: 10px; padding: 2px 6px;">Transfer</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div style="text-align: center; color: #6B7280; padding: 1.2rem; font-size: 13px;">No recent transactions recorded.</div>
+                    @endif
                 </div>
             </div>
 

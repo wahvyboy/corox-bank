@@ -3868,44 +3868,362 @@ td {
     color: #9CA3AF;
 }
 
-/* Responsive Breakpoints for Corox Institutional Dashboard */
+/* ==========================================================================
+   Responsive Breakpoints & Mobile Architecture for Dashboard
+   ========================================================================== */
+
+/* Default Desktop/Tablet display rules for transaction views */
+.wf-mobile-tx-list {
+    display: none;
+}
+
+.wf-desktop-table {
+    display: block;
+}
+
 @media (max-width: 992px) {
     .wf-dashboard-grid {
         grid-template-columns: 1fr;
+        gap: 1.25rem;
     }
     .wf-desktop-topbar {
         display: none;
     }
 }
 
-@media (max-width: 640px) {
-    .wf-account-card-main {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.9rem;
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        width: 100% !important;
+        max-width: 100vw !important;
+        padding: 0.85rem 0.75rem calc(75px + env(safe-area-inset-bottom)) 0.75rem !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
     }
-    .wf-account-card-right {
-        text-align: left;
+    .app-layout {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+    }
+    .wf-dashboard-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+}
+
+@media (max-width: 640px) {
+    /* Account Summary Bar — Clean Native Mobile Selector (Images 1 & 2) */
+    .wf-summary-bar {
+        padding: 0.75rem 0.85rem;
+        margin-bottom: 0.85rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+        border-radius: 8px;
+    }
+    .wf-summary-selector {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+    .wf-summary-title {
+        display: none; /* Matches Image 1: Clean dropdown selector only */
+    }
+    .wf-account-filter-pill {
         width: 100%;
         display: flex;
         justify-content: space-between;
-        align-items: baseline;
+        align-items: center;
+        padding: 8px 12px;
+        font-size: 13px;
+        background: #F9FAFB;
+        border: 1px solid #D1D5DB;
+        box-sizing: border-box;
     }
-    .wf-account-card-menu {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
+    .wf-summary-meta {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        padding-top: 0.5rem;
+        border-top: 1px solid #F3F4F6;
+        flex-wrap: nowrap;
     }
+    .wf-meta-item {
+        font-size: 11.5px;
+    }
+    .wf-meta-val {
+        font-size: 1.15rem;
+        font-weight: 800;
+        letter-spacing: -0.3px;
+    }
+    .wf-meta-badge {
+        font-size: 10.5px;
+        padding: 2px 7px;
+        white-space: nowrap;
+    }
+
+    /* Account Card — Authentic Side-by-Side Mobile Proportions (Images 1 & 2) */
     .wf-account-card {
-        position: relative;
+        border-radius: 8px;
+        border-left-width: 4px;
+        box-sizing: border-box;
+        overflow: hidden;
     }
-    .wf-summary-bar {
+    .wf-account-card-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         padding: 0.9rem 1rem;
+        gap: 8px;
+        flex-wrap: nowrap;
     }
-    .wf-summary-title {
-        font-size: 1.35rem;
+    .wf-account-card-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        min-width: 0;
+    }
+    .wf-account-icon-box {
+        display: none; /* Hide bulky icon box on mobile for authentic app spacing (Image 1) */
+    }
+    .wf-account-name {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.25;
+        letter-spacing: 0.3px;
+        margin: 0 0 2px 0;
+        white-space: normal;
+        word-break: break-word;
+    }
+    .wf-account-number {
+        font-size: 11.5px;
+        color: #6B7280;
+    }
+    .wf-account-routing {
+        display: none; /* Hide routing on mobile card preview, just like Image 1 (...1830) */
+    }
+    .wf-account-card-right {
+        text-align: right;
+        flex-shrink: 0;
     }
     .wf-balance-amount {
-        font-size: 1.4rem;
+        font-size: 1.22rem;
+        font-weight: 800;
+        letter-spacing: -0.3px;
+        line-height: 1.1;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+    .wf-balance-label {
+        font-size: 10.5px;
+        color: #6B7280;
+        margin-top: 2px;
+    }
+    .wf-account-card-menu {
+        flex-shrink: 0;
+    }
+    .wf-dots-btn {
+        width: 26px;
+        height: 26px;
+        color: #9CA3AF;
+    }
+
+    /* Card Quick Actions — 3-Column Native Mobile Grid (Image 4 on Mobile) */
+    .wf-account-quick-links {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        padding: 0.5rem 0.75rem;
+        background: #F9FAFB;
+        border-top: 1px solid #F3F4F6;
+    }
+    .wf-quick-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 6px 2px;
+        font-size: 10.5px;
+        font-weight: 700;
+        color: #374151;
+        background: #FFFFFF;
+        border: 1px solid #E5E7EB;
+        border-radius: 6px;
+        gap: 3px;
+        text-decoration: none;
+        transition: all 0.15s ease;
+    }
+    .wf-quick-link:active {
+        background: #F3F4F6;
+        transform: scale(0.97);
+    }
+    .wf-quick-link svg {
+        width: 14px;
+        height: 14px;
+        color: var(--brand-red);
+    }
+
+    /* In-Between Promo Card (Image 1) */
+    .wf-promo-card {
+        padding: 0.75rem 0.85rem;
+        gap: 6px;
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 8px;
+    }
+    .wf-promo-content {
+        gap: 8px;
+    }
+    .wf-promo-icon {
+        width: 24px;
+        height: 24px;
+    }
+    .wf-promo-text {
+        font-size: 11.5px;
+        line-height: 1.35;
+    }
+    .wf-promo-action {
+        font-size: 11.5px;
+        align-self: flex-end;
+    }
+
+    /* Wealth Advisory Banner (Image 2) */
+    .wf-advisory-banner {
+        padding: 0.85rem 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        border-radius: 8px;
+    }
+    .wf-advisory-left {
+        gap: 10px;
+        min-width: 0;
+        width: 100%;
+    }
+    .wf-advisory-pie {
+        width: 36px;
+        height: 36px;
+    }
+    .wf-advisory-title {
+        font-size: 13px;
+    }
+    .wf-advisory-sub {
+        font-size: 11px;
+    }
+    .wf-advisory-btn {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 11.5px;
+    }
+
+    /* Recent Activity Card & Responsive Feed */
+    .wf-activity-card {
+        padding: 1rem;
+        border-radius: 8px;
+    }
+    .wf-activity-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+        padding-bottom: 0.75rem;
+    }
+    .wf-activity-title {
+        font-size: 1.15rem;
+    }
+    .wf-activity-sub {
+        font-size: 11.5px;
+    }
+    .wf-activity-header .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Hide wide table on mobile and display native mobile feed */
+    .wf-desktop-table {
+        display: none !important;
+    }
+    .wf-mobile-tx-list {
+        display: flex !important;
+        flex-direction: column;
+        margin-top: 0.5rem;
+    }
+    .wf-mobile-tx-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0.25rem;
+        border-bottom: 1px solid #F3F4F6;
+        gap: 10px;
+    }
+    .wf-mobile-tx-item:last-child {
+        border-bottom: none;
+    }
+    .wf-mobile-tx-left {
+        flex: 1;
+        min-width: 0;
+    }
+    .wf-mobile-tx-desc {
+        font-weight: 700;
+        font-size: 12.5px;
+        color: #111827;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .wf-mobile-tx-date {
+        font-size: 11px;
+        color: #6B7280;
+        margin-top: 2px;
+    }
+    .wf-mobile-tx-right {
+        text-align: right;
+        flex-shrink: 0;
+    }
+    .wf-mobile-tx-amount {
+        font-weight: 800;
+        font-size: 13.5px;
+        letter-spacing: -0.3px;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.1;
+    }
+    .wf-mobile-tx-badge {
+        margin-top: 2px;
+    }
+
+    /* Sidebar Widgets on Mobile */
+    .wf-sidebar-column {
+        gap: 0.85rem;
+        margin-top: 0.5rem;
+    }
+    .wf-user-widget {
+        padding: 1.1rem;
+        border-radius: 8px;
+    }
+    .wf-user-greeting {
+        font-size: 1.05rem;
+    }
+    .wf-last-signon {
+        font-size: 11.5px;
+        margin-bottom: 0.9rem;
+    }
+    .wf-tool-card,
+    .wf-accordion-card,
+    .wf-offers-card {
+        padding: 0.9rem 1rem;
+        border-radius: 8px;
+    }
+    .wf-accordion-list a,
+    .wf-offers-list a {
+        padding: 0.7rem 0.5rem;
+        font-size: 12px;
     }
 }
