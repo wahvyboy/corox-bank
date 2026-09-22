@@ -2052,7 +2052,7 @@ td {
     z-index: 800;
     background: var(--brand-red);
     border-bottom: 2px solid #B30000;
-    padding: 0.65rem 1rem;
+    padding: calc(0.65rem + env(safe-area-inset-top, 0px)) 1rem 0.65rem 1rem;
     justify-content: space-between;
     align-items: center;
     width: 100%;
@@ -2157,14 +2157,15 @@ td {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 62px;
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
     background: #FFFFFF;
     border-top: 1px solid #E5E7EB;
     z-index: 950;
     justify-content: space-around;
     align-items: center;
     box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.06);
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
 }
 
 .mobile-bottom-item {
@@ -2258,6 +2259,9 @@ td {
     .app-mobile-topbar {
         display: flex;
     }
+    .wf-desktop-topbar {
+        display: none !important;
+    }
 }
 
 @media (max-width: 768px) {
@@ -2267,7 +2271,7 @@ td {
     }
 
     body {
-        padding-bottom: calc(62px + env(safe-area-inset-bottom));
+        padding-bottom: calc(62px + env(safe-area-inset-bottom, 0px));
     }
 
     /* Hide Corox Institutional Utility Bar entirely on Mobile Devices (< 769px) */
@@ -3883,54 +3887,73 @@ td {
 
 @media (max-width: 992px) {
     .wf-dashboard-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr) !important;
         gap: 1.25rem;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .wf-accounts-column,
+    .wf-sidebar-column {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
     }
     .wf-desktop-topbar {
-        display: none;
+        display: none !important;
     }
 }
 
 @media (max-width: 768px) {
-    .main-content {
-        margin-left: 0;
-        width: 100% !important;
-        max-width: 100vw !important;
-        padding: 0.85rem 0.75rem calc(75px + env(safe-area-inset-bottom)) 0.75rem !important;
-        box-sizing: border-box !important;
-        overflow-x: hidden !important;
-    }
     .app-layout {
-        overflow-x: hidden !important;
         width: 100% !important;
-        max-width: 100vw !important;
+        max-width: 100% !important;
+        overflow-x: clip !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        padding: 0.85rem 0.85rem calc(75px + env(safe-area-inset-bottom, 0px)) 0.85rem !important;
+        box-sizing: border-box !important;
+        overflow-x: clip !important;
     }
     .wf-dashboard-wrapper {
         width: 100% !important;
         max-width: 100% !important;
-        overflow-x: hidden !important;
+        min-width: 0 !important;
         box-sizing: border-box !important;
+        overflow-x: visible !important;
     }
 }
 
 @media (max-width: 640px) {
-    /* Account Summary Bar — Clean Native Mobile Selector (Images 1 & 2) */
+    /* Account Summary Bar — Clean Native Mobile Selector */
     .wf-summary-bar {
-        padding: 0.75rem 0.85rem;
+        padding: 0.85rem 1rem;
         margin-bottom: 0.85rem;
+        display: flex;
         flex-direction: column;
         align-items: stretch;
-        gap: 0.6rem;
+        gap: 0.75rem;
         border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
     }
     .wf-summary-selector {
         width: 100%;
+        min-width: 0;
         display: flex;
         flex-direction: column;
         gap: 0;
     }
     .wf-summary-title {
-        display: none; /* Matches Image 1: Clean dropdown selector only */
+        display: none;
     }
     .wf-account-filter-pill {
         width: 100%;
@@ -3941,107 +3964,159 @@ td {
         font-size: 13px;
         background: #F9FAFB;
         border: 1px solid #D1D5DB;
+        border-radius: 6px;
         box-sizing: border-box;
+        min-width: 0;
     }
     .wf-summary-meta {
         width: 100%;
         display: flex;
+        flex-direction: row;
         justify-content: space-between;
         align-items: center;
         gap: 8px;
-        padding-top: 0.5rem;
+        padding-top: 0.65rem;
         border-top: 1px solid #F3F4F6;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
+        min-width: 0;
+        box-sizing: border-box;
     }
     .wf-meta-item {
-        font-size: 11.5px;
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        flex-wrap: wrap;
+        min-width: 0;
     }
-    .wf-meta-val {
-        font-size: 1.15rem;
-        font-weight: 800;
-        letter-spacing: -0.3px;
-    }
-    .wf-meta-badge {
-        font-size: 10.5px;
-        padding: 2px 7px;
+    .wf-meta-label {
+        font-size: 12px;
+        color: #6B7280;
+        font-weight: 600;
         white-space: nowrap;
     }
+    .wf-meta-val {
+        font-size: clamp(1.2rem, 5vw, 1.45rem);
+        font-weight: 800;
+        letter-spacing: -0.4px;
+        color: #111827;
+        line-height: 1.1;
+        font-variant-numeric: tabular-nums;
+    }
+    .wf-meta-badge {
+        font-size: 11px;
+        padding: 3px 8px;
+        white-space: nowrap;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
 
-    /* Account Card — Authentic Side-by-Side Mobile Proportions (Images 1 & 2) */
+    /* Account Card — Modern Mobile Banking Architecture */
     .wf-account-card {
         border-radius: 8px;
         border-left-width: 4px;
         box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
         overflow: hidden;
     }
     .wf-account-card-main {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.9rem 1rem;
-        gap: 8px;
-        flex-wrap: nowrap;
-    }
-    .wf-account-card-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "header menu"
+            "balance balance";
+        gap: 0.65rem;
+        padding: 1rem 1rem 0.85rem 1rem;
+        align-items: start;
+        box-sizing: border-box;
+        width: 100%;
         min-width: 0;
     }
+    .wf-account-card-left {
+        grid-area: header;
+        min-width: 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+    }
     .wf-account-icon-box {
-        display: none; /* Hide bulky icon box on mobile for authentic app spacing (Image 1) */
+        display: none; /* Hidden on mobile for authentic compact spacing */
     }
     .wf-account-name {
-        font-size: 13px;
+        font-size: 13.5px;
         font-weight: 700;
         line-height: 1.25;
         letter-spacing: 0.3px;
-        margin: 0 0 2px 0;
+        margin: 0 0 3px 0;
         white-space: normal;
         word-break: break-word;
     }
     .wf-account-number {
-        font-size: 11.5px;
+        font-size: 12px;
         color: #6B7280;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
     }
     .wf-account-routing {
-        display: none; /* Hide routing on mobile card preview, just like Image 1 (...1830) */
-    }
-    .wf-account-card-right {
-        text-align: right;
-        flex-shrink: 0;
-    }
-    .wf-balance-amount {
-        font-size: 1.22rem;
-        font-weight: 800;
-        letter-spacing: -0.3px;
-        line-height: 1.1;
-        white-space: nowrap;
-        font-variant-numeric: tabular-nums;
-    }
-    .wf-balance-label {
-        font-size: 10.5px;
-        color: #6B7280;
-        margin-top: 2px;
+        display: none; /* Hidden on mobile card preview */
     }
     .wf-account-card-menu {
+        grid-area: menu;
+        justify-self: end;
+        align-self: start;
         flex-shrink: 0;
     }
     .wf-dots-btn {
-        width: 26px;
-        height: 26px;
+        width: 30px;
+        height: 30px;
         color: #9CA3AF;
     }
+    .wf-account-card-right {
+        grid-area: balance;
+        text-align: left;
+        border-top: 1px dashed #F3F4F6;
+        padding-top: 0.65rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 4px;
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
+    }
+    .wf-balance-amount {
+        font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+        font-weight: 800;
+        color: #111827;
+        letter-spacing: -0.5px;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.1;
+        white-space: nowrap;
+    }
+    .wf-balance-label {
+        font-size: 11.5px;
+        color: #6B7280;
+        font-weight: 500;
+    }
 
-    /* Card Quick Actions — 3-Column Native Mobile Grid (Image 4 on Mobile) */
+    /* Card Quick Actions — 3-Column Touch-Friendly Responsive Grid */
     .wf-account-quick-links {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 5px;
-        padding: 0.5rem 0.75rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        padding: 0.65rem 0.85rem;
         background: #F9FAFB;
         border-top: 1px solid #F3F4F6;
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
     }
     .wf-quick-link {
         display: flex;
@@ -4049,94 +4124,132 @@ td {
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: 6px 2px;
-        font-size: 10.5px;
+        padding: 8px 4px;
+        font-size: 11px;
+        line-height: 1.25;
         font-weight: 700;
         color: #374151;
         background: #FFFFFF;
         border: 1px solid #E5E7EB;
         border-radius: 6px;
-        gap: 3px;
+        gap: 4px;
         text-decoration: none;
+        min-width: 0;
+        box-sizing: border-box;
         transition: all 0.15s ease;
+        word-break: normal;
     }
     .wf-quick-link:active {
         background: #F3F4F6;
         transform: scale(0.97);
     }
     .wf-quick-link svg {
-        width: 14px;
-        height: 14px;
+        width: 15px;
+        height: 15px;
         color: var(--brand-red);
+        flex-shrink: 0;
     }
 
-    /* In-Between Promo Card (Image 1) */
+    /* In-Between Promotional Banner */
     .wf-promo-card {
-        padding: 0.75rem 0.85rem;
-        gap: 6px;
+        padding: 0.85rem 1rem;
+        gap: 0.6rem;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
     }
     .wf-promo-content {
-        gap: 8px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        width: 100%;
+        min-width: 0;
     }
     .wf-promo-icon {
-        width: 24px;
-        height: 24px;
+        width: 26px;
+        height: 26px;
+        flex-shrink: 0;
+        margin-top: 1px;
     }
     .wf-promo-text {
-        font-size: 11.5px;
-        line-height: 1.35;
+        font-size: 12px;
+        line-height: 1.4;
+        word-break: break-word;
+        min-width: 0;
+        flex: 1;
+        color: #374151;
     }
     .wf-promo-action {
-        font-size: 11.5px;
-        align-self: flex-end;
+        font-size: 12px;
+        font-weight: 700;
+        align-self: flex-start;
+        word-break: break-word;
+        padding-left: 36px;
     }
 
-    /* Wealth Advisory Banner (Image 2) */
+    /* Wealth Advisory Banner */
     .wf-advisory-banner {
-        padding: 0.85rem 1rem;
+        padding: 1rem;
         flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
+        align-items: stretch;
+        gap: 0.85rem;
         border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
     }
     .wf-advisory-left {
-        gap: 10px;
-        min-width: 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
         width: 100%;
+        min-width: 0;
     }
     .wf-advisory-pie {
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
     }
     .wf-advisory-title {
-        font-size: 13px;
+        font-size: 13.5px;
+        word-break: break-word;
+        line-height: 1.3;
     }
     .wf-advisory-sub {
-        font-size: 11px;
+        font-size: 11.5px;
+        line-height: 1.45;
+        word-break: break-word;
     }
     .wf-advisory-btn {
         width: 100%;
         text-align: center;
-        padding: 0.5rem;
-        font-size: 11.5px;
+        padding: 0.65rem 1rem;
+        font-size: 12.5px;
+        border-radius: 6px;
+        box-sizing: border-box;
     }
 
     /* Recent Activity Card & Responsive Feed */
     .wf-activity-card {
         padding: 1rem;
         border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
     }
     .wf-activity-header {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 0.6rem;
-        padding-bottom: 0.75rem;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding-bottom: 0.85rem;
+        width: 100%;
+        min-width: 0;
     }
     .wf-activity-title {
-        font-size: 1.15rem;
+        font-size: 1.2rem;
     }
     .wf-activity-sub {
         font-size: 11.5px;
@@ -4144,6 +4257,8 @@ td {
     .wf-activity-header .btn {
         width: 100%;
         text-align: center;
+        box-sizing: border-box;
+        padding: 0.65rem 1rem;
     }
 
     /* Hide wide table on mobile and display native mobile feed */
@@ -4154,14 +4269,20 @@ td {
         display: flex !important;
         flex-direction: column;
         margin-top: 0.5rem;
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
     }
     .wf-mobile-tx-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.75rem 0.25rem;
+        padding: 0.85rem 0.25rem;
         border-bottom: 1px solid #F3F4F6;
         gap: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
     }
     .wf-mobile-tx-item:last-child {
         border-bottom: none;
@@ -4172,7 +4293,7 @@ td {
     }
     .wf-mobile-tx-desc {
         font-weight: 700;
-        font-size: 12.5px;
+        font-size: 13px;
         color: #111827;
         line-height: 1.3;
         white-space: nowrap;
@@ -4180,17 +4301,18 @@ td {
         text-overflow: ellipsis;
     }
     .wf-mobile-tx-date {
-        font-size: 11px;
+        font-size: 11.5px;
         color: #6B7280;
         margin-top: 2px;
     }
     .wf-mobile-tx-right {
         text-align: right;
         flex-shrink: 0;
+        min-width: 0;
     }
     .wf-mobile-tx-amount {
         font-weight: 800;
-        font-size: 13.5px;
+        font-size: 14px;
         letter-spacing: -0.3px;
         font-variant-numeric: tabular-nums;
         line-height: 1.1;
@@ -4203,10 +4325,17 @@ td {
     .wf-sidebar-column {
         gap: 0.85rem;
         margin-top: 0.5rem;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
     }
     .wf-user-widget {
         padding: 1.1rem;
         border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
     }
     .wf-user-greeting {
         font-size: 1.05rem;
@@ -4218,12 +4347,41 @@ td {
     .wf-tool-card,
     .wf-accordion-card,
     .wf-offers-card {
-        padding: 0.9rem 1rem;
+        padding: 1rem;
         border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
     }
     .wf-accordion-list a,
     .wf-offers-list a {
-        padding: 0.7rem 0.5rem;
-        font-size: 12px;
+        padding: 0.75rem 0.75rem;
+        font-size: 12.5px;
+    }
+}
+
+@media (max-width: 380px) {
+    .main-content {
+        padding: 0.75rem 0.5rem calc(75px + env(safe-area-inset-bottom, 0px)) 0.5rem !important;
+    }
+    .wf-summary-bar {
+        padding: 0.75rem 0.75rem;
+    }
+    .wf-account-card-main {
+        padding: 0.85rem 0.75rem 0.75rem 0.75rem;
+    }
+    .wf-account-quick-links {
+        gap: 4px;
+        padding: 0.5rem 0.5rem;
+    }
+    .wf-quick-link {
+        font-size: 10px;
+        padding: 6px 2px;
+    }
+    .wf-balance-amount {
+        font-size: 1.3rem;
+    }
+    .wf-promo-action {
+        padding-left: 0;
     }
 }
