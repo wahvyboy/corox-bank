@@ -165,6 +165,80 @@
         display: flex;
         gap: 1rem;
         justify-content: space-between;
+    /* Mobile Responsive Styles */
+    @media (max-width: 640px) {
+        .receipt-wrapper {
+            padding: 1.25rem 1rem !important;
+            border-radius: 12px !important;
+            margin: 1rem auto 0 auto !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .receipt-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.85rem !important;
+            padding-bottom: 1.2rem !important;
+            margin-bottom: 1.25rem !important;
+        }
+
+        .receipt-brand {
+            width: 100% !important;
+        }
+
+        .receipt-logo {
+            height: 40px !important;
+        }
+
+        .receipt-bank-name {
+            font-size: 1.25rem !important;
+        }
+
+        .receipt-status-badge {
+            align-self: flex-start !important;
+            font-size: 11.5px !important;
+            padding: 4px 10px !important;
+        }
+
+        .receipt-amount-card {
+            padding: 1.5rem 1rem !important;
+            margin-bottom: 1.25rem !important;
+            border-radius: 10px !important;
+        }
+
+        .receipt-amount-value {
+            font-size: clamp(1.75rem, 7vw, 2.5rem) !important;
+            line-height: 1.15 !important;
+            word-break: break-word !important;
+        }
+
+        .receipt-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+            margin-bottom: 1.25rem !important;
+        }
+
+        .receipt-footer {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.75rem !important;
+        }
+
+        .action-buttons {
+            flex-direction: column !important;
+            gap: 0.75rem !important;
+            width: 100% !important;
+            margin: 1rem auto 0 auto !important;
+        }
+
+        .action-buttons .btn {
+            width: 100% !important;
+            text-align: center !important;
+            justify-content: center !important;
+            padding: 0.75rem 1rem !important;
+            box-sizing: border-box !important;
+        }
     }
 
     /* Print Styles */

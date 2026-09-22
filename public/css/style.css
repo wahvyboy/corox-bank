@@ -2005,6 +2005,90 @@ body.sidebar-open {
     box-sizing: border-box;
 }
 
+/* ==========================================================================
+   Portal Components (Headers, Form Cards, Admin Terminal)
+   ========================================================================== */
+
+/* Dashboard / Portal Page Headers */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard-header h2 {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 0.35rem;
+    line-height: 1.2;
+}
+
+.dashboard-header p {
+    color: var(--text-muted-dark);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Portal Form Cards (Transfer, Deposit, Withdraw, Create Account) */
+.portal-form-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 2.5rem;
+    max-width: 680px;
+    width: 100%;
+    box-shadow: var(--shadow-card);
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+/* Admin Welcome Hero */
+.welcome-hero {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-card);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.welcome-hero h2 {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 0.35rem;
+}
+
+.welcome-hero p {
+    color: var(--text-muted-dark);
+    font-size: 14px;
+    margin-bottom: 0.75rem;
+}
+
+.routing-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FEF2F2;
+    color: var(--brand-red);
+    border: 1px solid rgba(204, 0, 0, 0.2);
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
 .table-card {
     background: var(--pure-white);
     border: 1px solid var(--border-subtle);
@@ -3929,6 +4013,22 @@ td {
         box-sizing: border-box !important;
         overflow-x: visible !important;
     }
+    .table-card {
+        margin-top: 1rem;
+        border-radius: var(--radius-lg);
+    }
+    .table-card::before {
+        content: '← Swipe horizontally to view full ledger →';
+        display: block;
+        text-align: right;
+        padding: 6px 12px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #9CA3AF;
+        background: #F9FAFB;
+        border-bottom: 1px solid #E5E7EB;
+        letter-spacing: 0.3px;
+    }
 }
 
 @media (max-width: 640px) {
@@ -4358,6 +4458,87 @@ td {
         padding: 0.75rem 0.75rem;
         font-size: 12.5px;
     }
+
+    /* ==========================================================================
+       Portal Wide Responsive Components (Headers, Form Cards, Admin Terminal)
+       ========================================================================== */
+
+    /* Dashboard Header on Mobile */
+    .dashboard-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.85rem;
+        margin-bottom: 1.25rem;
+    }
+    .dashboard-header h2 {
+        font-size: clamp(1.35rem, 5vw, 1.7rem) !important;
+    }
+    .dashboard-header p {
+        font-size: 13px !important;
+    }
+    .dashboard-header .btn {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 0.75rem 1rem;
+    }
+
+    /* Portal Form Card on Mobile */
+    .portal-form-card {
+        padding: 1.25rem 1rem !important;
+        border-radius: var(--radius-lg) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .portal-form-card .form-control {
+        font-size: 16px !important; /* Prevents iOS auto-zoom */
+        padding: 0.75rem 0.85rem;
+    }
+    .portal-form-card .btn-lg {
+        padding: 0.85rem !important;
+        font-size: 14px !important;
+        width: 100% !important;
+    }
+
+    /* Bank Lookup Badge on Mobile */
+    #bankLookupBadge {
+        padding: 0.85rem 1rem !important;
+        gap: 10px !important;
+        flex-wrap: wrap !important;
+    }
+
+    /* Welcome Hero on Mobile */
+    .welcome-hero {
+        padding: 1.25rem 1rem !important;
+        border-radius: var(--radius-lg) !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .welcome-hero h2 {
+        font-size: clamp(1.25rem, 5vw, 1.6rem) !important;
+    }
+    .welcome-hero .btn {
+        width: 100% !important;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    /* Stats Grid on Mobile */
+    .stats-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.75rem !important;
+        margin-top: 1rem !important;
+    }
+    .stat-card {
+        padding: 1.1rem 0.85rem !important;
+        border-radius: var(--radius-md) !important;
+    }
+    .stat-title {
+        font-size: 10px !important;
+    }
+    .stat-value {
+        font-size: clamp(1.25rem, 4.5vw, 1.6rem) !important;
+    }
 }
 
 @media (max-width: 380px) {
@@ -4383,5 +4564,11 @@ td {
     }
     .wf-promo-action {
         padding-left: 0;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .portal-form-card {
+        padding: 1rem 0.75rem !important;
     }
 }

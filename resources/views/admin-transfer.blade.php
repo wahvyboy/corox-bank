@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div style="background: var(--bg-surface); border: 1px solid var(--navy-border); border-radius: var(--radius-xl); padding: 2.5rem; max-width: 600px;">
+<div class="portal-form-card">
     <form action="{{ url('/admin/transfer') }}" method="POST">
         @csrf
         <div class="form-group">
