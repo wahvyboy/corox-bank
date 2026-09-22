@@ -10,8 +10,11 @@
                 Master Wire Desk • ABA Routing: 026009593
             </div>
         </div>
-        <div>
-            <a href="{{ route('show.requests') }}" class="btn btn-primary">Review Pending Requests</a>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="{{ route('admin.pending.transactions') }}" class="btn btn-primary" style="background: #059669; border-color: #059669;">
+                Settlement Queue ({{ \App\Models\Transaction::where('status', 'pending')->count() }})
+            </a>
+            <a href="{{ route('show.requests') }}" class="btn btn-secondary">Review Account Requests</a>
         </div>
     </div>
 </div>
@@ -26,7 +29,11 @@
         <div class="stat-value">{{ \App\Models\Account::where('status', 'active')->count() }}</div>
     </div>
     <div class="stat-card">
-        <div class="stat-title">Pending Approval Requests</div>
+        <div class="stat-title">Pending Transactions (Wires/Checks)</div>
+        <div class="stat-value" style="color: #D97706;">{{ \App\Models\Transaction::where('status', 'pending')->count() }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-title">Pending Account Requests</div>
         <div class="stat-value" style="color: var(--accent-gold-bright);">{{ \App\Models\Account::where('status', 'pending')->count() }}</div>
     </div>
     <div class="stat-card">
@@ -37,6 +44,14 @@
 
 <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem;">Administrative Control Panel</h3>
 <div class="cards-grid" style="margin-top: 0;">
+    <a href="{{ route('admin.pending.transactions') }}" class="feature-card" style="border-left: 4px solid #059669;">
+        <div class="feature-icon" style="background: rgba(16, 185, 129, 0.1); color: #059669;">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3>Transaction Settlement Queue</h3>
+        <p>Inspect check photos, review pending wires, and issue one-click approvals or refunds.</p>
+    </a>
+
     <a href="{{ route('show.users') }}" class="feature-card">
         <div class="feature-icon">
             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>

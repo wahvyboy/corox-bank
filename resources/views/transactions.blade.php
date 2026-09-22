@@ -29,8 +29,9 @@
         <table>
             <thead>
                 <tr>
-                    <th>Date & Time</th>
+                    <th>Date &amp; Time</th>
                     <th>Type</th>
+                    <th>Status</th>
                     <th>Routing Number</th>
                     <th>Description / Memo</th>
                     <th>From Account</th>
@@ -44,12 +45,24 @@
                     <tr>
                         <td style="color: var(--text-secondary); font-size: 13px;">{{ $tx->created_at->format('M d, Y h:i A') }}</td>
                         <td>
-                            @if($tx->transaction_type === 'deposit')
+                            @if($tx->deposit_method === 'check')
+                                <span class="badge badge-deposit" style="background: #EEF2FF; color: #4338CA; border: 1px solid #C7D2FE;">📸 Check Deposit</span>
+                            @elseif($tx->transaction_type === 'deposit')
                                 <span class="badge badge-deposit">Deposit</span>
                             @elseif($tx->transaction_type === 'withdraw')
                                 <span class="badge badge-withdraw">Withdrawal</span>
                             @else
                                 <span class="badge badge-transfer">Wire Transfer</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($tx->status === 'pending')
+                                <span class="badge badge-pending">Pending</span>
+                                <div style="font-size: 11px; color: #92400E; font-weight: 600; margin-top: 2px;">Clears Tomorrow</div>
+                            @elseif($tx->status === 'rejected')
+                                <span class="badge badge-danger">Rejected</span>
+                            @else
+                                <span class="badge badge-active">Completed</span>
                             @endif
                         </td>
                         <td><code>{{ $tx->routing_number ?? '026009593' }}</code></td>
@@ -67,7 +80,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No transaction history recorded yet.</td>
+                        <td colspan="9" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No transaction history recorded yet.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -77,15 +90,25 @@
     <!-- Mobile Transaction Feed (< 768px) -->
     <div class="tx-mobile-feed">
         @forelse($transactions as $tx)
-            <div class="tx-mobile-card tx-type-{{ $tx->transaction_type }}">
+            <div class="tx-mobile-card tx-type-{{ $tx->transaction_type }}" style="{{ $tx->status === 'pending' ? 'border-left-color: #D97706;' : '' }}">
                 <div class="tx-mobile-header">
-                    <div>
-                        @if($tx->transaction_type === 'deposit')
+                    <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                        @if($tx->deposit_method === 'check')
+                            <span class="badge badge-deposit" style="background: #EEF2FF; color: #4338CA; border: 1px solid #C7D2FE;">📸 Check</span>
+                        @elseif($tx->transaction_type === 'deposit')
                             <span class="badge badge-deposit">Deposit</span>
                         @elseif($tx->transaction_type === 'withdraw')
                             <span class="badge badge-withdraw">Withdrawal</span>
                         @else
-                            <span class="badge badge-transfer">Wire Transfer</span>
+                            <span class="badge badge-transfer">Wire</span>
+                        @endif
+
+                        @if($tx->status === 'pending')
+                            <span class="badge badge-pending">Pending</span>
+                        @elseif($tx->status === 'rejected')
+                            <span class="badge badge-danger">Rejected</span>
+                        @else
+                            <span class="badge badge-active">Completed</span>
                         @endif
                     </div>
                     <div class="tx-mobile-date">{{ $tx->created_at->format('M d, Y • h:i A') }}</div>
@@ -93,12 +116,18 @@
 
                 <div class="tx-mobile-main">
                     <div class="tx-mobile-desc">{{ $tx->description ?? 'FedWire Settlement' }}</div>
-                    <div class="tx-mobile-amount amount-{{ $tx->transaction_type }}">
+                    <div class="tx-mobile-amount amount-{{ $tx->transaction_type }}" style="{{ $tx->status === 'pending' ? 'color: #D97706;' : '' }}">
                         {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}${{ number_format($tx->amount, 2) }}
                     </div>
                 </div>
 
                 <div class="tx-mobile-details">
+                    @if($tx->status === 'pending')
+                        <div class="tx-mobile-detail-row" style="background: #FEF3C7; padding: 4px 8px; border-radius: 4px; border: 1px solid #FDE68A;">
+                            <span style="color: #92400E; font-weight: 700;">Settlement:</span>
+                            <span style="color: #92400E; font-weight: 700;">Clears Tomorrow (Pending Admin Settlement)</span>
+                        </div>
+                    @endif
                     <div class="tx-mobile-detail-row">
                         <span>Routing ABA:</span>
                         <code>{{ $tx->routing_number ?? '026009593' }}</code>

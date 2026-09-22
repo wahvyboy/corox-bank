@@ -63,6 +63,7 @@ Route::get('/user/show-bank-accounts', 'App\Http\Controllers\UserController@show
 Route::get('/user/show-transaction-history', 'App\Http\Controllers\UserController@showTransactionHistory')->name('show.transaction.history');
 Route::get('/user/withdraw', 'App\Http\Controllers\UserController@showWithdrawForm')->name('show.withdraw.form');
 Route::get('/user/deposit', 'App\Http\Controllers\UserController@showDepositForm')->name('show.deposit.form');
+Route::get('/user/deposit-check', 'App\Http\Controllers\TransactionController@showCheckDepositForm')->name('show.deposit.check');
 Route::get('/user/transfer', 'App\Http\Controllers\UserController@showTransferForm')->name('show.transfer.form');
 Route::get('/user/transaction/{id}/receipt', 'App\Http\Controllers\TransactionController@showReceipt')->name('transaction.receipt');
 
@@ -71,6 +72,7 @@ Route::get('/admin/show-users', 'App\Http\Controllers\UserController@showUsers')
 Route::get('/admin/{user}/show-user-accounts', 'App\Http\Controllers\UserController@showUserAccounts')->name('show.user.accounts');
 Route::get('/admin/{user}/show-user-transactions', 'App\Http\Controllers\UserController@showUserTransactions')->name('show.user.transactions');
 Route::get('/admin/show-requests', 'App\Http\Controllers\UserController@showRequests')->name('show.requests');
+Route::get('/admin/pending-transactions', 'App\Http\Controllers\TransactionController@showPendingTransactions')->name('admin.pending.transactions');
 Route::get('/admin/withdraw', 'App\Http\Controllers\UserController@showAdminWithdrawForm')->name('show.admin.withdraw.form');
 Route::get('/admin/deposit', 'App\Http\Controllers\UserController@showAdminDepositForm')->name('show.admin.deposit.form');
 Route::get('/admin/transfer', 'App\Http\Controllers\UserController@showAdminTransferForm')->name('show.admin.transfer.form');
@@ -80,6 +82,7 @@ Route::get('/admin/create-bank-account', 'App\Http\Controllers\UserController@sh
 Route::post('/user/create-bank-account', 'App\Http\Controllers\AccountController@createUserAccount');
 Route::post('/user/withdraw', 'App\Http\Controllers\TransactionController@clientWithdraw');
 Route::post('/user/deposit', 'App\Http\Controllers\TransactionController@clientDeposit');
+Route::post('/user/deposit-check', 'App\Http\Controllers\TransactionController@clientDepositCheck')->name('deposit.check');
 Route::post('/user/transfer', 'App\Http\Controllers\TransactionController@clientTransfer');
 
 // Account Action Routes (Admin)
@@ -90,3 +93,5 @@ Route::post('/admin/create-bank-account', 'App\Http\Controllers\AccountControlle
 Route::put('/account/{id}/approve', 'App\Http\Controllers\AccountController@approveAccount')->name('account.approve');
 Route::put('/account/{id}/block', 'App\Http\Controllers\AccountController@block')->name('user.block');
 Route::put('/account/{id}/unblock', 'App\Http\Controllers\AccountController@unblock')->name('user.unblock');
+Route::put('/admin/transaction/{id}/approve', 'App\Http\Controllers\TransactionController@approveTransaction')->name('admin.transaction.approve');
+Route::put('/admin/transaction/{id}/reject', 'App\Http\Controllers\TransactionController@rejectTransaction')->name('admin.transaction.reject');

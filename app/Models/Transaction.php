@@ -9,11 +9,21 @@ class Transaction extends Model
     protected $fillable = [
         'amount',
         'transaction_type',
+        'status',
+        'clearing_date',
+        'deposit_method',
         'routing_number',
         'description',
+        'check_front_image',
+        'check_back_image',
+        'check_number',
         'user_id',
         'from_account_id',
         'to_account_id',
+    ];
+
+    protected $casts = [
+        'clearing_date' => 'date',
     ];
 
     public function user()

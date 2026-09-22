@@ -19,7 +19,17 @@ class User extends Authenticatable
         'account_type_requested',
         'password',
         'role',
-        'status'
+        'status',
+        'last_login_at'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'last_login_at' => 'datetime',
     ];
 
     /**

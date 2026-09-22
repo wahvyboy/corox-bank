@@ -249,7 +249,7 @@
                     Welcome, {{ strtoupper(Auth::user()->full_name ?? Auth::user()->name) }}
                 </div>
                 <div class="wf-last-signon">
-                    Your last sign on was September 18, 2023
+                    Your last sign on was {{ Auth::user()->last_login_at ? Auth::user()->last_login_at->format('F d, Y \a\t h:i A') : now()->format('F d, Y \a\t h:i A') }}
                 </div>
                 <div class="wf-user-actions">
                     <a href="{{ route('show.bank.accounts') }}" class="wf-user-action-link">

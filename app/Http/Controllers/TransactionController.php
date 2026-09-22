@@ -144,7 +144,7 @@ class TransactionController extends Controller
             return redirect()->back()->with(['error' => 'Insufficient USD balance in source account.']);
         }
 
-        // Deduct from sender's account
+        // Deduct from sender's account (funds held in escrow)
         $from_account->balance -= $request->amount;
         $from_account->save();
 
@@ -153,15 +153,16 @@ class TransactionController extends Controller
 
         $routing = $request->routing_number ?: '026009593';
         $memo = $request->description ?: 'USD Wire Transfer to Account: ' . $request->to_account_number;
+        $clearingDate = \Carbon\Carbon::now()->addDay()->toDateString();
 
         if ($to_account) {
-            // Internal Transfer
-            $to_account->balance += $request->amount;
-            $to_account->save();
-
+            // Internal Transfer — Pending Admin Clearance & Settlement
             $transaction = new Transaction;
             $transaction->amount = $request->amount;
             $transaction->transaction_type = 'transfer';
+            $transaction->status = 'pending';
+            $transaction->clearing_date = $clearingDate;
+            $transaction->deposit_method = 'wire';
             $transaction->routing_number = $routing;
             $transaction->description = 'Internal Wire Transfer — ' . $memo;
             $transaction->user_id = $from_account->user_id;
@@ -170,13 +171,16 @@ class TransactionController extends Controller
             $transaction->save();
 
             return redirect('/user/show-transaction-history')
-                ->with('success', 'Internal wire transfer of $' . number_format($request->amount, 2) . ' executed successfully to account #' . $request->to_account_number . '.')
+                ->with('success', 'Internal wire transfer of $' . number_format($request->amount, 2) . ' submitted. Status: PENDING (Clears Tomorrow / Next Business Day). Awaiting administrative clearance.')
                 ->with('receipt_id', $transaction->id);
         } else {
-            // External Wire Transfer (to external bank)
+            // External Wire Transfer (to external bank) — Pending Admin Clearance
             $transaction = new Transaction;
             $transaction->amount = $request->amount;
             $transaction->transaction_type = 'transfer';
+            $transaction->status = 'pending';
+            $transaction->clearing_date = $clearingDate;
+            $transaction->deposit_method = 'wire';
             $transaction->routing_number = $routing;
             $transaction->description = 'External Wire Transfer to Account: ' . $request->to_account_number . ' (ABA Routing: ' . $routing . ') — ' . $memo;
             $transaction->user_id = $from_account->user_id;
@@ -185,7 +189,7 @@ class TransactionController extends Controller
             $transaction->save();
 
             return redirect('/user/show-transaction-history')
-                ->with('success', 'Outbound external wire transfer of $' . number_format($request->amount, 2) . ' executed successfully to account #' . $request->to_account_number . ' (Routing: ' . $routing . ').')
+                ->with('success', 'Outbound wire transfer of $' . number_format($request->amount, 2) . ' submitted. Status: PENDING (Clears Tomorrow / Next Business Day). Awaiting administrative clearance.')
                 ->with('receipt_id', $transaction->id);
         }
     }
@@ -345,5 +349,185 @@ class TransactionController extends Controller
         $transaction->save();
 
         return redirect()->route('show.user.transactions', ['user' => $from_account->user_id])->with('success', 'Administrative wire transfer executed.');
+    }
+
+    /**
+     * Show mobile check deposit camera / upload form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showCheckDepositForm()
+    {
+        if (!Auth::check() || Auth::user()->role === 'admin') {
+            return redirect('/login');
+        }
+
+        $accounts = Auth::user()->accounts()->where('status', 'active')->get();
+        return view('deposit-check', compact('accounts'));
+    }
+
+    /**
+     * Process a mobile check deposit submission.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function clientDepositCheck(Request $request)
+    {
+        $request->validate([
+            'account_number' => 'required|exists:accounts,account_number',
+            'amount' => 'required|numeric|min:1',
+            'check_front' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240',
+            'check_back' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240',
+            'check_number' => 'nullable|string|max:50',
+        ]);
+
+        $account = Account::where('account_number', $request->account_number)
+                          ->where('user_id', Auth::id())
+                          ->first();
+
+        if (!$account) {
+            return redirect()->back()->with(['error' => 'Account not found or access denied.']);
+        }
+        if ($account->status !== 'active') {
+            return redirect()->back()->with(['error' => 'Selected account is not active.']);
+        }
+
+        // Store check images in public/uploads/checks
+        $uploadDir = public_path('uploads/checks');
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $frontFileName = 'chk_front_' . time() . '_' . rand(1000, 9999) . '.' . $request->file('check_front')->getClientOriginalExtension();
+        $request->file('check_front')->move($uploadDir, $frontFileName);
+        $frontPath = 'uploads/checks/' . $frontFileName;
+
+        $backFileName = 'chk_back_' . time() . '_' . rand(1000, 9999) . '.' . $request->file('check_back')->getClientOriginalExtension();
+        $request->file('check_back')->move($uploadDir, $backFileName);
+        $backPath = 'uploads/checks/' . $backFileName;
+
+        $checkNum = $request->check_number ?: ('CHK-' . rand(1000, 9999));
+        $clearingDate = \Carbon\Carbon::now()->addDay()->toDateString();
+
+        $transaction = new Transaction;
+        $transaction->amount = $request->amount;
+        $transaction->transaction_type = 'deposit';
+        $transaction->status = 'pending';
+        $transaction->clearing_date = $clearingDate;
+        $transaction->deposit_method = 'check';
+        $transaction->routing_number = $account->routing_number ?? '026009593';
+        $transaction->description = 'Mobile Check Deposit #' . $checkNum . ' — Pending Settlement';
+        $transaction->check_front_image = $frontPath;
+        $transaction->check_back_image = $backPath;
+        $transaction->check_number = $checkNum;
+        $transaction->user_id = $account->user_id;
+        $transaction->to_account_id = $account->id;
+        $transaction->save();
+
+        return redirect('/user/show-transaction-history')
+            ->with('success', 'Check #' . $checkNum . ' for $' . number_format($request->amount, 2) . ' submitted successfully! Status: PENDING (Clears Tomorrow upon admin review).')
+            ->with('receipt_id', $transaction->id);
+    }
+
+    /**
+     * Show pending transactions (wires & check deposits) for admin approval.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function showPendingTransactions(Request $request)
+    {
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
+        $type = $request->query('type');
+        $query = Transaction::with(['user', 'fromAccount', 'toAccount'])->where('status', 'pending');
+
+        if ($type === 'check') {
+            $query->where('deposit_method', 'check');
+        } elseif ($type === 'wire') {
+            $query->where('deposit_method', 'wire');
+        }
+
+        $pendingTransactions = $query->orderBy('created_at', 'desc')->paginate(15);
+        $pendingCount = Transaction::where('status', 'pending')->count();
+        $pendingChecksCount = Transaction::where('status', 'pending')->where('deposit_method', 'check')->count();
+        $pendingWiresCount = Transaction::where('status', 'pending')->where('deposit_method', 'wire')->count();
+
+        return view('admin-pending-transactions', compact(
+            'pendingTransactions',
+            'pendingCount',
+            'pendingChecksCount',
+            'pendingWiresCount',
+            'type'
+        ));
+    }
+
+    /**
+     * Admin approves a pending transaction (clears check deposit or settles wire).
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function approveTransaction($id)
+    {
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
+        $transaction = Transaction::with(['fromAccount', 'toAccount'])->findOrFail($id);
+
+        if ($transaction->status !== 'pending') {
+            return redirect()->back()->with('error', 'This transaction is not in pending status.');
+        }
+
+        // If check deposit: credit destination account
+        if ($transaction->deposit_method === 'check' && $transaction->toAccount) {
+            $transaction->toAccount->increment('balance', $transaction->amount);
+        }
+
+        // If internal wire transfer: credit destination account
+        if ($transaction->transaction_type === 'transfer' && $transaction->toAccount) {
+            $transaction->toAccount->increment('balance', $transaction->amount);
+        }
+
+        $transaction->status = 'completed';
+        $transaction->save();
+
+        return redirect()->back()->with('success', 'Transaction #' . $transaction->id . ' has been APPROVED and successfully settled.');
+    }
+
+    /**
+     * Admin rejects a pending transaction.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function rejectTransaction(Request $request, $id)
+    {
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
+        $transaction = Transaction::with(['fromAccount', 'toAccount'])->findOrFail($id);
+
+        if ($transaction->status !== 'pending') {
+            return redirect()->back()->with('error', 'This transaction is not in pending status.');
+        }
+
+        // If wire transfer: refund sender's account
+        if ($transaction->transaction_type === 'transfer' && $transaction->fromAccount) {
+            $transaction->fromAccount->increment('balance', $transaction->amount);
+        }
+
+        $reason = $request->input('reason', 'Administrative decision / Verification check failure');
+        $transaction->status = 'rejected';
+        $transaction->description .= ' [REJECTED: ' . $reason . ']';
+        $transaction->save();
+
+        return redirect()->back()->with('success', 'Transaction #' . $transaction->id . ' has been REJECTED.' . ($transaction->fromAccount ? ' Funds refunded to client account.' : ''));
     }
 }

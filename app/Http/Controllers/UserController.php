@@ -133,6 +133,11 @@ class UserController extends Controller
                 ]);
             }
 
+            // Update live last login timestamp
+            $user->update([
+                'last_login_at' => now(),
+            ]);
+
             Auth::login($user, $request->boolean('remember'));
 
             // Check the user's role and redirect accordingly
