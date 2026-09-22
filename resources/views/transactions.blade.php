@@ -9,22 +9,23 @@
 </div>
 
 @if(session('receipt_id'))
-    <div style="background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);">
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 38px; height: 38px; background: #10b981; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800;">✓</div>
+    <div class="tx-success-banner">
+        <div class="tx-success-left">
+            <div class="tx-success-icon">✓</div>
             <div>
-                <div style="font-weight: 800; color: #065f46; font-size: 15px;">Transfer Completed Successfully!</div>
-                <div style="font-size: 13px; color: #047857;">Your official Corox Bank transfer receipt has been generated with bank logo & security verification seal.</div>
+                <div class="tx-success-title">Transfer Completed Successfully!</div>
+                <div class="tx-success-sub">Your official Corox Bank transfer receipt has been generated with bank logo &amp; security verification seal.</div>
             </div>
         </div>
-        <a href="{{ route('transaction.receipt', session('receipt_id')) }}" class="btn btn-primary" style="white-space: nowrap; font-size: 14px; font-weight: 700; background: #047857; border: none; padding: 0.7rem 1.2rem; display: flex; align-items: center; gap: 8px;">
-            📄 View & Print Official Receipt
+        <a href="{{ route('transaction.receipt', session('receipt_id')) }}" class="tx-success-btn">
+            📄 View &amp; Print Official Receipt
         </a>
     </div>
 @endif
 
 <div class="table-card">
-    <div class="table-responsive">
+    <!-- Desktop Ledger Table (>= 768px) -->
+    <div class="table-responsive tx-desktop-table">
         <table>
             <thead>
                 <tr>
@@ -73,8 +74,56 @@
         </table>
     </div>
 
+    <!-- Mobile Transaction Feed (< 768px) -->
+    <div class="tx-mobile-feed">
+        @forelse($transactions as $tx)
+            <div class="tx-mobile-card tx-type-{{ $tx->transaction_type }}">
+                <div class="tx-mobile-header">
+                    <div>
+                        @if($tx->transaction_type === 'deposit')
+                            <span class="badge badge-deposit">Deposit</span>
+                        @elseif($tx->transaction_type === 'withdraw')
+                            <span class="badge badge-withdraw">Withdrawal</span>
+                        @else
+                            <span class="badge badge-transfer">Wire Transfer</span>
+                        @endif
+                    </div>
+                    <div class="tx-mobile-date">{{ $tx->created_at->format('M d, Y • h:i A') }}</div>
+                </div>
+
+                <div class="tx-mobile-main">
+                    <div class="tx-mobile-desc">{{ $tx->description ?? 'FedWire Settlement' }}</div>
+                    <div class="tx-mobile-amount amount-{{ $tx->transaction_type }}">
+                        {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}${{ number_format($tx->amount, 2) }}
+                    </div>
+                </div>
+
+                <div class="tx-mobile-details">
+                    <div class="tx-mobile-detail-row">
+                        <span>Routing ABA:</span>
+                        <code>{{ $tx->routing_number ?? '026009593' }}</code>
+                    </div>
+                    @if($tx->fromAccount || $tx->toAccount)
+                        <div class="tx-mobile-detail-row">
+                            <span>Account Flow:</span>
+                            <span>{{ $tx->fromAccount ? '...' . substr($tx->fromAccount->account_number, -4) : 'Source' }} &rarr; {{ $tx->toAccount ? '...' . substr($tx->toAccount->account_number, -4) : 'Beneficiary' }}</span>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="tx-mobile-actions">
+                    <a href="{{ route('transaction.receipt', $tx->id) }}" class="btn btn-sm btn-secondary" style="font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">
+                        🧾 View Official Receipt
+                    </a>
+                </div>
+            </div>
+        @empty
+            <div style="text-align: center; color: var(--text-secondary); padding: 2rem; font-size: 13.5px;">No transaction history recorded yet.</div>
+        @endforelse
+    </div>
+
     @if($transactions->hasPages())
-        <div style="padding: 1.25rem 1.5rem; border-top: 1px solid #E5E7EB; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div class="tx-pagination-wrapper">
             <div style="font-size: 13px; color: var(--text-secondary); font-weight: 600;">
                 Showing transactions {{ $transactions->firstItem() ?? 0 }}–{{ $transactions->lastItem() ?? 0 }} of {{ $transactions->total() }}
             </div>

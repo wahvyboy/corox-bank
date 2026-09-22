@@ -9,7 +9,8 @@
 </div>
 
 <div class="table-card">
-    <div class="table-responsive">
+    {{-- Desktop Table View (>= 768px) --}}
+    <div class="table-responsive tx-desktop-table">
         <table>
             <thead>
                 <tr>
@@ -56,6 +57,54 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    {{-- Mobile Transaction Card Feed (< 768px) --}}
+    <div class="tx-mobile-feed">
+        @forelse($transactions as $tx)
+            <div class="tx-mobile-card tx-type-{{ $tx->transaction_type }}">
+                <div class="tx-mobile-header">
+                    <div>
+                        @if($tx->transaction_type === 'deposit')
+                            <span class="badge badge-deposit">Deposit</span>
+                        @elseif($tx->transaction_type === 'withdraw')
+                            <span class="badge badge-withdraw">Withdrawal</span>
+                        @else
+                            <span class="badge badge-transfer">Wire Transfer</span>
+                        @endif
+                    </div>
+                    <div class="tx-mobile-date">{{ $tx->created_at->format('M d, Y • h:i A') }}</div>
+                </div>
+
+                <div class="tx-mobile-main">
+                    <div class="tx-mobile-desc">{{ $tx->description ?? 'FedWire Settlement' }}</div>
+                    <div class="tx-mobile-amount amount-{{ $tx->transaction_type }}">
+                        {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}${{ number_format($tx->amount, 2) }}
+                    </div>
+                </div>
+
+                <div class="tx-mobile-details">
+                    <div class="tx-mobile-detail-row">
+                        <span>Routing ABA:</span>
+                        <code>{{ $tx->routing_number ?? '026009593' }}</code>
+                    </div>
+                    @if($tx->fromAccount || $tx->toAccount)
+                        <div class="tx-mobile-detail-row">
+                            <span>Account Flow:</span>
+                            <span>{{ $tx->fromAccount ? '...' . substr($tx->fromAccount->account_number, -4) : 'Source' }} &rarr; {{ $tx->toAccount ? '...' . substr($tx->toAccount->account_number, -4) : 'Beneficiary' }}</span>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="tx-mobile-actions">
+                    <a href="{{ route('transaction.receipt', $tx->id) }}" class="btn btn-sm btn-secondary" style="font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">
+                        🧾 View Official Receipt
+                    </a>
+                </div>
+            </div>
+        @empty
+            <div style="text-align: center; color: var(--text-secondary); padding: 2rem; font-size: 13.5px;">No transaction history for this user.</div>
+        @endforelse
     </div>
 </div>
 @endsection
