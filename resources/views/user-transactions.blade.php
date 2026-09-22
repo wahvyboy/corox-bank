@@ -106,5 +106,16 @@
             <div style="text-align: center; color: var(--text-secondary); padding: 2rem; font-size: 13.5px;">No transaction history for this user.</div>
         @endforelse
     </div>
+
+    @if($transactions->hasPages())
+        <div class="tx-pagination-wrapper">
+            <div style="font-size: 13px; color: var(--text-secondary); font-weight: 600;">
+                Showing transactions {{ $transactions->firstItem() ?? 0 }}–{{ $transactions->lastItem() ?? 0 }} of {{ $transactions->total() }}
+            </div>
+            <div class="pagination-wrapper">
+                {{ $transactions->links('partials.pagination') }}
+            </div>
+        </div>
+    @endif
 </div>
 @endsection

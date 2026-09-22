@@ -2352,6 +2352,132 @@ td {
     box-sizing: border-box;
 }
 
+/* ==========================================================================
+   Corox Institutional Pagination Component
+   ========================================================================== */
+.corox-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.corox-pagination-desktop {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.corox-pagination-mobile {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+}
+
+.corox-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    user-select: none;
+    line-height: 1.4;
+}
+
+.corox-page-btn:hover:not(.disabled) {
+    background: #F3F4F6;
+    border-color: #9CA3AF;
+    color: #111827;
+}
+
+.corox-page-btn.disabled {
+    color: #9CA3AF;
+    background: #F9FAFB;
+    border-color: #E5E7EB;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.corox-page-info {
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+    white-space: nowrap;
+}
+
+.corox-page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.corox-page-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.corox-page-num:hover:not(.active) {
+    background: #F3F4F6;
+    border-color: #9CA3AF;
+    color: #111827;
+}
+
+.corox-page-num.active {
+    background: #CC0000;
+    border-color: #CC0000;
+    color: #FFFFFF;
+    font-weight: 700;
+    cursor: default;
+    box-shadow: 0 1px 3px rgba(204, 0, 0, 0.3);
+}
+
+.corox-page-dots {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 34px;
+    font-size: 14px;
+    color: #9CA3AF;
+    font-weight: 700;
+}
+
+/* Bulletproof safety for any stray SVGs inside pagination */
+.pagination-wrapper svg,
+.tx-pagination-wrapper svg,
+.corox-pagination svg {
+    width: 16px !important;
+    height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    display: inline-block !important;
+}
+
 /* Authenticated Portal Mobile Topbar & Sidebar Backdrop (Corox Institutional Style) */
 .app-mobile-topbar {
     display: none;
@@ -4293,6 +4419,20 @@ td {
 }
 
 @media (max-width: 640px) {
+    /* Corox Mobile Pagination */
+    .corox-pagination-desktop {
+        display: none !important;
+    }
+    .corox-pagination-mobile {
+        display: flex !important;
+    }
+    .corox-pagination-mobile .corox-page-btn {
+        flex: 1;
+        max-width: 130px;
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
     /* Account Summary Bar — Clean Native Mobile Selector */
     .wf-summary-bar {
         padding: 0.85rem 1rem;

@@ -128,7 +128,7 @@
                 Showing transactions {{ $transactions->firstItem() ?? 0 }}–{{ $transactions->lastItem() ?? 0 }} of {{ $transactions->total() }}
             </div>
             <div class="pagination-wrapper">
-                {{ $transactions->links() }}
+                {{ $transactions->links('partials.pagination') }}
             </div>
         </div>
     @endif
