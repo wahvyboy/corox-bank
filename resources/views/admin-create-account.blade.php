@@ -26,7 +26,7 @@
 
         <div class="form-group">
             <label class="form-label">ABA Routing Number</label>
-            <input type="text" class="form-control" value="026009593 (Corox Bank)" readonly>
+            <input type="text" class="form-control" value="071923456 (Corox Bank)" readonly>
         </div>
 
         <button type="submit" class="btn btn-primary btn-lg btn-block">Create Active USD Account</button>

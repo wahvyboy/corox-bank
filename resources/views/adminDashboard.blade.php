@@ -7,7 +7,7 @@
             <h2>Corox Bank Administration Terminal</h2>
             <p>System Administrator: {{ Auth::user()->name }}</p>
             <div class="routing-badge">
-                Master Wire Desk • ABA Routing: 026009593
+                Master Wire Desk • ABA Routing: 071923456
             </div>
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">

@@ -48,7 +48,7 @@
             </div>
             <div class="wf-meta-badge">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                ABA 026009593 • Member FDIC
+                ABA 071923456 • Member FDIC
             </div>
         </div>
     </div>
@@ -76,7 +76,7 @@
                                     </h3>
                                     <div class="wf-account-number">
                                         ...{{ substr($acc->account_number, -4) }}
-                                        <span class="wf-account-routing">Routing: {{ $acc->routing_number ?? '026009593' }}</span>
+                                        <span class="wf-account-routing">Routing: {{ $acc->routing_number ?? '071923456' }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -280,7 +280,7 @@
                 <div class="wf-tool-card-body">
                     <div class="wf-tool-detail">
                         <span>FedWire Routing:</span>
-                        <strong>026009593</strong>
+                        <strong>071923456</strong>
                     </div>
                     <div class="wf-tool-detail">
                         <span>Status:</span>

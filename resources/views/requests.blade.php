@@ -28,7 +28,7 @@
                         <td><strong>{{ $account->user ? $account->user->name : 'Unknown' }}</strong></td>
                         <td>{{ $account->account_type ?? 'Checking' }}</td>
                         <td><code>{{ $account->account_number }}</code></td>
-                        <td><code>{{ $account->routing_number ?? '026009593' }}</code></td>
+                        <td><code>{{ $account->routing_number ?? '071923456' }}</code></td>
                         <td>
                             @if($account->status === 'active')
                                 <span class="badge badge-active">Active</span>

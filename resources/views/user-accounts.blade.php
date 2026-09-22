@@ -28,7 +28,7 @@
                     <tr>
                         <td><strong>{{ $account->account_type ?? 'Checking' }}</strong></td>
                         <td><code>{{ $account->account_number }}</code></td>
-                        <td><code>{{ $account->routing_number ?? '026009593' }}</code></td>
+                        <td><code>{{ $account->routing_number ?? '071923456' }}</code></td>
                         <td style="font-weight: 700; color: var(--accent-gold-bright);">${{ number_format($account->balance, 2) }}</td>
                         <td>
                             @if($account->status === 'active')

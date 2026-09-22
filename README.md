@@ -23,7 +23,7 @@
 **Corox Bank** is an enterprise-grade full-stack digital banking web application built with Laravel and PHP 8. It features an institutional front-end inspired by the signature **Corox Institutional wireframe architecture**, Google Fonts typography (`Merriweather` serif + `Inter` sans-serif), live infinite ticker bar, Corox Crimson Red (`#CC0000`) and Carbon Onyx branding, comprehensive client and administrator portals, and direct simulated FedWire clearing.
 
 - **Institution**: Corox Commercial Bank
-- **ABA / FedWire Routing**: `026009593`
+- **ABA / FedWire Routing**: `071923456`
 - **Deposit Insurance**: Member FDIC (Protected up to $250,000 per depositor)
 - **Primary Color**: Corox Crimson (`#CC0000`)
 - **Accent Palette**: Corox Institutional Stagecoach Gold (`#DDAA00` / `#FFB81C`) & Onyx Carbon (`#1B1B1B`)
@@ -155,7 +155,7 @@ corox-bank/
 ## ⚖️ Regulatory & Legal Disclosures
 
 - **FDIC Insurance**: Deposits are insured up to $250,000 per depositor, per insured bank, for each account ownership category.
-- **Routing**: Official simulated FedWire/ACH transit routing number: `026009593`.
+- **Routing**: Official simulated FedWire/ACH transit routing number: `071923456`.
 - **Equal Housing Lender**: Corox Bank complies with federal fair lending regulations.
 
 ---

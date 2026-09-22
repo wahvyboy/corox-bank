@@ -25,7 +25,7 @@ class AccountController extends Controller
 
         $account = new Account;
         $account->user_id = Auth::id();
-        $account->routing_number = '026009593';
+        $account->routing_number = '071923456';
         $account->account_type = $request->account_type;
         $account->currency = 'USD';
         $account->balance = 0.00;
@@ -61,7 +61,7 @@ class AccountController extends Controller
     
         $account = new Account;
         $account->user_id = $user->id;
-        $account->routing_number = '026009593';
+        $account->routing_number = '071923456';
         $account->account_type = $request->account_type;
         $account->currency = 'USD';
         $account->balance = 0.00;

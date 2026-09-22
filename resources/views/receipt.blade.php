@@ -315,7 +315,7 @@
             </div>
             <div class="receipt-detail-row">
                 <div class="receipt-label">Originating Bank</div>
-                <div class="receipt-value">Corox Bank (Routing: 026009593)</div>
+                <div class="receipt-value">Corox Bank (Routing: 071923456)</div>
             </div>
         </div>
 
@@ -349,7 +349,11 @@
             </div>
             <div class="receipt-detail-row">
                 <div class="receipt-label">ABA Routing / SWIFT Code</div>
-                <div class="receipt-value"><code>{{ $transaction->routing_number ?? '026009593' }}</code></div>
+                <div class="receipt-value"><code>{{ $transaction->routing_number ?? '071923456' }}</code></div>
+            </div>
+            <div class="receipt-detail-row">
+                <div class="receipt-label">Receiving Bank / Clearing Network</div>
+                <div class="receipt-value" style="font-weight: 700; color: #111827;">{{ $transaction->receiving_bank }}</div>
             </div>
         </div>
     </div>

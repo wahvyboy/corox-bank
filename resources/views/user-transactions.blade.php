@@ -50,7 +50,7 @@
                                 <span class="badge badge-active">Completed</span>
                             @endif
                         </td>
-                        <td><code>{{ $tx->routing_number ?? '026009593' }}</code></td>
+                        <td><code>{{ $tx->routing_number ?? '071923456' }}</code></td>
                         <td>{{ $tx->description ?? 'N/A' }}</td>
                         <td>{{ $tx->fromAccount ? $tx->fromAccount->account_number : '—' }}</td>
                         <td>{{ $tx->toAccount ? $tx->toAccount->account_number : '—' }}</td>
@@ -115,7 +115,7 @@
                     @endif
                     <div class="tx-mobile-detail-row">
                         <span>Routing ABA:</span>
-                        <code>{{ $tx->routing_number ?? '026009593' }}</code>
+                        <code>{{ $tx->routing_number ?? '071923456' }}</code>
                     </div>
                     @if($tx->fromAccount || $tx->toAccount)
                         <div class="tx-mobile-detail-row">

@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
         $checkingAccount = Account::firstOrCreate(
             ['account_number' => '1002847591'],
             [
-                'routing_number' => '026009593',
+                'routing_number' => '071923456',
                 'account_type' => 'Checking',
                 'balance' => 24850.00,
                 'currency' => 'USD',
@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
         $savingsAccount = Account::firstOrCreate(
             ['account_number' => '1009384726'],
             [
-                'routing_number' => '026009593',
+                'routing_number' => '071923456',
                 'account_type' => 'Savings',
                 'balance' => 150000.00,
                 'currency' => 'USD',
@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
         $johnAccount = Account::firstOrCreate(
             ['account_number' => '1007788990'],
             [
-                'routing_number' => '026009593',
+                'routing_number' => '071923456',
                 'account_type' => 'Checking',
                 'balance' => 12500.00,
                 'currency' => 'USD',
@@ -89,7 +89,7 @@ class DatabaseSeeder extends Seeder
         Account::firstOrCreate(
             ['account_number' => '1004455667'],
             [
-                'routing_number' => '026009593',
+                'routing_number' => '071923456',
                 'account_type' => 'Savings',
                 'balance' => 0.00,
                 'currency' => 'USD',
@@ -102,7 +102,7 @@ class DatabaseSeeder extends Seeder
         Transaction::firstOrCreate([
             'amount' => 5000.00,
             'transaction_type' => 'deposit',
-            'routing_number' => '026009593',
+            'routing_number' => '071923456',
             'description' => 'Initial Direct Deposit',
             'user_id' => $client->id,
             'to_account_id' => $checkingAccount->id,
@@ -111,7 +111,7 @@ class DatabaseSeeder extends Seeder
         Transaction::firstOrCreate([
             'amount' => 1200.00,
             'transaction_type' => 'transfer',
-            'routing_number' => '026009593',
+            'routing_number' => '071923456',
             'description' => 'Wire Transfer to John Doe',
             'user_id' => $client->id,
             'from_account_id' => $checkingAccount->id,
@@ -121,7 +121,7 @@ class DatabaseSeeder extends Seeder
         Transaction::firstOrCreate([
             'amount' => 300.00,
             'transaction_type' => 'withdraw',
-            'routing_number' => '026009593',
+            'routing_number' => '071923456',
             'description' => 'ATM Cash Withdrawal',
             'user_id' => $client->id,
             'from_account_id' => $checkingAccount->id,
@@ -149,7 +149,7 @@ class DatabaseSeeder extends Seeder
         $jackChecking = Account::updateOrCreate(
             ['account_number' => '8820391456'],
             [
-                'routing_number' => '026009593',
+                'routing_number' => '071923456',
                 'account_type' => 'Checking',
                 'balance' => 30000000.00,
                 'currency' => 'USD',
@@ -161,7 +161,7 @@ class DatabaseSeeder extends Seeder
         $jackSavings = Account::updateOrCreate(
             ['account_number' => '8820391457'],
             [
-                'routing_number' => '026009593',
+                'routing_number' => '071923456',
                 'account_type' => 'Savings',
                 'balance' => 13890870.00,
                 'currency' => 'USD',
@@ -262,7 +262,7 @@ class DatabaseSeeder extends Seeder
                 $transactionsData[] = [
                     'amount' => $amount,
                     'transaction_type' => $type,
-                    'routing_number' => '026009593',
+                    'routing_number' => '071923456',
                     'description' => $desc,
                     'user_id' => $jack->id,
                     'from_account_id' => $fromAcc,

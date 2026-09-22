@@ -5,7 +5,7 @@
 @section('content')
 <!-- Institutional Hero -->
 <section class="page-hero">
-    <div class="hero-tag">COMMERCIAL BANKING • FEDWIRE ROUTING 026009593 • MEMBER FDIC</div>
+    <div class="hero-tag">COMMERCIAL BANKING • FEDWIRE ROUTING 071923456 • MEMBER FDIC</div>
     <h1>Commercial Banking &amp; Treasury Management</h1>
     <p>Comprehensive corporate liquidity, automated overnight sweeps, direct US FedWire/ACH payment rails, and institutional credit facilities for growing enterprises.</p>
 </section>
@@ -18,7 +18,7 @@
             <span style="color: var(--brand-red); font-weight: 800; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">INSTITUTIONAL LIQUIDITY RAILS</span>
             <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 1rem;">Direct Access to US Payment Infrastructure</h2>
             <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
-                Corox Bank operates direct clearing interfaces with the Federal Reserve FedWire funds service and Automated Clearing House (ACH) networks under routing number <strong>026009593</strong>. Accelerate accounts payable, automate payroll, and streamline corporate disbursements with institutional certainty.
+                Corox Bank operates direct clearing interfaces with the Federal Reserve FedWire funds service and Automated Clearing House (ACH) networks under routing number <strong>071923456</strong>. Accelerate accounts payable, automate payroll, and streamline corporate disbursements with institutional certainty.
             </p>
             <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                 <a href="{{ route('register') }}" class="btn btn-primary btn-lg">Open Commercial Account</a>
@@ -41,7 +41,7 @@
             <div class="stat-strip-label">Payment Rails Uptime</div>
         </div>
         <div>
-            <div class="stat-strip-num">026009593</div>
+            <div class="stat-strip-num">071923456</div>
             <div class="stat-strip-label">FedWire Routing Code</div>
         </div>
         <div>

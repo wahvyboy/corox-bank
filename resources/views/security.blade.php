@@ -88,11 +88,11 @@
                     </tr>
                     <tr>
                         <td><strong>ABA / FedWire Routing Number</strong></td>
-                        <td><strong style="color: var(--brand-red); font-size: 1.2rem; font-family: monospace;">026009593</strong> <span style="font-size: 12px; color: #059669; font-weight: 700;">(Verified Active)</span></td>
+                        <td><strong style="color: var(--brand-red); font-size: 1.2rem; font-family: monospace;">071923456</strong> <span style="font-size: 12px; color: #059669; font-weight: 700;">(Verified Active)</span></td>
                     </tr>
                     <tr>
                         <td><strong>ACH Direct Deposit Routing</strong></td>
-                        <td><strong style="font-family: monospace; font-size: 1.2rem;">026009593</strong></td>
+                        <td><strong style="font-family: monospace; font-size: 1.2rem;">071923456</strong></td>
                     </tr>
                     <tr>
                         <td><strong>SWIFT / BIC Code (International)</strong></td>

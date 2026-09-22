@@ -69,7 +69,7 @@
         <div class="process-step-card">
             <div class="process-step-num" style="font-size: 1rem; width: 48px; height: 48px;">1999</div>
             <h4>Direct FedWire Integration</h4>
-            <p>Direct clearing integration with the Federal Reserve Bank under ABA routing number <code>026009593</code>.</p>
+            <p>Direct clearing integration with the Federal Reserve Bank under ABA routing number <code>071923456</code>.</p>
         </div>
         <div class="process-step-card">
             <div class="process-step-num" style="font-size: 1rem; width: 48px; height: 48px;">2012</div>

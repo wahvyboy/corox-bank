@@ -31,7 +31,18 @@
 
         <div class="form-group">
             <label for="routing_number" class="form-label">Destination ABA Routing / SWIFT Code</label>
-            <input type="text" name="routing_number" id="routing_number" class="form-control" value="026009593" required placeholder="Enter 9-digit ABA Routing Number">
+            <input type="text" name="routing_number" id="routing_number" class="form-control" value="071923456" required placeholder="Enter 9-digit ABA Routing Number">
+        </div>
+
+        <!-- Quick Routing Institution Selector Chips -->
+        <div style="margin-top: -0.5rem; margin-bottom: 1.25rem; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+            <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase;">Quick Bank Select:</span>
+            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('071923456')" style="background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;">Corox Bank (071923456)</button>
+            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('026009593')" style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1D4ED8; cursor: pointer;">Bank of America (026009593)</button>
+            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('021000021')" style="background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;">Chase (021000021)</button>
+            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('121000248')" style="background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;">Wells Fargo (121000248)</button>
+            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('101205681')" style="background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;">Fidelity (101205681)</button>
+            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('062000019')" style="background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;">Regions (062000019)</button>
         </div>
 
         <!-- Dynamic Live Bank Lookup Badge -->
@@ -65,8 +76,17 @@
 
         // Comprehensive US ABA Routing Number Registry Database (65+ Institutions)
         const routingDatabase = {
-            // Internal & Primary Sponsor
-            '026009593': 'Corox Bank (Internal Clearing)',
+            // Corox Bank (Neutral Internal Clearing)
+            '071923456': 'Corox Bank (Internal Clearing)',
+
+            // Bank of America (Wire & ACH Electronic Clearing)
+            '026009593': 'Bank of America, N.A. (Domestic Wire Clearing)',
+            '121000358': 'Bank of America, N.A. (California)',
+            '054000030': 'Bank of America, N.A. (North Carolina)',
+            '111000025': 'Bank of America, N.A. (Texas)',
+            '021200339': 'Bank of America, N.A. (New York)',
+            '011900254': 'Bank of America, N.A. (Massachusetts)',
+            '063100277': 'Bank of America, N.A. (Florida)',
 
             // Requested: Fidelity Brokerage & Regions Bank
             '101205681': 'Fidelity Brokerage Services LLC',
@@ -81,10 +101,6 @@
             '021000021': 'JPMorgan Chase Bank, N.A. (New York)',
             '111000614': 'JPMorgan Chase Bank, N.A. (Texas)',
             '071000013': 'JPMorgan Chase Bank, N.A. (Midwest)',
-            '121000358': 'Bank of America, N.A. (California)',
-            '054000030': 'Bank of America, N.A. (North Carolina)',
-            '111000025': 'Bank of America, N.A. (Texas)',
-            '021200339': 'Bank of America, N.A. (New York)',
             '121000248': 'WF National Bank, N.A. (San Francisco)',
             '091000019': 'WF National Bank, N.A. (Minneapolis)',
             '102000076': 'WF National Bank, N.A. (Denver)',
@@ -198,8 +214,15 @@
             }
         }
 
+        window.setRoutingPreset = function(routing) {
+            routingInput.value = routing;
+            resolveReceivingBank();
+            routingInput.focus();
+        };
+
         routingInput.addEventListener('input', resolveReceivingBank);
         accountInput.addEventListener('input', resolveReceivingBank);
+        resolveReceivingBank();
     });
 </script>
 @endsection

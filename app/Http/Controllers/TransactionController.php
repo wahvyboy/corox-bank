@@ -52,7 +52,7 @@ class TransactionController extends Controller
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
         $transaction->transaction_type = 'withdraw';
-        $transaction->routing_number = $account->routing_number ?? '026009593';
+        $transaction->routing_number = $account->routing_number ?? '071923456';
         $transaction->description = $request->description ?? 'ATM / Client Withdrawal';
         $transaction->user_id = $account->user_id;
         $transaction->from_account_id = $account->id;
@@ -99,7 +99,7 @@ class TransactionController extends Controller
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
         $transaction->transaction_type = 'deposit';
-        $transaction->routing_number = $account->routing_number ?? '026009593';
+        $transaction->routing_number = $account->routing_number ?? '071923456';
         $transaction->description = $request->description ?? 'Direct Deposit / Credit';
         $transaction->user_id = $account->user_id;
         $transaction->to_account_id = $account->id;
@@ -151,7 +151,7 @@ class TransactionController extends Controller
         // Check if destination account exists internally within Corox Bank
         $to_account = Account::where('account_number', $request->to_account_number)->first();
 
-        $routing = $request->routing_number ?: '026009593';
+        $routing = $request->routing_number ?: '071923456';
         $memo = $request->description ?: 'USD Wire Transfer to Account: ' . $request->to_account_number;
         $clearingDate = \Carbon\Carbon::now()->addDay()->toDateString();
 
@@ -175,6 +175,7 @@ class TransactionController extends Controller
                 ->with('receipt_id', $transaction->id);
         } else {
             // External Wire Transfer (to external bank) — Pending Admin Clearance
+            $receivingBank = Transaction::resolveBankByRouting($routing);
             $transaction = new Transaction;
             $transaction->amount = $request->amount;
             $transaction->transaction_type = 'transfer';
@@ -182,7 +183,7 @@ class TransactionController extends Controller
             $transaction->clearing_date = $clearingDate;
             $transaction->deposit_method = 'wire';
             $transaction->routing_number = $routing;
-            $transaction->description = 'External Wire Transfer to Account: ' . $request->to_account_number . ' (ABA Routing: ' . $routing . ') — ' . $memo;
+            $transaction->description = 'External Wire Transfer to ' . $receivingBank . ' (Account: ' . $request->to_account_number . ', ABA: ' . $routing . ') — ' . $memo;
             $transaction->user_id = $from_account->user_id;
             $transaction->from_account_id = $from_account->id;
             $transaction->to_account_id = null;
@@ -250,7 +251,7 @@ class TransactionController extends Controller
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
         $transaction->transaction_type = 'withdraw';
-        $transaction->routing_number = $account->routing_number ?? '026009593';
+        $transaction->routing_number = $account->routing_number ?? '071923456';
         $transaction->description = 'Administrative Ledger Withdrawal';
         $transaction->user_id = $account->user_id;
         $transaction->from_account_id = $account->id;
@@ -289,7 +290,7 @@ class TransactionController extends Controller
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
         $transaction->transaction_type = 'deposit';
-        $transaction->routing_number = $account->routing_number ?? '026009593';
+        $transaction->routing_number = $account->routing_number ?? '071923456';
         $transaction->description = 'Administrative Ledger Deposit';
         $transaction->user_id = $account->user_id;
         $transaction->to_account_id = $account->id;
@@ -330,19 +331,21 @@ class TransactionController extends Controller
         $from_account->save();
 
         $to_account = Account::where('account_number', $request->to_account_number)->first();
-        $routing = $request->routing_number ?: '026009593';
+        $routing = $request->routing_number ?: '071923456';
 
         if ($to_account) {
             $to_account->balance += $request->amount;
             $to_account->save();
         }
 
+        $receivingBank = Transaction::resolveBankByRouting($routing);
+
         // Create a new transaction record
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
         $transaction->transaction_type = 'transfer';
         $transaction->routing_number = $routing;
-        $transaction->description = 'Administrative Wire Override to Account: ' . $request->to_account_number . ' (ABA Routing: ' . $routing . ')';
+        $transaction->description = 'Administrative Wire Override to ' . $receivingBank . ' (Account: ' . $request->to_account_number . ', ABA: ' . $routing . ')';
         $transaction->user_id = $from_account->user_id;
         $transaction->from_account_id = $from_account->id;
         $transaction->to_account_id = $to_account ? $to_account->id : null;
@@ -416,7 +419,7 @@ class TransactionController extends Controller
         $transaction->status = 'pending';
         $transaction->clearing_date = $clearingDate;
         $transaction->deposit_method = 'check';
-        $transaction->routing_number = $account->routing_number ?? '026009593';
+        $transaction->routing_number = $account->routing_number ?? '071923456';
         $transaction->description = 'Mobile Check Deposit #' . $checkNum . ' — Pending Settlement';
         $transaction->check_front_image = $frontPath;
         $transaction->check_back_image = $backPath;

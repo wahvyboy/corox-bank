@@ -5,7 +5,7 @@
 @section('content')
 <!-- Institutional Hero -->
 <section class="page-hero">
-    <div class="hero-tag">PERSONAL BANKING • MEMBER FDIC • ROUTING 026009593</div>
+    <div class="hero-tag">PERSONAL BANKING • MEMBER FDIC • ROUTING 071923456</div>
     <h1>Personal Checking &amp; High-Yield Savings</h1>
     <p>Maximize liquidity, earn institutional-grade interest rates, and protect your capital with full FDIC insurance up to $250,000 per depositor.</p>
 </section>
@@ -32,7 +32,7 @@
                 <div style="margin: 1.2rem 0; padding: 0.8rem; background: #F9FAFB; border-radius: var(--radius-sm); border: 1px solid #E5E7EB; font-size: 13px;">
                     <div><strong>Min. Opening:</strong> $0</div>
                     <div><strong>Monthly Fee:</strong> <span style="color: #059669; font-weight: 700;">$0 (Waived)</span></div>
-                    <div><strong>Routing No:</strong> <code>026009593</code></div>
+                    <div><strong>Routing No:</strong> <code>071923456</code></div>
                 </div>
             </div>
             <a href="{{ route('register') }}" class="btn btn-primary" style="width: 100%; text-align: center;">Open Checking</a>
@@ -186,9 +186,9 @@
                 </tr>
                 <tr>
                     <td><strong>FedWire &amp; ACH Routing</strong></td>
-                    <td><code>026009593</code> (Direct)</td>
-                    <td class="highlight-col"><code>026009593</code> (Direct)</td>
-                    <td><code>026009593</code> (Direct)</td>
+                    <td><code>071923456</code> (Direct)</td>
+                    <td class="highlight-col"><code>071923456</code> (Direct)</td>
+                    <td><code>071923456</code> (Direct)</td>
                 </tr>
                 <tr>
                     <td><strong>FDIC Insurance</strong></td>
@@ -257,7 +257,7 @@
                 <span class="faq-icon">+</span>
             </div>
             <div class="faq-answer">
-                The Corox Bank official routing number for incoming and outgoing domestic FedWire and ACH transfers is <strong>026009593</strong>.
+                The Corox Bank official routing number for incoming and outgoing domestic FedWire and ACH transfers is <strong>071923456</strong>.
             </div>
         </div>
 

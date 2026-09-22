@@ -5,7 +5,7 @@
 @section('content')
 <!-- Institutional Hero -->
 <section class="page-hero">
-    <div class="hero-tag">CLIENT RELATIONS • 24/7 WIRE DESK • ROUTING 026009593</div>
+    <div class="hero-tag">CLIENT RELATIONS • 24/7 WIRE DESK • ROUTING 071923456</div>
     <h1>Contact Corox Commercial Bank</h1>
     <p>Connect directly with our commercial wire desk, private wealth concierges, or 24/7 fraud rapid response unit.</p>
 </section>
@@ -22,7 +22,7 @@
             <p>Direct assistance for high-value domestic FedWire, international SWIFT transfers, and ACH batch clearing.</p>
             <div style="margin: 1rem 0; font-size: 14px;">
                 <div><strong>Telephone:</strong> 1-800-COROX-BK</div>
-                <div><strong>Routing:</strong> <code>026009593</code></div>
+                <div><strong>Routing:</strong> <code>071923456</code></div>
                 <div><strong>Hours:</strong> Mon – Fri: 7:00 AM – 8:00 PM ET</div>
             </div>
             <a href="tel:18002676925" class="btn btn-primary" style="width: 100%; text-align: center;">Call Wire Desk</a>

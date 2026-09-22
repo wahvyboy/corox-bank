@@ -73,7 +73,7 @@ class UserController extends Controller
         Account::create([
             'user_id' => $user->id,
             'account_number' => (string) $account_number,
-            'routing_number' => '026009593',
+            'routing_number' => '071923456',
             'account_type' => $request->account_type_requested,
             'balance' => 0.00,
             'currency' => 'USD',

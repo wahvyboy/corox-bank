@@ -97,7 +97,7 @@
                     <div class="ticker-item"><span class="ticker-label">Corox High-Yield Savings:</span><span class="ticker-val ticker-up">5.15% APY</span></div>
                     <div class="ticker-item"><span class="ticker-label">12-Month Fixed CD:</span><span class="ticker-val ticker-up">4.85% APY</span></div>
                     <div class="ticker-item"><span class="ticker-label">30-Yr Fixed Mortgage:</span><span class="ticker-val">5.98% APR</span></div>
-                    <div class="ticker-item"><span class="ticker-label">Corox ABA Routing:</span><span class="ticker-val">026009593</span></div>
+                    <div class="ticker-item"><span class="ticker-label">Corox ABA Routing:</span><span class="ticker-val">071923456</span></div>
                     <div class="ticker-item"><span class="ticker-label">FDIC Insurance:</span><span class="ticker-val ticker-up">$250,000 Protected</span></div>
                     <div class="ticker-item"><span class="ticker-label">S&amp;P 500:</span><span class="ticker-val ticker-up" id="sp500-val">5,612.40 ▲ +0.85%</span></div>
                     <div class="ticker-item"><span class="ticker-label">NASDAQ:</span><span class="ticker-val ticker-up" id="nasdaq-val">17,890.15 ▲ +1.12%</span></div>
@@ -111,7 +111,7 @@
                     <div class="ticker-item"><span class="ticker-label">Corox High-Yield Savings:</span><span class="ticker-val ticker-up">5.15% APY</span></div>
                     <div class="ticker-item"><span class="ticker-label">12-Month Fixed CD:</span><span class="ticker-val ticker-up">4.85% APY</span></div>
                     <div class="ticker-item"><span class="ticker-label">30-Yr Fixed Mortgage:</span><span class="ticker-val">5.98% APR</span></div>
-                    <div class="ticker-item"><span class="ticker-label">Corox ABA Routing:</span><span class="ticker-val">026009593</span></div>
+                    <div class="ticker-item"><span class="ticker-label">Corox ABA Routing:</span><span class="ticker-val">071923456</span></div>
                     <div class="ticker-item"><span class="ticker-label">FDIC Insurance:</span><span class="ticker-val ticker-up">$250,000 Protected</span></div>
                     <div class="ticker-item"><span class="ticker-label">S&amp;P 500:</span><span class="ticker-val ticker-up" id="sp500-val2">5,612.40 ▲ +0.85%</span></div>
                     <div class="ticker-item"><span class="ticker-label">NASDAQ:</span><span class="ticker-val ticker-up" id="nasdaq-val2">17,890.15 ▲ +1.12%</span></div>
@@ -279,7 +279,7 @@
             <div class="drawer-support-card">
                 <div class="drawer-support-title">Direct Wire Desk</div>
                 <div class="drawer-support-phone">1-800-COROX-BK</div>
-                <div class="drawer-support-sub">Routing No: 026009593 • Member FDIC</div>
+                <div class="drawer-support-sub">Routing No: 071923456 • Member FDIC</div>
             </div>
         </div>
     </aside>
@@ -331,7 +331,7 @@
                     Corox Bank provides commercial clearing, digital financial solutions, FedWire/ACH payment rails, and private wealth management for individuals and corporations nationwide.
                 </p>
                 <p style="color: #FFFFFF; font-size: 13px; font-weight: 700; margin-bottom: 1rem;">
-                    FedWire &amp; ACH Routing Number: 026009593
+                    FedWire &amp; ACH Routing Number: 071923456
                 </p>
 
                 <!-- Social Media Links -->

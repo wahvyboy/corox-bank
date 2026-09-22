@@ -28,7 +28,7 @@
             🏛️
         </div>
         <h3 style="font-size: 1.15rem; font-weight: 800; color: #111827; margin-bottom: 0.35rem;">Incoming Wire Routing</h3>
-        <p style="font-size: 13px; color: #4B5563; margin-bottom: 0.6rem; line-height: 1.4;">Direct outward senders to Corox Bank routing <code>026009593</code> and your active account number.</p>
+        <p style="font-size: 13px; color: #4B5563; margin-bottom: 0.6rem; line-height: 1.4;">Direct outward senders to Corox Bank routing <code>071923456</code> and your active account number.</p>
         <span style="font-size: 12px; font-weight: 600; color: #059669;">FedWire &amp; ACH Eligible</span>
     </div>
 </div>
