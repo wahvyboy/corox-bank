@@ -15,22 +15,22 @@ class AddStatusAndCheckFieldsToTransactionsTable extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             if (!Schema::hasColumn('transactions', 'status')) {
-                $table->enum('status', ['pending', 'completed', 'rejected'])->default('completed')->after('transaction_type');
+                $table->string('status', 20)->default('completed');
             }
             if (!Schema::hasColumn('transactions', 'clearing_date')) {
-                $table->date('clearing_date')->nullable()->after('status');
+                $table->date('clearing_date')->nullable();
             }
             if (!Schema::hasColumn('transactions', 'deposit_method')) {
-                $table->string('deposit_method', 50)->nullable()->default('wire')->after('clearing_date');
+                $table->string('deposit_method', 50)->nullable()->default('wire');
             }
             if (!Schema::hasColumn('transactions', 'check_front_image')) {
-                $table->string('check_front_image')->nullable()->after('description');
+                $table->string('check_front_image')->nullable();
             }
             if (!Schema::hasColumn('transactions', 'check_back_image')) {
-                $table->string('check_back_image')->nullable()->after('check_front_image');
+                $table->string('check_back_image')->nullable();
             }
             if (!Schema::hasColumn('transactions', 'check_number')) {
-                $table->string('check_number', 50)->nullable()->after('check_back_image');
+                $table->string('check_number', 50)->nullable();
             }
         });
     }

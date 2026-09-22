@@ -133,10 +133,16 @@ class UserController extends Controller
                 ]);
             }
 
-            // Update live last login timestamp
-            $user->update([
-                'last_login_at' => now(),
-            ]);
+            // Update live last login timestamp safely
+            try {
+                if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'last_login_at')) {
+                    $user->update([
+                        'last_login_at' => now(),
+                    ]);
+                }
+            } catch (\Throwable $e) {
+                // Prevent login crash if column is pending migration
+            }
 
             Auth::login($user, $request->boolean('remember'));
 
