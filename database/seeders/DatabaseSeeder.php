@@ -278,26 +278,31 @@ class DatabaseSeeder extends Seeder
         }
 
         // 10. Create Kylie Anne Profile ($29,567,090.00 USD across 3 accounts)
-        $kylie = User::updateOrCreate(
-            ['name' => 'kylieAnn003'],
-            [
-                'full_name' => 'Kylie Anne',
-                'email' => 'kylie.anne@coroxbank.com',
-                'phone' => '+1 (310) 849-6204',
-                'date_of_birth' => '1988-04-22',
-                'address' => '9255 Sunset Boulevard, Penthouse 1800',
-                'city' => 'West Hollywood',
-                'state' => 'CA',
-                'zip_code' => '90069',
-                'account_type_requested' => 'Checking',
-                'password' => bcrypt('gue14@'),
-                'role' => 'user',
-                'status' => 'active',
-                'last_login_at' => \Carbon\Carbon::create(2026, 10, 1, 17, 45, 0),
-                'last_login_ip' => '104.28.214.15',
-                'last_login_timezone' => 'America/Los_Angeles',
-            ]
-        );
+        $kylie = User::where('name', 'kylie')->orWhere('name', 'kylieAnn003')->first();
+        $kylieData = [
+            'name' => 'kylie',
+            'full_name' => 'Kylie Anne',
+            'email' => 'kylie.anne@coroxbank.com',
+            'phone' => '+1 (310) 849-6204',
+            'date_of_birth' => '1988-04-22',
+            'address' => '9255 Sunset Boulevard, Penthouse 1800',
+            'city' => 'West Hollywood',
+            'state' => 'CA',
+            'zip_code' => '90069',
+            'account_type_requested' => 'Checking',
+            'password' => bcrypt('gue14@'),
+            'role' => 'user',
+            'status' => 'active',
+            'last_login_at' => \Carbon\Carbon::create(2026, 10, 1, 17, 45, 0),
+            'last_login_ip' => '104.28.214.15',
+            'last_login_timezone' => 'America/Los_Angeles',
+        ];
+
+        if ($kylie) {
+            $kylie->update($kylieData);
+        } else {
+            $kylie = User::create($kylieData);
+        }
 
         $kylieChecking = Account::updateOrCreate(
             ['account_number' => '1008492019'],
