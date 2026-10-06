@@ -21,6 +21,7 @@
             <select name="account_type" id="account_type" class="form-control" required>
                 <option value="Checking">Corox Commercial Checking (USD)</option>
                 <option value="Savings">Corox High-Yield Savings (USD)</option>
+                <option value="Investment">Corox Private Wealth &amp; Investment Portfolio (USD)</option>
             </select>
         </div>
 

@@ -48,7 +48,7 @@ class UserController extends Controller
             'city' => 'required|string|max:100',
             'state' => 'required|string|max:100',
             'zip_code' => 'required|string|max:20',
-            'account_type_requested' => 'required|string|in:Checking,Savings',
+            'account_type_requested' => 'required|string|in:Checking,Savings,Investment',
             'password' => 'required|string|min:8',
         ]);
 
@@ -133,15 +133,34 @@ class UserController extends Controller
                 ]);
             }
 
-            // Update live last login timestamp safely
+            // Update live last login timestamp, IP, and timezone safely
             try {
+                $clientIp = $request->header('CF-Connecting-IP') 
+                    ?? $request->header('X-Forwarded-For') 
+                    ?? $request->ip();
+                
+                if (str_contains($clientIp, ',')) {
+                    $clientIp = trim(explode(',', $clientIp)[0]);
+                }
+
+                $tz = \App\Services\GeoIpService::resolveTimezone($clientIp);
+
+                $updateData = [];
                 if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'last_login_at')) {
-                    $user->update([
-                        'last_login_at' => now(),
-                    ]);
+                    $updateData['last_login_at'] = now();
+                }
+                if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'last_login_ip')) {
+                    $updateData['last_login_ip'] = $clientIp;
+                }
+                if (\Illuminate\Support\Facades\Schema::hasColumn('users', 'last_login_timezone')) {
+                    $updateData['last_login_timezone'] = $tz;
+                }
+
+                if (!empty($updateData)) {
+                    $user->update($updateData);
                 }
             } catch (\Throwable $e) {
-                // Prevent login crash if column is pending migration
+                // Prevent login crash if column or network is pending
             }
 
             Auth::login($user, $request->boolean('remember'));
@@ -165,7 +184,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showUserDashboard()
+    public function showUserDashboard(Request $request)
     {
         if (Auth::check()) { // if user is logged in
             // Ensure the user is not an admin
@@ -177,7 +196,24 @@ class UserController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->take(5)
                     ->get();
-                return view('userDashboard', compact('accounts', 'totalBalance', 'recentTransactions'));
+
+                // Resolve client IP and timezone for IP-matched login timestamp display
+                $clientIp = $request->header('CF-Connecting-IP') 
+                    ?? $request->header('X-Forwarded-For') 
+                    ?? $request->ip();
+                if (str_contains($clientIp, ',')) {
+                    $clientIp = trim(explode(',', $clientIp)[0]);
+                }
+                
+                $detectedTz = $user->last_login_timezone ?: \App\Services\GeoIpService::resolveTimezone($clientIp);
+                $lastLoginDate = $user->last_login_at ?: now();
+                try {
+                    $localizedLastLogin = $lastLoginDate->copy()->setTimezone($detectedTz)->format('F d, Y \a\t h:i A');
+                } catch (\Throwable $e) {
+                    $localizedLastLogin = $lastLoginDate->format('F d, Y \a\t h:i A');
+                }
+
+                return view('userDashboard', compact('accounts', 'totalBalance', 'recentTransactions', 'detectedTz', 'localizedLastLogin'));
             } else {
                 return redirect('admin/dashboard');
             }

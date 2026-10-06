@@ -20,7 +20,9 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
-        'last_login_at'
+        'last_login_at',
+        'last_login_ip',
+        'last_login_timezone',
     ];
 
     /**

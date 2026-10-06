@@ -135,6 +135,7 @@
                     <select name="account_type_requested" id="account_type_requested" class="form-control" required>
                         <option value="Checking" {{ old('account_type_requested') == 'Checking' ? 'selected' : '' }}>Corox Commercial Checking (USD)</option>
                         <option value="Savings" {{ old('account_type_requested') == 'Savings' ? 'selected' : '' }}>Corox High-Yield Savings (5.15% APY USD)</option>
+                        <option value="Investment" {{ old('account_type_requested') == 'Investment' ? 'selected' : '' }}>Corox Private Wealth &amp; Investment Portfolio (USD)</option>
                     </select>
                 </div>
 

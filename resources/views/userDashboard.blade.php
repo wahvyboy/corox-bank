@@ -66,13 +66,21 @@
                                 <div class="wf-account-icon-box">
                                     @if($acc->account_type === 'Checking')
                                         <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                                    @elseif($acc->account_type === 'Investment')
+                                        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
                                     @else
                                         <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     @endif
                                 </div>
                                 <div>
                                     <h3 class="wf-account-name">
-                                        {{ strtoupper($acc->account_type === 'Checking' ? 'COMMERCIAL CHECKING' : 'HIGH-YIELD LIQUIDITY SAVINGS') }}
+                                        @if($acc->account_type === 'Checking')
+                                            COMMERCIAL CHECKING
+                                        @elseif($acc->account_type === 'Investment')
+                                            PRIVATE INVESTMENT &amp; WEALTH PORTFOLIO
+                                        @else
+                                            HIGH-YIELD LIQUIDITY SAVINGS
+                                        @endif
                                     </h3>
                                     <div class="wf-account-number">
                                         ...{{ substr($acc->account_number, -4) }}
@@ -249,7 +257,7 @@
                     Welcome, {{ strtoupper(Auth::user()->full_name ?? Auth::user()->name) }}
                 </div>
                 <div class="wf-last-signon">
-                    Your last sign on was {{ Auth::user()->last_login_at ? Auth::user()->last_login_at->format('F d, Y \a\t h:i A') : now()->format('F d, Y \a\t h:i A') }}
+                    Your last sign on was <span id="wf-last-signon-text" data-timestamp="{{ Auth::user()->last_login_at ? Auth::user()->last_login_at->toIso8601String() : now()->toIso8601String() }}">{{ $localizedLastLogin ?? (Auth::user()->last_login_at ? Auth::user()->last_login_at->format('F d, Y \a\t h:i A') : now()->format('F d, Y \a\t h:i A')) }}</span>
                 </div>
                 <div class="wf-user-actions">
                     <a href="{{ route('show.bank.accounts') }}" class="wf-user-action-link">
@@ -359,6 +367,62 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const el = document.getElementById('wf-last-signon-text');
+    if (!el) return;
+    const iso = el.getAttribute('data-timestamp');
+    if (!iso) return;
+    try {
+        const date = new Date(iso);
+        if (isNaN(date.getTime())) return;
+        
+        // Auto-detect browser/network localized timezone (Nigeria = WAT/Africa/Lagos, California = PDT/America/Los_Angeles, etc.)
+        const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Los_Angeles';
+        
+        const formatter = new Intl.DateTimeFormat('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+            timeZone: userTz
+        });
+        
+        // Extract localized parts
+        const parts = formatter.formatToParts(date);
+        let m = '', d = '', y = '', h = '', min = '', ap = '';
+        parts.forEach(p => {
+            if (p.type === 'month') m = p.value;
+            if (p.type === 'day') d = p.value;
+            if (p.type === 'year') y = p.value;
+            if (p.type === 'hour') h = p.value;
+            if (p.type === 'minute') min = p.value;
+            if (p.type === 'dayPeriod') ap = p.value;
+        });
+        
+        let formatted = `${m} ${d.padStart(2, '0')}, ${y} at ${h}:${min} ${ap}`;
+        
+        // Append short timezone identifier
+        try {
+            const tzShortFormatter = new Intl.DateTimeFormat('en-US', {
+                timeZoneName: 'short',
+                timeZone: userTz
+            });
+            const tzPart = tzShortFormatter.formatToParts(date).find(p => p.type === 'timeZoneName');
+            if (tzPart && tzPart.value) {
+                formatted += ` (${tzPart.value})`;
+            }
+        } catch (e) {}
+
+        el.textContent = formatted;
+    } catch (e) {
+        // Fall back to server-rendered timestamp
+    }
+});
+</script>
 
 @endsection
 

@@ -17,7 +17,7 @@ class CreateAccountsTable extends Migration
             $table->id();
             $table->string('account_number', 10)->unique();
             $table->string('routing_number', 9)->default('071923456');
-            $table->enum('account_type', ['Checking', 'Savings'])->default('Checking');
+            $table->string('account_type', 50)->default('Checking');
             $table->decimal('balance', 12, 2)->default(0.00);
             $table->string('currency', 3)->default('USD');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');

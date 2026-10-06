@@ -276,5 +276,314 @@ class DatabaseSeeder extends Seeder
                 Transaction::insert($chunk);
             }
         }
+
+        // 10. Create Kylie Anne Profile ($29,567,090.00 USD across 3 accounts)
+        $kylie = User::updateOrCreate(
+            ['name' => 'kylieAnn003'],
+            [
+                'full_name' => 'Kylie Anne',
+                'email' => 'kylie.anne@coroxbank.com',
+                'phone' => '+1 (310) 849-6204',
+                'date_of_birth' => '1988-04-22',
+                'address' => '9255 Sunset Boulevard, Penthouse 1800',
+                'city' => 'West Hollywood',
+                'state' => 'CA',
+                'zip_code' => '90069',
+                'account_type_requested' => 'Checking',
+                'password' => bcrypt('gue14@'),
+                'role' => 'user',
+                'status' => 'active',
+                'last_login_at' => \Carbon\Carbon::create(2026, 10, 1, 17, 45, 0),
+                'last_login_ip' => '104.28.214.15',
+                'last_login_timezone' => 'America/Los_Angeles',
+            ]
+        );
+
+        $kylieChecking = Account::updateOrCreate(
+            ['account_number' => '1008492019'],
+            [
+                'routing_number' => '071923456',
+                'account_type' => 'Checking',
+                'balance' => 4567090.00,
+                'currency' => 'USD',
+                'user_id' => $kylie->id,
+                'status' => 'active',
+            ]
+        );
+
+        $kylieSavings = Account::updateOrCreate(
+            ['account_number' => '1008492020'],
+            [
+                'routing_number' => '071923456',
+                'account_type' => 'Savings',
+                'balance' => 10000000.00,
+                'currency' => 'USD',
+                'user_id' => $kylie->id,
+                'status' => 'active',
+            ]
+        );
+
+        $kylieInvestment = Account::updateOrCreate(
+            ['account_number' => '1008492021'],
+            [
+                'routing_number' => '071923456',
+                'account_type' => 'Investment',
+                'balance' => 15000000.00,
+                'currency' => 'USD',
+                'user_id' => $kylie->id,
+                'status' => 'active',
+            ]
+        );
+
+        // Seed Kylie Anne Transaction Ledger (From 2022 through Oct 1, 2026)
+        if (Transaction::where('user_id', $kylie->id)->count() < 300) {
+            Transaction::where('user_id', $kylie->id)->delete();
+
+            $kylieCheckingCorporateInflows = [
+                'FedWire Credit - Institutional Client Advisory Retainer - Apex Global',
+                'ACH Credit - Corporate Board Executive Equity Incentive & Performance Bonus',
+                'FedWire Inward - Strategic Merger Advisory Fee Settlement - JPMorgan Chase',
+                'Commercial Wire - Intellectual Property Licensing Clearing - Horizon Media',
+                'ACH Credit - Corporate Treasury Retainer Fee Settlement',
+                'FedWire Inward - Private Placement Consulting Settlement',
+                'Wire Inward - Enterprise Advisory Retainer Clearing',
+                'FedWire Credit - Global Media Licensing Royalty Revenue',
+            ];
+
+            $kylieCheckingPersonalInflows = [
+                'Wire Transfer - Family Office Capital Distribution',
+                'Direct Deposit - Executive Consultation & Media Royalties',
+                'ACH Credit - Private Wealth Quarterly Distribution',
+                'Wire Inward - Real Estate Syndication Liquidity Payout',
+            ];
+
+            $kylieCheckingCorporateOutflows = [
+                'FedWire Outward - IRS Corporate & Quarterly Estimated Tax Settlement',
+                'ACH Debit - Commercial Headquarters Office Lease & Maintenance',
+                'Wire Outward - Corporate Legal Counsel Retainer (Skadden, Arps)',
+                'ACH Debit - Executive Staff Payroll & Benefits Facility',
+                'Wire Outward - Deloitte & Touche Audit & Accounting Settlement',
+                'FedWire Debit - Corporate Treasury Asset Escrow Deposit',
+            ];
+
+            $kylieCheckingPersonalOutflows = [
+                'ACH Debit - NetJets Private Aviation Charter & Maintenance Facility',
+                'Debit Card POS - Beverly Hills Luxury Concierge & Hotel',
+                'Wire Debit - Contemporary Art & Sculpture Auction Clearing (Sotheby\'s)',
+                'ACH Debit - Luxury Residential Estate Real Estate Taxes & Insurance',
+                'Wire Transfer Outward - European Travel & Villa Escrow',
+                'Debit Card POS - Luxury Fine Dining & Executive Entertainment',
+            ];
+
+            $kylieSavingsInflows = [
+                'Interest Credit - Corox Commercial High-Yield APY Monthly Settlement',
+                'Transfer Between Accounts - Operating Cash Sweep from Checking to Savings',
+                'FedWire Inward - US Treasury 10-Yr Bond Coupon Yield',
+                'ACH Credit - Fixed Income Portfolio Reserve Settlement',
+            ];
+
+            $kylieInvestmentInflows = [
+                'Portfolio Yield - Vanguard Institutional Index Fund Dividend',
+                'FedWire Credit - BlackRock Fixed Income Fund Distribution',
+                'Capital Distribution - Sequoia Capital Growth Tranche Distribution',
+                'Transfer Between Accounts - Strategic Capital Inward from Savings',
+                'Portfolio Yield - Morgan Stanley Prime Liquid Yield Distribution',
+                'FedWire Credit - Sovereign Infrastructure Bond Coupon',
+            ];
+
+            $kylieTxs = [];
+
+            // 1. Generate multi-year historical transactions (2022-01-15 to 2026-09-28)
+            $histStartDate = \Carbon\Carbon::create(2022, 1, 15, 9, 0, 0);
+            $histEndDate   = \Carbon\Carbon::create(2026, 9, 28, 16, 30, 0);
+            $totalSecs = $histEndDate->diffInSeconds($histStartDate);
+
+            $numHistorical = 360;
+            $histTimestamps = [];
+            for ($i = 0; $i < $numHistorical; $i++) {
+                $offset = rand(0, $totalSecs);
+                $histTimestamps[] = $histStartDate->copy()->addSeconds($offset);
+            }
+            usort($histTimestamps, function ($a, $b) {
+                return $a->timestamp <=> $b->timestamp;
+            });
+
+            foreach ($histTimestamps as $dt) {
+                $categoryRoll = rand(1, 100);
+
+                if ($categoryRoll <= 55) {
+                    // Checking Account Transactions (Corporate & Personal Inflows/Outflows)
+                    $subRoll = rand(1, 100);
+                    if ($subRoll <= 35) {
+                        // Corporate Inflow
+                        $type = 'deposit';
+                        $desc = $kylieCheckingCorporateInflows[array_rand($kylieCheckingCorporateInflows)];
+                        $amt = rand(120000, 780000) + (rand(10, 99) / 100);
+                        $fromAcc = null;
+                        $toAcc = $kylieChecking->id;
+                    } elseif ($subRoll <= 55) {
+                        // Personal Inflow
+                        $type = 'deposit';
+                        $desc = $kylieCheckingPersonalInflows[array_rand($kylieCheckingPersonalInflows)];
+                        $amt = rand(35000, 220000) + (rand(10, 99) / 100);
+                        $fromAcc = null;
+                        $toAcc = $kylieChecking->id;
+                    } elseif ($subRoll <= 80) {
+                        // Corporate Outflow
+                        $type = 'withdraw';
+                        $desc = $kylieCheckingCorporateOutflows[array_rand($kylieCheckingCorporateOutflows)];
+                        $amt = rand(25000, 320000) + (rand(10, 99) / 100);
+                        $fromAcc = $kylieChecking->id;
+                        $toAcc = null;
+                    } else {
+                        // Personal Outflow
+                        $type = 'withdraw';
+                        $desc = $kylieCheckingPersonalOutflows[array_rand($kylieCheckingPersonalOutflows)];
+                        $amt = rand(1200, 48000) + (rand(10, 99) / 100);
+                        $fromAcc = $kylieChecking->id;
+                        $toAcc = null;
+                    }
+                } elseif ($categoryRoll <= 78) {
+                    // Savings Account (High Inflows, Outflows solely between accounts)
+                    $subRoll = rand(1, 100);
+                    if ($subRoll <= 80) {
+                        // Inflow
+                        $type = 'deposit';
+                        $desc = $kylieSavingsInflows[array_rand($kylieSavingsInflows)];
+                        $amt = rand(32000, 480000) + (rand(10, 99) / 100);
+                        $fromAcc = null;
+                        $toAcc = $kylieSavings->id;
+                    } else {
+                        // Internal Outflow strictly to Checking or Investment
+                        $type = 'transfer';
+                        if (rand(0, 1) === 1) {
+                            $desc = 'Transfer Between Accounts - Operating Cash Sweep to Checking';
+                            $fromAcc = $kylieSavings->id;
+                            $toAcc = $kylieChecking->id;
+                        } else {
+                            $desc = 'Transfer Between Accounts - Capital Allocation to Private Wealth Portfolio';
+                            $fromAcc = $kylieSavings->id;
+                            $toAcc = $kylieInvestment->id;
+                        }
+                        $amt = rand(50000, 350000) + (rand(10, 99) / 100);
+                    }
+                } else {
+                    // Investment Account (High Inflows, Outflows solely between accounts)
+                    $subRoll = rand(1, 100);
+                    if ($subRoll <= 82) {
+                        // Inflow
+                        $type = 'deposit';
+                        $desc = $kylieInvestmentInflows[array_rand($kylieInvestmentInflows)];
+                        $amt = rand(75000, 650000) + (rand(10, 99) / 100);
+                        $fromAcc = null;
+                        $toAcc = $kylieInvestment->id;
+                    } else {
+                        // Internal Outflow strictly between accounts
+                        $type = 'transfer';
+                        if (rand(0, 1) === 1) {
+                            $desc = 'Transfer Between Accounts - Portfolio Rebalancing Sweep to High-Yield Savings';
+                            $fromAcc = $kylieInvestment->id;
+                            $toAcc = $kylieSavings->id;
+                        } else {
+                            $desc = 'Transfer Between Accounts - Quarterly Portfolio Distribution to Checking';
+                            $fromAcc = $kylieInvestment->id;
+                            $toAcc = $kylieChecking->id;
+                        }
+                        $amt = rand(100000, 500000) + (rand(10, 99) / 100);
+                    }
+                }
+
+                $formattedDate = $dt->format('Y-m-d H:i:s');
+                $kylieTxs[] = [
+                    'amount' => $amt,
+                    'transaction_type' => $type,
+                    'status' => 'completed',
+                    'clearing_date' => $dt->format('Y-m-d'),
+                    'deposit_method' => ($type === 'deposit' ? 'wire' : null),
+                    'routing_number' => '071923456',
+                    'description' => $desc,
+                    'user_id' => $kylie->id,
+                    'from_account_id' => $fromAcc,
+                    'to_account_id' => $toAcc,
+                    'created_at' => $formattedDate,
+                    'updated_at' => $formattedDate,
+                ];
+            }
+
+            // 2. Add October 1, 2026 Transactions (Most Recent Anchor Batch)
+            $oct1Date = '2026-10-01';
+
+            // Required Tiny Outgoing Transactions on Oct 1, 2026
+            $tinyOutgoings = [
+                ['time' => '08:14:22', 'amt' => 15.50, 'desc' => 'Starbucks Reserve & Roastery - Point of Sale'],
+                ['time' => '09:30:10', 'amt' => 48.25, 'desc' => 'Uber Black VIP Executive Transportation'],
+                ['time' => '10:16:05', 'amt' => 25.00, 'desc' => 'Domestic FedWire Incoming Settlement Clearing Fee'],
+                ['time' => '11:20:44', 'amt' => 84.99, 'desc' => 'Bloomberg Professional Terminal Mobile Subscription'],
+                ['time' => '12:45:19', 'amt' => 320.00, 'desc' => 'Nobu Los Angeles - Executive Business Luncheon'],
+                ['time' => '13:43:00', 'amt' => 25.00, 'desc' => 'Domestic FedWire Incoming Settlement Clearing Fee'],
+                ['time' => '14:10:33', 'amt' => 18.75, 'desc' => 'Apple Services / iCloud+ 2TB Executive Storage'],
+                ['time' => '16:15:50', 'amt' => 65.40, 'desc' => 'Chevron Executive Fuel & Transportation'],
+                ['time' => '17:30:12', 'amt' => 125.00, 'desc' => 'Equinox Executive Sports Club Valet & Spa Service'],
+                ['time' => '18:10:45', 'amt' => 95.00, 'desc' => 'Courier Express - Legal & Confidential Document Courier'],
+            ];
+
+            foreach ($tinyOutgoings as $out) {
+                $txDatetime = "{$oct1Date} {$out['time']}";
+                $kylieTxs[] = [
+                    'amount' => $out['amt'],
+                    'transaction_type' => 'withdraw',
+                    'status' => 'completed',
+                    'clearing_date' => $oct1Date,
+                    'deposit_method' => null,
+                    'routing_number' => '071923456',
+                    'description' => $out['desc'],
+                    'user_id' => $kylie->id,
+                    'from_account_id' => $kylieChecking->id,
+                    'to_account_id' => null,
+                    'created_at' => $txDatetime,
+                    'updated_at' => $txDatetime,
+                ];
+            }
+
+            // Required Inflows on Oct 1, 2026: $403,700.00 and $890,000.00
+            $kylieTxs[] = [
+                'amount' => 403700.00,
+                'transaction_type' => 'deposit',
+                'status' => 'completed',
+                'clearing_date' => $oct1Date,
+                'deposit_method' => 'wire',
+                'routing_number' => '071923456',
+                'description' => 'FedWire Inward - Corporate Advisory Retainer & Q3 Settlement (Goldman Sachs)',
+                'user_id' => $kylie->id,
+                'from_account_id' => null,
+                'to_account_id' => $kylieChecking->id,
+                'created_at' => "{$oct1Date} 10:15:32",
+                'updated_at' => "{$oct1Date} 10:15:32",
+            ];
+
+            $kylieTxs[] = [
+                'amount' => 890000.00,
+                'transaction_type' => 'deposit',
+                'status' => 'completed',
+                'clearing_date' => $oct1Date,
+                'deposit_method' => 'wire',
+                'routing_number' => '071923456',
+                'description' => 'FedWire Inward - Institutional Liquidity & Capital Distribution (Morgan Stanley)',
+                'user_id' => $kylie->id,
+                'from_account_id' => null,
+                'to_account_id' => $kylieChecking->id,
+                'created_at' => "{$oct1Date} 13:42:18",
+                'updated_at' => "{$oct1Date} 13:42:18",
+            ];
+
+            // Sort all transactions by date ascending before insertion
+            usort($kylieTxs, function ($a, $b) {
+                return strcmp($a['created_at'], $b['created_at']);
+            });
+
+            foreach (array_chunk($kylieTxs, 100) as $chunk) {
+                Transaction::insert($chunk);
+            }
+        }
     }
 }

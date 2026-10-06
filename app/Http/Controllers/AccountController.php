@@ -20,7 +20,7 @@ class AccountController extends Controller
     public function createUserAccount(Request $request)
     {
         $request->validate([
-            'account_type' => 'required|in:Checking,Savings',
+            'account_type' => 'required|in:Checking,Savings,Investment',
         ]);
 
         $account = new Account;
@@ -50,7 +50,7 @@ class AccountController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'account_type' => 'required|in:Checking,Savings',
+            'account_type' => 'required|in:Checking,Savings,Investment',
         ]);
     
         $user = User::where('name', $request->name)->first();
