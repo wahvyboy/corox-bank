@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title', 'My USD Accounts')
+@section('title', 'My Bank Accounts')
 @section('content')
 <div class="dashboard-header">
     <div>
-        <h2 style="font-size: 1.8rem; font-weight: 800;">My USD Bank Accounts</h2>
-        <p style="color: var(--text-secondary);">Manage active accounts, ABA routing numbers, and request new lines.</p>
+        <h2 style="font-size: 1.8rem; font-weight: 800;">My Bank Accounts</h2>
+        <p style="color: var(--text-secondary);">Manage active multi-currency accounts, routing / clearing identifiers, and request new accounts.</p>
     </div>
-    <a href="{{ route('create.bank.account') }}" class="btn btn-primary">Request New USD Account</a>
+    <a href="{{ route('create.bank.account') }}" class="btn btn-primary">Request New Bank Account</a>
 </div>
 
 <div class="table-card">
@@ -16,9 +16,9 @@
                 <tr>
                     <th>Account Type</th>
                     <th>Account Number</th>
-                    <th>Routing Number</th>
+                    <th>Routing / Clearing Code</th>
                     <th>Currency</th>
-                    <th>USD Balance</th>
+                    <th>Available Balance</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -29,8 +29,12 @@
                         <td><strong>{{ $account->account_type ?? 'Checking' }}</strong></td>
                         <td><code>{{ $account->account_number }}</code></td>
                         <td><code>{{ $account->routing_number ?? '071923456' }}</code></td>
-                        <td>USD ($)</td>
-                        <td style="font-weight: 700; color: var(--accent-gold-bright);">${{ number_format($account->balance, 2) }}</td>
+                        <td>
+                            <span class="badge" style="background: #EFF6FF; color: #1D4ED8; font-weight: 700; border: 1px solid #BFDBFE;">
+                                {{ $account->currency ?? 'USD' }} ({{ $account->currency_symbol }})
+                            </span>
+                        </td>
+                        <td style="font-weight: 700; color: var(--accent-gold-bright);">{{ $account->currency_symbol }}{{ number_format($account->balance, 2) }}</td>
                         <td>
                             @if($account->status === 'active')
                                 <span class="badge badge-active">Active</span>
@@ -42,15 +46,15 @@
                         </td>
                         <td>
                             @if($account->status === 'active')
-                                <a href="{{ route('show.transfer.form') }}?from={{ $account->account_number }}" class="btn btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 12px;">Wire Funds</a>
+                                <a href="{{ route('show.transfer.form') }}?from={{ $account->account_number }}" class="btn btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 12px;">Transfer Funds</a>
                             @else
-                                <span style="color: var(--text-muted); font-size: 12px;">N/A</span>
+                                <span style="color: var(--text-muted); font-size: 12px;">Pending</span>
                             @endif
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No accounts found. Click "Request New USD Account" to open one.</td>
+                        <td colspan="7" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No accounts found. Click "Request New Bank Account" to open one.</td>
                     </tr>
                 @endforelse
             </tbody>

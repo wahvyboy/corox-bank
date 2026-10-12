@@ -38,6 +38,7 @@ class UserController extends Controller
      */
     public function register(Request $request)
     {
+        $allowedCurrencies = implode(',', \App\Services\CurrencyService::codes());
         $request->validate([
             'name' => 'required|string|max:255|unique:users',
             'full_name' => 'required|string|max:255',
@@ -49,6 +50,7 @@ class UserController extends Controller
             'state' => 'required|string|max:100',
             'zip_code' => 'required|string|max:20',
             'account_type_requested' => 'required|string|in:Checking,Savings,Investment',
+            'currency' => 'nullable|string|in:' . $allowedCurrencies,
             'password' => 'required|string|min:8',
         ]);
 
@@ -68,21 +70,26 @@ class UserController extends Controller
             'status' => 'active',
         ]);
 
+        $currency = strtoupper($request->input('currency', 'USD'));
+        if (!\App\Services\CurrencyService::isValid($currency)) {
+            $currency = 'USD';
+        }
+
         // Auto-generate initial bank account application request
         $account_number = rand(1000000000, 9999999999);
         Account::create([
             'user_id' => $user->id,
             'account_number' => (string) $account_number,
-            'routing_number' => '071923456',
+            'routing_number' => \App\Services\CurrencyService::defaultRouting($currency),
             'account_type' => $request->account_type_requested,
             'balance' => 0.00,
-            'currency' => 'USD',
+            'currency' => $currency,
             'status' => 'pending'
         ]);
 
         Auth::login($user);
 
-        return redirect('/user/dashboard')->with('success', 'Account application submitted successfully! Your account is pending admin approval.');
+        return redirect('/user/dashboard')->with('success', "Account application submitted successfully in {$currency}! Your account is pending admin approval.");
     }
 
     /**
@@ -205,6 +212,14 @@ class UserController extends Controller
                 $user = Auth::user();
                 $accounts = $user->accounts()->where('status', 'active')->get();
                 $totalBalance = $accounts->sum('balance');
+                $primaryCurrency = $accounts->first() ? $accounts->first()->currency : 'USD';
+                
+                $currencyTotals = [];
+                foreach ($accounts as $acc) {
+                    $c = $acc->currency ?: 'USD';
+                    $currencyTotals[$c] = ($currencyTotals[$c] ?? 0) + $acc->balance;
+                }
+
                 $recentTransactions = Transaction::where('user_id', $user->id)
                     ->orderBy('created_at', 'desc')
                     ->take(5)
@@ -226,7 +241,7 @@ class UserController extends Controller
                     $localizedLastLogin = $lastLoginDate->format('F d, Y \a\t h:i A');
                 }
 
-                return view('userDashboard', compact('accounts', 'totalBalance', 'recentTransactions', 'detectedTz', 'localizedLastLogin'));
+                return view('userDashboard', compact('accounts', 'totalBalance', 'primaryCurrency', 'currencyTotals', 'recentTransactions', 'detectedTz', 'localizedLastLogin'));
             } else {
                 return redirect('admin/dashboard');
             }

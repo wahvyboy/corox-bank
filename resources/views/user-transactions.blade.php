@@ -21,7 +21,7 @@
                     <th>Description</th>
                     <th>From Account</th>
                     <th>To Account</th>
-                    <th>Amount (USD)</th>
+                    <th>Amount</th>
                     <th style="text-align: center;">Receipt</th>
                 </tr>
             </thead>
@@ -55,7 +55,8 @@
                         <td>{{ $tx->fromAccount ? $tx->fromAccount->account_number : '—' }}</td>
                         <td>{{ $tx->toAccount ? $tx->toAccount->account_number : '—' }}</td>
                         <td style="font-weight: 700; color: {{ $tx->transaction_type === 'deposit' ? 'var(--success)' : ($tx->transaction_type === 'withdraw' ? 'var(--danger)' : 'var(--text-primary)') }};">
-                            {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}${{ number_format($tx->amount, 2) }}
+                            {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}{{ $tx->currency_symbol ?? '$' }}{{ number_format($tx->amount, 2) }}
+                            <span style="font-size: 11px; color: var(--text-secondary); margin-left: 2px;">{{ $tx->currency ?? 'USD' }}</span>
                         </td>
                         <td style="text-align: center;">
                             <a href="{{ route('transaction.receipt', $tx->id) }}" class="btn btn-sm btn-secondary" style="font-size: 12px; padding: 4px 10px; border-radius: 6px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
@@ -100,9 +101,9 @@
                 </div>
 
                 <div class="tx-mobile-main">
-                    <div class="tx-mobile-desc">{{ $tx->description ?? 'FedWire Settlement' }}</div>
+                    <div class="tx-mobile-desc">{{ $tx->description ?? 'Settlement Clearing' }}</div>
                     <div class="tx-mobile-amount amount-{{ $tx->transaction_type }}" style="{{ $tx->status === 'pending' ? 'color: #D97706;' : '' }}">
-                        {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}${{ number_format($tx->amount, 2) }}
+                        {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}{{ $tx->currency_symbol ?? '$' }}{{ number_format($tx->amount, 2) }} <span style="font-size: 11px;">{{ $tx->currency ?? 'USD' }}</span>
                     </div>
                 </div>
 
@@ -114,7 +115,7 @@
                         </div>
                     @endif
                     <div class="tx-mobile-detail-row">
-                        <span>Routing ABA:</span>
+                        <span>Routing / Code:</span>
                         <code>{{ $tx->routing_number ?? '071923456' }}</code>
                     </div>
                     @if($tx->fromAccount || $tx->toAccount)

@@ -281,7 +281,7 @@
             <img src="{{ asset('images/corox_logo_transparent.png') }}" alt="Corox Bank Logo" class="receipt-logo" onerror="this.src='{{ asset('images/corox_logo.png') }}'">
             <div>
                 <div class="receipt-bank-name">Corox Bank</div>
-                <div class="receipt-bank-sub">Federal Reserve Wire Clearing System</div>
+                <div class="receipt-bank-sub">{{ $transaction->currency === 'AUD' ? 'Australian Payments Network (AusPayNet) & Reserve Bank of Australia (RBA)' : ($transaction->currency === 'EUR' ? 'Single Euro Payments Area (SEPA) & TARGET2' : ($transaction->currency === 'GBP' ? 'Bank of England CHAPS & Faster Payments System' : 'Federal Reserve Wire Clearing System')) }}</div>
             </div>
         </div>
         <div class="receipt-status-badge">
@@ -293,7 +293,7 @@
     <!-- Amount Card -->
     <div class="receipt-amount-card">
         <div class="receipt-amount-label">Official Wire Transfer Amount</div>
-        <div class="receipt-amount-value">${{ number_format($transaction->amount, 2) }} USD</div>
+        <div class="receipt-amount-value">{{ $transaction->currency_symbol ?? '$' }}{{ number_format($transaction->amount, 2) }} {{ $transaction->currency ?? 'USD' }}</div>
         <div style="font-size: 13px; color: #cbd5e1; margin-top: 6px;">Reference ID: <strong>STB-TXN-{{ str_pad($transaction->id, 8, '0', STR_PAD_LEFT) }}</strong></div>
     </div>
 
@@ -315,7 +315,7 @@
             </div>
             <div class="receipt-detail-row">
                 <div class="receipt-label">Originating Bank</div>
-                <div class="receipt-value">Corox Bank (Routing: 071923456)</div>
+                <div class="receipt-value">Corox Bank ({{ $transaction->currency === 'AUD' ? 'BSB: 082-001' : ($transaction->currency === 'GBP' ? 'Sort Code: 20-00-00' : ($transaction->currency === 'EUR' ? 'BIC: CRXBDEFF' : 'Routing: 071923456')) }})</div>
             </div>
         </div>
 
@@ -348,7 +348,7 @@
                 </div>
             </div>
             <div class="receipt-detail-row">
-                <div class="receipt-label">ABA Routing / SWIFT Code</div>
+                <div class="receipt-label">{{ $transaction->currency === 'AUD' ? 'BSB / Clearing Code' : ($transaction->currency === 'GBP' ? 'UK Sort Code' : ($transaction->currency === 'EUR' ? 'BIC / SWIFT' : 'ABA Routing / SWIFT Code')) }}</div>
                 <div class="receipt-value"><code>{{ $transaction->routing_number ?? '071923456' }}</code></div>
             </div>
             <div class="receipt-detail-row">
@@ -364,7 +364,7 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="receipt-detail-row">
                 <div class="receipt-label">Execution Date & Time</div>
-                <div class="receipt-value">{{ $transaction->created_at->format('F d, Y - h:i:s A') }} EST</div>
+                <div class="receipt-value">{{ $transaction->created_at->format('F d, Y - h:i:s A') }} {{ $transaction->currency === 'AUD' ? 'AEST' : ($transaction->currency === 'GBP' ? 'GMT' : ($transaction->currency === 'EUR' ? 'CET' : 'EST')) }}</div>
             </div>
             <div class="receipt-detail-row">
                 <div class="receipt-label">Transaction Type</div>
@@ -383,7 +383,7 @@
             <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
             <div>
                 <div>VERIFIED DIGITAL TRANSACTION RECORD</div>
-                <div style="font-weight: 500; font-size: 11px; color: #64748b;">Issued by Corox Bank • Federal Reserve System</div>
+                <div style="font-weight: 500; font-size: 11px; color: #64748b;">Issued by Corox Bank • {{ $transaction->currency === 'AUD' ? 'Reserve Bank of Australia / APRA Supervised' : ($transaction->currency === 'GBP' ? 'Bank of England / FCA Supervised' : ($transaction->currency === 'EUR' ? 'European Central Bank Supervised' : 'Federal Reserve System')) }}</div>
             </div>
         </div>
         <div style="text-align: right;">

@@ -4,7 +4,7 @@
 <div class="dashboard-header">
     <div>
         <h2 style="font-size: 1.8rem; font-weight: 800;">Admin Wire Transfer Override</h2>
-        <p style="color: var(--text-secondary);">Perform inter-account wire transfers between any two Corox Bank USD accounts.</p>
+        <p style="color: var(--text-secondary);">Perform inter-account wire transfers between Corox Bank accounts or to external institutions.</p>
     </div>
 </div>
 
@@ -17,12 +17,17 @@
         </div>
 
         <div class="form-group">
-            <label for="to_account_number" class="form-label">Destination Account Number</label>
+            <label for="to_account_number" class="form-label">Destination Account / IBAN Number</label>
             <input type="text" name="to_account_number" id="to_account_number" class="form-control" required placeholder="e.g. 1007788990">
         </div>
 
         <div class="form-group">
-            <label for="amount" class="form-label">Transfer Amount (USD $)</label>
+            <label for="routing_number" class="form-label">ABA Routing / SWIFT / BSB / Sort Code</label>
+            <input type="text" name="routing_number" id="routing_number" class="form-control" placeholder="Optional for internal accounts, required for external wires">
+        </div>
+
+        <div class="form-group">
+            <label for="amount" class="form-label">Transfer Amount (In Source Account Currency)</label>
             <input type="number" step="0.01" min="1" name="amount" id="amount" class="form-control" required placeholder="0.00">
         </div>
 

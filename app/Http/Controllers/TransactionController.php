@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Account;
+use App\Services\CurrencyService;
+use App\Services\BankDirectoryService;
 use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
@@ -42,7 +44,7 @@ class TransactionController extends Controller
             return redirect()->back()->with(['error' => 'This account has been blocked.']);
         }
         if ($account->balance < $request->amount) {
-            return redirect()->back()->with(['error' => 'Insufficient USD balance in account.']);
+            return redirect()->back()->with(['error' => "Insufficient {$account->currency} balance in account."]);
         }
 
         $account->balance -= $request->amount;
@@ -51,14 +53,15 @@ class TransactionController extends Controller
         // Create a new transaction record
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
+        $transaction->currency = $account->currency;
         $transaction->transaction_type = 'withdraw';
-        $transaction->routing_number = $account->routing_number ?? '071923456';
+        $transaction->routing_number = $account->routing_number ?? CurrencyService::defaultRouting($account->currency);
         $transaction->description = $request->description ?? 'ATM / Client Withdrawal';
         $transaction->user_id = $account->user_id;
         $transaction->from_account_id = $account->id;
         $transaction->save();
 
-        return redirect('/user/show-transaction-history')->with('success', 'Withdrawal of $' . number_format($request->amount, 2) . ' processed successfully.');
+        return redirect('/user/show-transaction-history')->with('success', 'Withdrawal of ' . $account->currency_symbol . number_format($request->amount, 2) . ' ' . $account->currency . ' processed successfully.');
     }
 
     /**
@@ -98,18 +101,19 @@ class TransactionController extends Controller
         // Create a new transaction record
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
+        $transaction->currency = $account->currency;
         $transaction->transaction_type = 'deposit';
-        $transaction->routing_number = $account->routing_number ?? '071923456';
+        $transaction->routing_number = $account->routing_number ?? CurrencyService::defaultRouting($account->currency);
         $transaction->description = $request->description ?? 'Direct Deposit / Credit';
         $transaction->user_id = $account->user_id;
         $transaction->to_account_id = $account->id;
         $transaction->save();
 
-        return redirect('/user/show-transaction-history')->with('success', 'Deposit of $' . number_format($request->amount, 2) . ' credited successfully.');
+        return redirect('/user/show-transaction-history')->with('success', 'Deposit of ' . $account->currency_symbol . number_format($request->amount, 2) . ' ' . $account->currency . ' credited successfully.');
     }
 
     /**
-     * Perform a transfer transaction for clients (ACH / Wire to any internal or external account).
+     * Perform a transfer transaction for clients (ACH / Wire / SWIFT / NPP to any internal or external account).
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -141,24 +145,33 @@ class TransactionController extends Controller
             return redirect()->back()->with(['error' => 'Source account has been blocked.']);
         }
         if ($from_account->balance < $request->amount) {
-            return redirect()->back()->with(['error' => 'Insufficient USD balance in source account.']);
+            return redirect()->back()->with(['error' => "Insufficient {$from_account->currency} balance in source account."]);
         }
-
-        // Deduct from sender's account (funds held in escrow)
-        $from_account->balance -= $request->amount;
-        $from_account->save();
 
         // Check if destination account exists internally within Corox Bank
         $to_account = Account::where('account_number', $request->to_account_number)->first();
 
-        $routing = $request->routing_number ?: '071923456';
-        $memo = $request->description ?: 'USD Wire Transfer to Account: ' . $request->to_account_number;
+        // Cross-currency transfer protection (same currency only)
+        if ($to_account && $to_account->currency !== $from_account->currency) {
+            return redirect()->back()->with([
+                'error' => "Cross-currency transfer restricted. Source account is in {$from_account->currency} ({$from_account->currency_symbol}) while internal destination account is in {$to_account->currency} ({$to_account->currency_symbol}). Transfers must be executed between matching currencies."
+            ]);
+        }
+
+        // Deduct from sender's account (funds held in settlement escrow)
+        $from_account->balance -= $request->amount;
+        $from_account->save();
+
+        $defaultRouting = CurrencyService::defaultRouting($from_account->currency);
+        $routing = $request->routing_number ?: $defaultRouting;
+        $memo = $request->description ?: "{$from_account->currency} Wire Transfer to Account: " . $request->to_account_number;
         $clearingDate = \Carbon\Carbon::now()->addDay()->toDateString();
 
         if ($to_account) {
             // Internal Transfer — Pending Admin Clearance & Settlement
             $transaction = new Transaction;
             $transaction->amount = $request->amount;
+            $transaction->currency = $from_account->currency;
             $transaction->transaction_type = 'transfer';
             $transaction->status = 'pending';
             $transaction->clearing_date = $clearingDate;
@@ -171,26 +184,27 @@ class TransactionController extends Controller
             $transaction->save();
 
             return redirect('/user/show-transaction-history')
-                ->with('success', 'Internal wire transfer of $' . number_format($request->amount, 2) . ' submitted. Status: PENDING (Clears Tomorrow / Next Business Day). Awaiting administrative clearance.')
+                ->with('success', "Internal wire transfer of {$from_account->currency_symbol}" . number_format($request->amount, 2) . " {$from_account->currency} submitted. Status: PENDING (Clears Tomorrow / Next Business Day). Awaiting administrative clearance.")
                 ->with('receipt_id', $transaction->id);
         } else {
-            // External Wire Transfer (to external bank) — Pending Admin Clearance
+            // External Wire Transfer (to external bank resolved via global directory) — Pending Admin Clearance
             $receivingBank = Transaction::resolveBankByRouting($routing);
             $transaction = new Transaction;
             $transaction->amount = $request->amount;
+            $transaction->currency = $from_account->currency;
             $transaction->transaction_type = 'transfer';
             $transaction->status = 'pending';
             $transaction->clearing_date = $clearingDate;
             $transaction->deposit_method = 'wire';
             $transaction->routing_number = $routing;
-            $transaction->description = 'External Wire Transfer to ' . $receivingBank . ' (Account: ' . $request->to_account_number . ', ABA: ' . $routing . ') — ' . $memo;
+            $transaction->description = 'External Wire Transfer to ' . $receivingBank . ' (Account: ' . $request->to_account_number . ', Code: ' . $routing . ') — ' . $memo;
             $transaction->user_id = $from_account->user_id;
             $transaction->from_account_id = $from_account->id;
             $transaction->to_account_id = null;
             $transaction->save();
 
             return redirect('/user/show-transaction-history')
-                ->with('success', 'Outbound wire transfer of $' . number_format($request->amount, 2) . ' submitted. Status: PENDING (Clears Tomorrow / Next Business Day). Awaiting administrative clearance.')
+                ->with('success', "Outbound wire transfer of {$from_account->currency_symbol}" . number_format($request->amount, 2) . " {$from_account->currency} submitted. Status: PENDING (Clears Tomorrow / Next Business Day). Awaiting administrative clearance.")
                 ->with('receipt_id', $transaction->id);
         }
     }
@@ -241,7 +255,7 @@ class TransactionController extends Controller
         }
 
         if ($account->balance < $request->amount) {
-            return redirect()->back()->with(['error' => 'Insufficient balance in account.']);
+            return redirect()->back()->with(['error' => "Insufficient {$account->currency} balance in account."]);
         }
 
         $account->balance -= $request->amount;
@@ -250,14 +264,15 @@ class TransactionController extends Controller
         // Create a new transaction record
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
+        $transaction->currency = $account->currency;
         $transaction->transaction_type = 'withdraw';
-        $transaction->routing_number = $account->routing_number ?? '071923456';
+        $transaction->routing_number = $account->routing_number ?? CurrencyService::defaultRouting($account->currency);
         $transaction->description = 'Administrative Ledger Withdrawal';
         $transaction->user_id = $account->user_id;
         $transaction->from_account_id = $account->id;
         $transaction->save();
 
-        return redirect()->route('show.user.transactions', ['user' => $account->user_id])->with('success', 'Administrative withdrawal processed.');
+        return redirect()->route('show.user.transactions', ['user' => $account->user_id])->with('success', 'Administrative withdrawal of ' . $account->currency_symbol . number_format($request->amount, 2) . ' ' . $account->currency . ' processed.');
     }
 
     /**
@@ -289,14 +304,15 @@ class TransactionController extends Controller
         // Create a new transaction record
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
+        $transaction->currency = $account->currency;
         $transaction->transaction_type = 'deposit';
-        $transaction->routing_number = $account->routing_number ?? '071923456';
+        $transaction->routing_number = $account->routing_number ?? CurrencyService::defaultRouting($account->currency);
         $transaction->description = 'Administrative Ledger Deposit';
         $transaction->user_id = $account->user_id;
         $transaction->to_account_id = $account->id;
         $transaction->save();
 
-        return redirect()->route('show.user.transactions', ['user' => $account->user_id])->with('success', 'Administrative deposit processed.');
+        return redirect()->route('show.user.transactions', ['user' => $account->user_id])->with('success', 'Administrative deposit of ' . $account->currency_symbol . number_format($request->amount, 2) . ' ' . $account->currency . ' credited.');
     }
 
     /**
@@ -324,14 +340,19 @@ class TransactionController extends Controller
             return redirect()->back()->with(['error' => 'Source account not found.']);
         }
         if ($from_account->balance < $request->amount) {
-            return redirect()->back()->with(['error' => 'Insufficient balance in source account.']);
+            return redirect()->back()->with(['error' => "Insufficient {$from_account->currency} balance in source account."]);
+        }
+
+        $to_account = Account::where('account_number', $request->to_account_number)->first();
+        if ($to_account && $to_account->currency !== $from_account->currency) {
+            return redirect()->back()->with(['error' => "Cross-currency transfer override blocked. Source is {$from_account->currency} and destination is {$to_account->currency}."]);
         }
 
         $from_account->balance -= $request->amount;
         $from_account->save();
 
-        $to_account = Account::where('account_number', $request->to_account_number)->first();
-        $routing = $request->routing_number ?: '071923456';
+        $defaultRouting = CurrencyService::defaultRouting($from_account->currency);
+        $routing = $request->routing_number ?: $defaultRouting;
 
         if ($to_account) {
             $to_account->balance += $request->amount;
@@ -343,15 +364,16 @@ class TransactionController extends Controller
         // Create a new transaction record
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
+        $transaction->currency = $from_account->currency;
         $transaction->transaction_type = 'transfer';
         $transaction->routing_number = $routing;
-        $transaction->description = 'Administrative Wire Override to ' . $receivingBank . ' (Account: ' . $request->to_account_number . ', ABA: ' . $routing . ')';
+        $transaction->description = 'Administrative Wire Override to ' . $receivingBank . ' (Account: ' . $request->to_account_number . ', Routing: ' . $routing . ')';
         $transaction->user_id = $from_account->user_id;
         $transaction->from_account_id = $from_account->id;
         $transaction->to_account_id = $to_account ? $to_account->id : null;
         $transaction->save();
 
-        return redirect()->route('show.user.transactions', ['user' => $from_account->user_id])->with('success', 'Administrative wire transfer executed.');
+        return redirect()->route('show.user.transactions', ['user' => $from_account->user_id])->with('success', 'Administrative wire transfer executed successfully.');
     }
 
     /**
@@ -415,11 +437,12 @@ class TransactionController extends Controller
 
         $transaction = new Transaction;
         $transaction->amount = $request->amount;
+        $transaction->currency = $account->currency;
         $transaction->transaction_type = 'deposit';
         $transaction->status = 'pending';
         $transaction->clearing_date = $clearingDate;
         $transaction->deposit_method = 'check';
-        $transaction->routing_number = $account->routing_number ?? '071923456';
+        $transaction->routing_number = $account->routing_number ?? CurrencyService::defaultRouting($account->currency);
         $transaction->description = 'Mobile Check Deposit #' . $checkNum . ' — Pending Settlement';
         $transaction->check_front_image = $frontPath;
         $transaction->check_back_image = $backPath;
@@ -429,7 +452,7 @@ class TransactionController extends Controller
         $transaction->save();
 
         return redirect('/user/show-transaction-history')
-            ->with('success', 'Check #' . $checkNum . ' for $' . number_format($request->amount, 2) . ' submitted successfully! Status: PENDING (Clears Tomorrow upon admin review).')
+            ->with('success', 'Check #' . $checkNum . ' for ' . $account->currency_symbol . number_format($request->amount, 2) . ' ' . $account->currency . ' submitted successfully! Status: PENDING (Clears Tomorrow upon admin review).')
             ->with('receipt_id', $transaction->id);
     }
 

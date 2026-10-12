@@ -3,8 +3,8 @@
 @section('content')
 <div class="dashboard-header">
     <div>
-        <h2 style="font-size: 1.8rem; font-weight: 800;">USD Accounts for {{ $user->name }}</h2>
-        <p style="color: var(--text-secondary);">User ID: #{{ $user->id }} • Status: {{ strtoupper($user->status) }}</p>
+        <h2 style="font-size: 1.8rem; font-weight: 800;">Accounts for {{ $user->full_name ?? $user->name }}</h2>
+        <p style="color: var(--text-secondary);">User ID: #{{ $user->id }} • Status: {{ strtoupper($user->status) }} • Currency Portfolio</p>
     </div>
     <a href="{{ route('show.admin.create.account.form') }}" class="btn btn-primary">Create Account for {{ $user->name }}</a>
 </div>
@@ -16,8 +16,9 @@
                 <tr>
                     <th>Account Type</th>
                     <th>Account Number</th>
-                    <th>Routing Number</th>
-                    <th>Balance (USD)</th>
+                    <th>Routing / Clearing Code</th>
+                    <th>Currency</th>
+                    <th>Balance</th>
                     <th>Status</th>
                     <th>Created At</th>
                     <th>Actions</th>
@@ -29,7 +30,12 @@
                         <td><strong>{{ $account->account_type ?? 'Checking' }}</strong></td>
                         <td><code>{{ $account->account_number }}</code></td>
                         <td><code>{{ $account->routing_number ?? '071923456' }}</code></td>
-                        <td style="font-weight: 700; color: var(--accent-gold-bright);">${{ number_format($account->balance, 2) }}</td>
+                        <td>
+                            <span class="badge" style="background: #EFF6FF; color: #1D4ED8; font-weight: 700; border: 1px solid #BFDBFE;">
+                                {{ $account->currency ?? 'USD' }} ({{ $account->currency_symbol }})
+                            </span>
+                        </td>
+                        <td style="font-weight: 700; color: var(--accent-gold-bright);">{{ $account->currency_symbol }}{{ number_format($account->balance, 2) }}</td>
                         <td>
                             @if($account->status === 'active')
                                 <span class="badge badge-active">Active</span>
@@ -60,7 +66,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No accounts found for this user.</td>
+                        <td colspan="8" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No accounts found for this user.</td>
                     </tr>
                 @endforelse
             </tbody>

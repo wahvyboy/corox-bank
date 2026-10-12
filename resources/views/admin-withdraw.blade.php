@@ -3,8 +3,8 @@
 @section('content')
 <div class="dashboard-header">
     <div>
-        <h2 style="font-size: 1.8rem; font-weight: 800;">Admin Withdrawal Override (USD)</h2>
-        <p style="color: var(--text-secondary);">Directly debit funds from any target Corox Bank USD account.</p>
+        <h2 style="font-size: 1.8rem; font-weight: 800;">Admin Withdrawal Override</h2>
+        <p style="color: var(--text-secondary);">Directly debit funds from any target Corox Bank account in its denominated currency.</p>
     </div>
 </div>
 
@@ -17,7 +17,7 @@
         </div>
 
         <div class="form-group">
-            <label for="amount" class="form-label">Withdrawal Amount (USD $)</label>
+            <label for="amount" class="form-label">Withdrawal Amount (In Account's Currency)</label>
             <input type="number" step="0.01" min="1" name="amount" id="amount" class="form-control" required placeholder="0.00">
         </div>
 

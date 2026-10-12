@@ -136,13 +136,25 @@
                 <!-- Section 3: Account Type & Credentials -->
                 <div class="form-section-title">3. Account Type & Portal Credentials</div>
 
-                <div class="form-group">
-                    <label for="account_type_requested" class="form-label">Initial USD Account Selection</label>
-                    <select name="account_type_requested" id="account_type_requested" class="form-control" required>
-                        <option value="Checking" {{ old('account_type_requested') == 'Checking' ? 'selected' : '' }}>Corox Commercial Checking (USD)</option>
-                        <option value="Savings" {{ old('account_type_requested') == 'Savings' ? 'selected' : '' }}>Corox High-Yield Savings (5.15% APY USD)</option>
-                        <option value="Investment" {{ old('account_type_requested') == 'Investment' ? 'selected' : '' }}>Corox Private Wealth &amp; Investment Portfolio (USD)</option>
-                    </select>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="currency" class="form-label">Account Base Currency</label>
+                        <select name="currency" id="currency" class="form-control" required>
+                            @foreach(\App\Services\CurrencyService::all() as $code => $cData)
+                                <option value="{{ $code }}" {{ old('currency', 'USD') === $code ? 'selected' : '' }}>
+                                    {{ $code }} ({{ $cData['symbol'] }}) — {{ $cData['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="account_type_requested" class="form-label">Initial Account Type</label>
+                        <select name="account_type_requested" id="account_type_requested" class="form-control" required>
+                            <option value="Checking" {{ old('account_type_requested') == 'Checking' ? 'selected' : '' }}>Commercial Checking</option>
+                            <option value="Savings" {{ old('account_type_requested') == 'Savings' ? 'selected' : '' }}>High-Yield Savings (5.15% APY)</option>
+                            <option value="Investment" {{ old('account_type_requested') == 'Investment' ? 'selected' : '' }}>Private Wealth &amp; Investment Portfolio</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-row">

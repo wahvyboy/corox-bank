@@ -74,11 +74,11 @@
                         <div class="sidebar-nav-label">Operations</div>
                         <a href="{{ route('show.admin.deposit.form') }}" class="{{ request()->routeIs('show.admin.deposit.form') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg>
-                            Deposit USD
+                            Deposit Funds
                         </a>
                         <a href="{{ route('show.admin.withdraw.form') }}" class="{{ request()->routeIs('show.admin.withdraw.form') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20V4m0 0l-4 4m4-4l4 4"/></svg>
-                            Withdraw USD
+                            Withdraw Funds
                         </a>
                         <a href="{{ route('show.admin.transfer.form') }}" class="{{ request()->routeIs('show.admin.transfer.form') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4-4m-4 4l4 4"/></svg>
@@ -86,7 +86,7 @@
                         </a>
                         <a href="{{ route('show.admin.create.account.form') }}" class="{{ request()->routeIs('show.admin.create.account.form') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                            Create USD Account
+                            Create Account
                         </a>
                     @else
                         <div class="sidebar-nav-label">Client Portal</div>
@@ -96,7 +96,7 @@
                         </a>
                         <a href="{{ route('show.bank.accounts') }}" class="{{ request()->routeIs('show.bank.accounts') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                            My USD Accounts
+                            My Accounts
                         </a>
                         <a href="{{ route('show.transaction.history') }}" class="{{ request()->routeIs('show.transaction.history') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
@@ -106,15 +106,15 @@
                         <div class="sidebar-nav-label">Transactions</div>
                         <a href="{{ route('show.transfer.form') }}" class="{{ request()->routeIs('show.transfer.form') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4-4m-4 4l4 4"/></svg>
-                            Send Wire / ACH
+                            Send Wire / Clearing
                         </a>
                         <a href="{{ route('show.deposit.form') }}" class="{{ request()->routeIs('show.deposit.form') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg>
-                            Deposit USD
+                            Deposit Funds
                         </a>
                         <a href="{{ route('show.withdraw.form') }}" class="{{ request()->routeIs('show.withdraw.form') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20V4m0 0l-4 4m4-4l4 4"/></svg>
-                            Withdraw USD
+                            Withdraw Funds
                         </a>
                         <a href="{{ route('create.bank.account') }}" class="{{ request()->routeIs('create.bank.account') ? 'active' : '' }}">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
@@ -268,6 +268,7 @@
             }, { passive: true });
         })();
     </script>
+    <script src="{{ asset('js/bank-directory.js') }}"></script>
     @yield('scripts')
 </body>
 </html>

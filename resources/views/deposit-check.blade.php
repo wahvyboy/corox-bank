@@ -36,10 +36,12 @@
         {{-- Account Selection --}}
         <div class="form-group">
             <label for="account_number" class="form-label" style="font-weight: 700; color: #111827;">Deposit Into Account</label>
-            <select name="account_number" id="account_number" class="form-control" required style="font-size: 14px; font-weight: 600;">
+            <select name="account_number" id="account_number" class="form-control" required style="font-size: 14px; font-weight: 600;" onchange="handleCheckAccountChange()">
                 @foreach($accounts as $acc)
-                    <option value="{{ $acc->account_number }}">
-                        {{ $acc->account_type }} — {{ $acc->account_number }} (Available: ${{ number_format($acc->balance, 2) }} USD)
+                    <option value="{{ $acc->account_number }}"
+                            data-currency="{{ $acc->currency }}"
+                            data-symbol="{{ $acc->currency_symbol }}">
+                        {{ $acc->account_type }} — {{ $acc->account_number }} (Available: {{ $acc->currency_symbol }}{{ number_format($acc->balance, 2) }} {{ $acc->currency }})
                     </option>
                 @endforeach
             </select>
@@ -112,10 +114,10 @@
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
                 <div class="form-group" style="margin-bottom: 0;">
-                    <label for="amount" class="form-label" style="font-weight: 700; color: #111827;">Check Amount (USD $)</label>
+                    <label for="amount" class="form-label" style="font-weight: 700; color: #111827;">Check Amount (<span id="chkCurrencySymbol">$</span> <span id="chkCurrencyCode">USD</span>)</label>
                     <div style="position: relative;">
-                        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-weight: 800; color: #374151; font-size: 16px;">$</span>
-                        <input type="number" step="0.01" min="1" max="100000" name="amount" id="amount" class="form-control" required placeholder="0.00" style="padding-left: 28px; font-size: 18px; font-weight: 800; color: #111827;">
+                        <span id="chkSymbolPrefix" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-weight: 800; color: #374151; font-size: 16px;">$</span>
+                        <input type="number" step="0.01" min="1" max="1000000" name="amount" id="amount" class="form-control" required placeholder="0.00" style="padding-left: 28px; font-size: 18px; font-weight: 800; color: #111827;">
                     </div>
                     <small style="color: #6B7280; font-size: 11.5px; margin-top: 4px; display: block;">Enter or confirm the exact numeric amount written on the check</small>
                 </div>
@@ -144,6 +146,21 @@
 </div>
 
 <script>
+function handleCheckAccountChange() {
+    const sel = document.getElementById('account_number');
+    if (!sel || !sel.selectedOptions || sel.selectedOptions.length === 0) return;
+    const opt = sel.selectedOptions[0];
+    const currency = opt.getAttribute('data-currency') || 'USD';
+    const symbol = opt.getAttribute('data-symbol') || '$';
+
+    const symEl = document.getElementById('chkCurrencySymbol');
+    const codeEl = document.getElementById('chkCurrencyCode');
+    const pfxEl = document.getElementById('chkSymbolPrefix');
+    if (symEl) symEl.innerText = symbol;
+    if (codeEl) codeEl.innerText = currency;
+    if (pfxEl) pfxEl.innerText = symbol;
+}
+
 function handleCheckPreview(input, previewId, contentId) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -165,6 +182,8 @@ function handleCheckPreview(input, previewId, contentId) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+document.addEventListener('DOMContentLoaded', handleCheckAccountChange);
 </script>
 
 @endsection

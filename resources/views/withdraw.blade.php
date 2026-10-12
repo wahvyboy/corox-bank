@@ -1,10 +1,10 @@
 @extends('layouts.app')
-@section('title', 'Withdraw USD')
+@section('title', 'Withdraw Funds')
 @section('content')
 <div class="dashboard-header">
     <div>
-        <h2 style="font-size: 1.8rem; font-weight: 800;">Withdraw Funds (USD)</h2>
-        <p style="color: var(--text-secondary);">Request a withdrawal or ATM payout from your active Corox Bank account.</p>
+        <h2 style="font-size: 1.8rem; font-weight: 800;">Withdraw Funds</h2>
+        <p style="color: var(--text-secondary);">Request a withdrawal or payout from your active Corox Bank account.</p>
     </div>
 </div>
 
@@ -12,27 +12,45 @@
     <form action="{{ url('/user/withdraw') }}" method="POST">
         @csrf
         <div class="form-group">
-            <label for="account_number" class="form-label">Select USD Account</label>
-            <select name="account_number" id="account_number" class="form-control" required>
+            <label for="account_number" class="form-label">Select Source Account</label>
+            <select name="account_number" id="account_number" class="form-control" required onchange="handleWithdrawAccountChange()">
                 @foreach(Auth::user()->accounts()->where('status', 'active')->get() as $acc)
-                    <option value="{{ $acc->account_number }}">
-                        {{ $acc->account_type }} - {{ $acc->account_number }} (Balance: ${{ number_format($acc->balance, 2) }} USD)
+                    <option value="{{ $acc->account_number }}"
+                            data-currency="{{ $acc->currency }}"
+                            data-symbol="{{ $acc->currency_symbol }}">
+                        {{ $acc->account_type }} - {{ $acc->account_number }} (Balance: {{ $acc->currency_symbol }}{{ number_format($acc->balance, 2) }} {{ $acc->currency }})
                     </option>
                 @endforeach
             </select>
         </div>
 
         <div class="form-group">
-            <label for="amount" class="form-label">Withdrawal Amount (USD $)</label>
+            <label for="amount" class="form-label">
+                Withdrawal Amount (<span id="withCurrencySymbol">$</span> <span id="withCurrencyCode">USD</span>)
+            </label>
             <input type="number" step="0.01" min="1" name="amount" id="amount" class="form-control" required placeholder="0.00">
         </div>
 
         <div class="form-group">
-            <label for="description" class="form-label">Withdrawal Reason / Note</label>
-            <input type="text" name="description" id="description" class="form-control" placeholder="e.g. ATM Cash Withdrawal">
+            <label for="description" class="form-label">Withdrawal Reason / Note (Optional)</label>
+            <input type="text" name="description" id="description" class="form-control" placeholder="e.g. ATM Cash Withdrawal, personal disbursement">
         </div>
 
         <button type="submit" class="btn btn-primary btn-lg btn-block">Process Withdrawal</button>
     </form>
 </div>
+
+<script>
+    function handleWithdrawAccountChange() {
+        const sel = document.getElementById('account_number');
+        if (!sel || !sel.selectedOptions || sel.selectedOptions.length === 0) return;
+        const opt = sel.selectedOptions[0];
+        const currency = opt.getAttribute('data-currency') || 'USD';
+        const symbol = opt.getAttribute('data-symbol') || '$';
+
+        document.getElementById('withCurrencySymbol').innerText = symbol;
+        document.getElementById('withCurrencyCode').innerText = currency;
+    }
+    document.addEventListener('DOMContentLoaded', handleWithdrawAccountChange);
+</script>
 @endsection

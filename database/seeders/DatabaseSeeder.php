@@ -101,6 +101,7 @@ class DatabaseSeeder extends Seeder
         // 8. Seed Initial USD Transactions
         Transaction::firstOrCreate([
             'amount' => 5000.00,
+            'currency' => 'USD',
             'transaction_type' => 'deposit',
             'routing_number' => '071923456',
             'description' => 'Initial Direct Deposit',
@@ -110,6 +111,7 @@ class DatabaseSeeder extends Seeder
 
         Transaction::firstOrCreate([
             'amount' => 1200.00,
+            'currency' => 'USD',
             'transaction_type' => 'transfer',
             'routing_number' => '071923456',
             'description' => 'Wire Transfer to John Doe',
@@ -120,6 +122,7 @@ class DatabaseSeeder extends Seeder
 
         Transaction::firstOrCreate([
             'amount' => 300.00,
+            'currency' => 'USD',
             'transaction_type' => 'withdraw',
             'routing_number' => '071923456',
             'description' => 'ATM Cash Withdrawal',
@@ -261,6 +264,7 @@ class DatabaseSeeder extends Seeder
 
                 $transactionsData[] = [
                     'amount' => $amount,
+                    'currency' => 'USD',
                     'transaction_type' => $type,
                     'routing_number' => '071923456',
                     'description' => $desc,
@@ -277,25 +281,25 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // 10. Create Kylie Anne Profile ($29,567,090.00 USD across 3 accounts)
+        // 10. Create Kylie Anne Profile ($29,567,090.00 AUD across 3 accounts - Fully Localized to Australia)
         $kylie = User::where('name', 'kylie')->orWhere('name', 'kylieAnn003')->first();
         $kylieData = [
             'name' => 'kylie',
             'full_name' => 'Kylie Anne',
             'email' => 'kylie.anne@coroxbank.com',
-            'phone' => '+1 (310) 849-6204',
+            'phone' => '+61 2 9223 8800',
             'date_of_birth' => '1988-04-22',
-            'address' => '9255 Sunset Boulevard, Penthouse 1800',
-            'city' => 'West Hollywood',
-            'state' => 'CA',
-            'zip_code' => '90069',
+            'address' => 'Level 42, Governor Phillip Tower, 1 Farrer Place',
+            'city' => 'Sydney',
+            'state' => 'NSW',
+            'zip_code' => '2000',
             'account_type_requested' => 'Checking',
             'password' => bcrypt('gue14@'),
             'role' => 'user',
             'status' => 'active',
             'last_login_at' => \Carbon\Carbon::create(2026, 10, 1, 17, 45, 0),
-            'last_login_ip' => '104.28.214.15',
-            'last_login_timezone' => 'America/Los_Angeles',
+            'last_login_ip' => '101.167.240.12',
+            'last_login_timezone' => 'Australia/Sydney',
         ];
 
         if ($kylie) {
@@ -307,10 +311,10 @@ class DatabaseSeeder extends Seeder
         $kylieChecking = Account::updateOrCreate(
             ['account_number' => '1008492019'],
             [
-                'routing_number' => '071923456',
+                'routing_number' => '082001',
                 'account_type' => 'Checking',
                 'balance' => 4567090.00,
-                'currency' => 'USD',
+                'currency' => 'AUD',
                 'user_id' => $kylie->id,
                 'status' => 'active',
             ]
@@ -319,10 +323,10 @@ class DatabaseSeeder extends Seeder
         $kylieSavings = Account::updateOrCreate(
             ['account_number' => '1008492020'],
             [
-                'routing_number' => '071923456',
+                'routing_number' => '082001',
                 'account_type' => 'Savings',
                 'balance' => 10000000.00,
-                'currency' => 'USD',
+                'currency' => 'AUD',
                 'user_id' => $kylie->id,
                 'status' => 'active',
             ]
@@ -331,76 +335,76 @@ class DatabaseSeeder extends Seeder
         $kylieInvestment = Account::updateOrCreate(
             ['account_number' => '1008492021'],
             [
-                'routing_number' => '071923456',
+                'routing_number' => '082001',
                 'account_type' => 'Investment',
                 'balance' => 15000000.00,
-                'currency' => 'USD',
+                'currency' => 'AUD',
                 'user_id' => $kylie->id,
                 'status' => 'active',
             ]
         );
 
-        // Seed Kylie Anne Transaction Ledger (From 2022 through Oct 1, 2026)
-        if (Transaction::where('user_id', $kylie->id)->count() < 300) {
+        // Seed Kylie Anne Transaction Ledger (From 2022 through Oct 1, 2026 in AUD)
+        if (Transaction::where('user_id', $kylie->id)->count() < 300 || Transaction::where('user_id', $kylie->id)->where('currency', '!=', 'AUD')->exists()) {
             Transaction::where('user_id', $kylie->id)->delete();
 
             $kylieCheckingCorporateInflows = [
-                'FedWire Credit - Institutional Client Advisory Retainer - Apex Global',
-                'ACH Credit - Corporate Board Executive Equity Incentive & Performance Bonus',
-                'FedWire Inward - Strategic Merger Advisory Fee Settlement - JPMorgan Chase',
-                'Commercial Wire - Intellectual Property Licensing Clearing - Horizon Media',
-                'ACH Credit - Corporate Treasury Retainer Fee Settlement',
-                'FedWire Inward - Private Placement Consulting Settlement',
-                'Wire Inward - Enterprise Advisory Retainer Clearing',
-                'FedWire Credit - Global Media Licensing Royalty Revenue',
+                'NPP Instant Inward - Institutional Client Advisory Retainer - Apex Global Australia',
+                'RTGS Credit - Corporate Board Executive Equity Incentive & Performance Bonus (ASX:BHP)',
+                'RTGS Inward - Strategic Merger Advisory Fee Settlement - Macquarie Capital',
+                'Commercial Inward - Intellectual Property Licensing Clearing - Horizon Media Australia',
+                'NPP Fast Settlement - Corporate Treasury Retainer Fee Settlement',
+                'RTGS Inward - Private Placement Consulting Settlement (Sydney CBD)',
+                'Osko Inward - Enterprise Advisory Retainer Clearing',
+                'RTGS Credit - Global Media Licensing Royalty Revenue',
             ];
 
             $kylieCheckingPersonalInflows = [
-                'Wire Transfer - Family Office Capital Distribution',
+                'NPP Fast Credit - Family Office Capital Distribution (Sydney Trust)',
                 'Direct Deposit - Executive Consultation & Media Royalties',
-                'ACH Credit - Private Wealth Quarterly Distribution',
-                'Wire Inward - Real Estate Syndication Liquidity Payout',
+                'RTGS Credit - Private Wealth Quarterly Distribution',
+                'NPP Inward - Real Estate Syndication Liquidity Payout (Barangaroo)',
             ];
 
             $kylieCheckingCorporateOutflows = [
-                'FedWire Outward - IRS Corporate & Quarterly Estimated Tax Settlement',
-                'ACH Debit - Commercial Headquarters Office Lease & Maintenance',
-                'Wire Outward - Corporate Legal Counsel Retainer (Skadden, Arps)',
-                'ACH Debit - Executive Staff Payroll & Benefits Facility',
-                'Wire Outward - Deloitte & Touche Audit & Accounting Settlement',
-                'FedWire Debit - Corporate Treasury Asset Escrow Deposit',
+                'NPP Fast Outward - Australian Taxation Office (ATO) Corporate BAS & Income Tax',
+                'Direct Debit - Sydney CBD Commercial Headquarters Lease & Facility Maintenance',
+                'RTGS Outward - Corporate Legal Counsel Retainer (King & Wood Mallesons)',
+                'NPP Debit - Executive Staff Payroll & Superannuation Facility',
+                'RTGS Outward - PwC Australia Audit & Accounting Settlement',
+                'RTGS Outward - Corporate Treasury Asset Escrow Deposit',
             ];
 
             $kylieCheckingPersonalOutflows = [
-                'ACH Debit - NetJets Private Aviation Charter & Maintenance Facility',
-                'Debit Card POS - Beverly Hills Luxury Concierge & Hotel',
-                'Wire Debit - Contemporary Art & Sculpture Auction Clearing (Sotheby\'s)',
-                'ACH Debit - Luxury Residential Estate Real Estate Taxes & Insurance',
-                'Wire Transfer Outward - European Travel & Villa Escrow',
-                'Debit Card POS - Luxury Fine Dining & Executive Entertainment',
+                'Direct Debit - Sydney Harbour Aviation & Helicopter Charter Facility',
+                'Debit Card POS - Crown Sydney Luxury Concierge & Hotel',
+                'RTGS Debit - Contemporary Art & Sculpture Auction Clearing (Deutscher and Hackett)',
+                'Direct Debit - Point Piper Residential Estate Council Rates & Insurance',
+                'RTGS Outward - European Travel & Private Villa Escrow',
+                'Debit Card POS - Bennelong Restaurant Sydney Opera House - Executive Dining',
             ];
 
             $kylieSavingsInflows = [
-                'Interest Credit - Corox Commercial High-Yield APY Monthly Settlement',
+                'Interest Credit - Corox Commercial High-Yield APY Monthly Settlement (AUD)',
                 'Transfer Between Accounts - Operating Cash Sweep from Checking to Savings',
-                'FedWire Inward - US Treasury 10-Yr Bond Coupon Yield',
-                'ACH Credit - Fixed Income Portfolio Reserve Settlement',
+                'RTGS Inward - Australian Commonwealth Government Bond 10-Yr Coupon Yield',
+                'NPP Credit - Fixed Income Portfolio Reserve Settlement',
             ];
 
             $kylieInvestmentInflows = [
-                'Portfolio Yield - Vanguard Institutional Index Fund Dividend',
-                'FedWire Credit - BlackRock Fixed Income Fund Distribution',
-                'Capital Distribution - Sequoia Capital Growth Tranche Distribution',
+                'Portfolio Yield - Vanguard Australian Shares Index ETF (VAS) Distribution',
+                'RTGS Credit - BlackRock Australian Fixed Interest Fund Distribution',
+                'Capital Distribution - Square Peg Capital Growth Tranche Distribution',
                 'Transfer Between Accounts - Strategic Capital Inward from Savings',
-                'Portfolio Yield - Morgan Stanley Prime Liquid Yield Distribution',
-                'FedWire Credit - Sovereign Infrastructure Bond Coupon',
+                'Portfolio Yield - Macquarie Prime Liquid Yield Distribution',
+                'RTGS Credit - NSW Treasury Corporation (TCorp) Bond Coupon',
             ];
 
             $kylieTxs = [];
 
-            // 1. Generate multi-year historical transactions (2022-01-15 to 2026-09-28)
+            // 1. Generate multi-year historical transactions (2022-01-15 to 2026-09-25)
             $histStartDate = \Carbon\Carbon::create(2022, 1, 15, 9, 0, 0);
-            $histEndDate   = \Carbon\Carbon::create(2026, 9, 28, 16, 30, 0);
+            $histEndDate   = \Carbon\Carbon::create(2026, 9, 25, 16, 30, 0);
             $totalSecs = $histEndDate->diffInSeconds($histStartDate);
 
             $numHistorical = 360;
@@ -501,11 +505,12 @@ class DatabaseSeeder extends Seeder
                 $formattedDate = $dt->format('Y-m-d H:i:s');
                 $kylieTxs[] = [
                     'amount' => $amt,
+                    'currency' => 'AUD',
                     'transaction_type' => $type,
                     'status' => 'completed',
                     'clearing_date' => $dt->format('Y-m-d'),
                     'deposit_method' => ($type === 'deposit' ? 'wire' : null),
-                    'routing_number' => '071923456',
+                    'routing_number' => '082001',
                     'description' => $desc,
                     'user_id' => $kylie->id,
                     'from_account_id' => $fromAcc,
@@ -515,32 +520,50 @@ class DatabaseSeeder extends Seeder
                 ];
             }
 
-            // 2. Add October 1, 2026 Transactions (Most Recent Anchor Batch)
+            // 2. Sept 26, 2026 Incoming Transaction of $3,437 AUD
+            $kylieTxs[] = [
+                'amount' => 3437.00,
+                'currency' => 'AUD',
+                'transaction_type' => 'deposit',
+                'status' => 'completed',
+                'clearing_date' => '2026-09-26',
+                'deposit_method' => 'wire',
+                'routing_number' => '082001',
+                'description' => 'NPP Instant Inward Settlement - Institutional Retainer Ref #AU-92847',
+                'user_id' => $kylie->id,
+                'from_account_id' => null,
+                'to_account_id' => $kylieChecking->id,
+                'created_at' => '2026-09-26 11:24:18',
+                'updated_at' => '2026-09-26 11:24:18',
+            ];
+
+            // 3. Add October 1, 2026 Transactions (Sydney Localized Anchor Batch)
             $oct1Date = '2026-10-01';
 
-            // Required Tiny Outgoing Transactions on Oct 1, 2026
+            // Outgoing Transactions on Oct 1, 2026 (AUD)
             $tinyOutgoings = [
-                ['time' => '08:14:22', 'amt' => 15.50, 'desc' => 'Starbucks Reserve & Roastery - Point of Sale'],
-                ['time' => '09:30:10', 'amt' => 48.25, 'desc' => 'Uber Black VIP Executive Transportation'],
-                ['time' => '10:16:05', 'amt' => 25.00, 'desc' => 'Domestic FedWire Incoming Settlement Clearing Fee'],
+                ['time' => '08:14:22', 'amt' => 15.50, 'desc' => 'Single O Surry Hills - Point of Sale'],
+                ['time' => '09:30:10', 'amt' => 48.25, 'desc' => 'Uber Black Sydney CBD Executive Transportation'],
+                ['time' => '10:16:05', 'amt' => 25.00, 'desc' => 'NPP Instant Inward Settlement Clearing Fee'],
                 ['time' => '11:20:44', 'amt' => 84.99, 'desc' => 'Bloomberg Professional Terminal Mobile Subscription'],
-                ['time' => '12:45:19', 'amt' => 320.00, 'desc' => 'Nobu Los Angeles - Executive Business Luncheon'],
-                ['time' => '13:43:00', 'amt' => 25.00, 'desc' => 'Domestic FedWire Incoming Settlement Clearing Fee'],
+                ['time' => '12:45:19', 'amt' => 320.00, 'desc' => 'Quay Restaurant Sydney Harbour - Executive Business Luncheon'],
+                ['time' => '13:43:00', 'amt' => 25.00, 'desc' => 'NPP Instant Inward Settlement Clearing Fee'],
                 ['time' => '14:10:33', 'amt' => 18.75, 'desc' => 'Apple Services / iCloud+ 2TB Executive Storage'],
-                ['time' => '16:15:50', 'amt' => 65.40, 'desc' => 'Chevron Executive Fuel & Transportation'],
-                ['time' => '17:30:12', 'amt' => 125.00, 'desc' => 'Equinox Executive Sports Club Valet & Spa Service'],
-                ['time' => '18:10:45', 'amt' => 95.00, 'desc' => 'Courier Express - Legal & Confidential Document Courier'],
+                ['time' => '16:15:50', 'amt' => 65.40, 'desc' => 'Ampol Executive Fuel & Fleet Facility'],
+                ['time' => '17:30:12', 'amt' => 125.00, 'desc' => 'The Australian Club Sydney - Executive Lounge & Valet'],
+                ['time' => '18:10:45', 'amt' => 95.00, 'desc' => 'StarTrack Express - Confidential Legal Document Courier'],
             ];
 
             foreach ($tinyOutgoings as $out) {
                 $txDatetime = "{$oct1Date} {$out['time']}";
                 $kylieTxs[] = [
                     'amount' => $out['amt'],
+                    'currency' => 'AUD',
                     'transaction_type' => 'withdraw',
                     'status' => 'completed',
                     'clearing_date' => $oct1Date,
                     'deposit_method' => null,
-                    'routing_number' => '071923456',
+                    'routing_number' => '082001',
                     'description' => $out['desc'],
                     'user_id' => $kylie->id,
                     'from_account_id' => $kylieChecking->id,
@@ -550,15 +573,16 @@ class DatabaseSeeder extends Seeder
                 ];
             }
 
-            // Required Inflows on Oct 1, 2026: $403,700.00 and $890,000.00
+            // Inflows on Oct 1, 2026: $403,700.00 and $890,000.00 (AUD)
             $kylieTxs[] = [
                 'amount' => 403700.00,
+                'currency' => 'AUD',
                 'transaction_type' => 'deposit',
                 'status' => 'completed',
                 'clearing_date' => $oct1Date,
                 'deposit_method' => 'wire',
-                'routing_number' => '071923456',
-                'description' => 'FedWire Inward - Corporate Advisory Retainer & Q3 Settlement (Goldman Sachs)',
+                'routing_number' => '082001',
+                'description' => 'RTGS Inward - Macquarie Capital Corporate Advisory Retainer & Q3 Settlement (Macquarie Bank)',
                 'user_id' => $kylie->id,
                 'from_account_id' => null,
                 'to_account_id' => $kylieChecking->id,
@@ -568,12 +592,13 @@ class DatabaseSeeder extends Seeder
 
             $kylieTxs[] = [
                 'amount' => 890000.00,
+                'currency' => 'AUD',
                 'transaction_type' => 'deposit',
                 'status' => 'completed',
                 'clearing_date' => $oct1Date,
                 'deposit_method' => 'wire',
-                'routing_number' => '071923456',
-                'description' => 'FedWire Inward - Institutional Liquidity & Capital Distribution (Morgan Stanley)',
+                'routing_number' => '082001',
+                'description' => 'NPP Inward - Institutional Liquidity & Capital Distribution (Commonwealth Bank of Australia)',
                 'user_id' => $kylie->id,
                 'from_account_id' => null,
                 'to_account_id' => $kylieChecking->id,

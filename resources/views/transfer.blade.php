@@ -1,10 +1,10 @@
 @extends('layouts.app')
-@section('title', 'Send Wire / ACH Transfer')
+@section('title', 'Send Wire / ACH / NPP Transfer')
 @section('content')
 <div class="dashboard-header">
     <div>
-        <h2 style="font-size: 1.8rem; font-weight: 800;">Send Wire / ACH Transfer</h2>
-        <p style="color: var(--text-secondary);">Transfer funds in USD to any domestic or international bank account using Account Number and Routing Number.</p>
+        <h2 style="font-size: 1.8rem; font-weight: 800;">Send Wire Transfer &amp; Real-Time Electronic Remittance</h2>
+        <p style="color: var(--text-secondary);">Direct wire &amp; clearing across domestic (FedWire, ACH, NPP, Bacs, SEPA) and international SWIFT networks.</p>
     </div>
 </div>
 
@@ -12,11 +12,15 @@
     <form action="{{ url('/user/transfer') }}" method="POST" id="transferForm">
         @csrf
         <div class="form-group">
-            <label for="from_account_number" class="form-label">Source USD Account</label>
-            <select name="from_account_number" id="from_account_number" class="form-control" required>
+            <label for="from_account_number" class="form-label">Source Account</label>
+            <select name="from_account_number" id="from_account_number" class="form-control" required onchange="handleSourceAccountChange()">
                 @forelse(Auth::user()->accounts()->where('status', 'active')->get() as $acc)
-                    <option value="{{ $acc->account_number }}" {{ request()->get('from') == $acc->account_number ? 'selected' : '' }}>
-                        {{ $acc->account_type }} - {{ $acc->account_number }} (Balance: ${{ number_format($acc->balance, 2) }} USD)
+                    <option value="{{ $acc->account_number }}"
+                            data-currency="{{ $acc->currency }}"
+                            data-symbol="{{ $acc->currency_symbol }}"
+                            data-routing="{{ $acc->routing_number }}"
+                            {{ request()->get('from') == $acc->account_number ? 'selected' : '' }}>
+                        {{ $acc->account_type }} - {{ $acc->account_number }} (Balance: {{ $acc->currency_symbol }}{{ number_format($acc->balance, 2) }} {{ $acc->currency }})
                     </option>
                 @empty
                     <option value="">No Active Accounts Available</option>
@@ -25,204 +29,187 @@
         </div>
 
         <div class="form-group">
-            <label for="to_account_number" class="form-label">Destination Account Number</label>
-            <input type="text" name="to_account_number" id="to_account_number" class="form-control" required placeholder="e.g. 1007788990 or external account">
+            <label for="to_account_number" class="form-label">Destination Account / IBAN Number</label>
+            <input type="text" name="to_account_number" id="to_account_number" class="form-control" required placeholder="e.g. 1007788990 or beneficiary account / IBAN">
         </div>
 
         <div class="form-group">
-            <label for="routing_number" class="form-label">Destination ABA Routing / SWIFT Code</label>
-            <input type="text" name="routing_number" id="routing_number" class="form-control" value="071923456" required placeholder="Enter 9-digit ABA Routing Number">
+            <label for="routing_number" class="form-label" id="routingLabel">Destination ABA Routing / SWIFT / BSB / Sort Code</label>
+            <input type="text" name="routing_number" id="routing_number" class="form-control" value="071923456" required placeholder="Enter 9-digit ABA, SWIFT/BIC, 6-digit BSB or Sort Code">
         </div>
 
-        <!-- Quick Routing Institution Selector Chips -->
-        <div style="margin-top: -0.5rem; margin-bottom: 1.25rem; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+        <!-- Adaptive Quick Routing Chips based on Currency -->
+        <div id="quickChipsContainer" style="margin-top: -0.5rem; margin-bottom: 1.25rem; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
             <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase;">Quick Bank Select:</span>
-            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('071923456')" style="background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;">Corox Bank (071923456)</button>
-            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('026009593')" style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1D4ED8; cursor: pointer;">Bank of America (026009593)</button>
-            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('021000021')" style="background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;">Chase (021000021)</button>
-            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('121000248')" style="background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;">Wells Fargo (121000248)</button>
-            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('101205681')" style="background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;">Fidelity (101205681)</button>
-            <button type="button" class="btn-routing-chip" onclick="setRoutingPreset('062000019')" style="background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;">Regions (062000019)</button>
+            <div id="quickChipsList" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
         </div>
 
-        <!-- Dynamic Live Bank Lookup Badge -->
-        <div id="bankLookupBadge" style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px;">
-            <div style="width: 32px; height: 32px; background: #10b981; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">✓</div>
-            <div>
-                <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #047857;">Verified Receiving Bank</div>
+        <!-- Dynamic Live Bank Lookup Badge (Instant Directory Resolution) -->
+        <div id="bankLookupBadge" style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease;">
+            <div id="bankBadgeIcon" style="width: 36px; height: 36px; background: #10b981; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;">✓</div>
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #047857;">Verified Receiving Bank</span>
+                    <span id="bankCountryBadge" style="font-size: 11px; font-weight: 700; background: #d1fae5; color: #065f46; padding: 1px 8px; border-radius: 9999px;">US</span>
+                </div>
                 <div style="font-size: 15px; font-weight: 800; color: #065f46;" id="receivingBankName">Corox Bank (Internal Clearing)</div>
+                <div style="font-size: 12px; color: #047857; margin-top: 2px;" id="receivingNetwork">Direct FedWire &amp; ACH Electronic Rail</div>
             </div>
         </div>
 
         <div class="form-group">
-            <label for="amount" class="form-label">Transfer Amount (USD $)</label>
+            <label for="amount" class="form-label">
+                Transfer Amount (<span id="currSymbol">$</span> <span id="currCode">USD</span>)
+            </label>
             <input type="number" step="0.01" min="1" name="amount" id="amount" class="form-control" required placeholder="0.00">
         </div>
 
         <div class="form-group">
-            <label for="description" class="form-label">Wire Description / Memo (Optional)</label>
-            <input type="text" name="description" id="description" class="form-control" placeholder="e.g. Invoice payment, personal transfer">
+            <label for="description" class="form-label">Wire Remittance Memo / Description (Optional)</label>
+            <input type="text" name="description" id="description" class="form-control" placeholder="e.g. Invoice settlement, commercial trade remittance">
         </div>
 
         <button type="submit" class="btn btn-primary btn-lg btn-block">Execute Wire Transfer</button>
     </form>
 </div>
 
+<script src="{{ asset('js/bank-directory.js') }}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const routingInput = document.getElementById('routing_number');
-        const accountInput = document.getElementById('to_account_number');
-        const bankBadgeName = document.getElementById('receivingBankName');
+    const PRESETS_BY_CURRENCY = {
+        'AUD': [
+            { code: '082001', name: 'Corox Bank / NAB (082-001)' },
+            { code: '062000', name: 'Commonwealth Bank (062-000)' },
+            { code: '032001', name: 'Westpac (032-001)' },
+            { code: '012002', name: 'ANZ (012-002)' },
+            { code: '182512', name: 'Macquarie Bank (182-512)' }
+        ],
+        'USD': [
+            { code: '071923456', name: 'Corox Bank (071923456)' },
+            { code: '026009593', name: 'Bank of America (026009593)' },
+            { code: '021000021', name: 'Chase (021000021)' },
+            { code: '121000248', name: 'Wells Fargo (121000248)' },
+            { code: '101205681', name: 'Fidelity (101205681)' },
+            { code: '062000019', name: 'Regions (062000019)' }
+        ],
+        'GBP': [
+            { code: '200000', name: 'Barclays (20-00-00)' },
+            { code: '400000', name: 'HSBC UK (40-00-00)' },
+            { code: '300000', name: 'Lloyds Bank (30-00-00)' },
+            { code: '600001', name: 'NatWest (60-00-01)' },
+            { code: '040075', name: 'Revolut UK (04-00-75)' }
+        ],
+        'EUR': [
+            { code: 'DEUTDEDD', name: 'Deutsche Bank (DEUTDEDD)' },
+            { code: 'BNPAFRPP', name: 'BNP Paribas (BNPAFRPP)' },
+            { code: 'BSCHESMM', name: 'Santander (BSCHESMM)' },
+            { code: 'INGBNL2A', name: 'ING Bank (INGBNL2A)' }
+        ],
+        'CNY': [
+            { code: 'BKCHCNBJ', name: 'Bank of China (BKCHCNBJ)' },
+            { code: 'ICBCCNBS', name: 'ICBC (ICBCCNBS)' },
+            { code: 'PCBCCNBJ', name: 'China Construction Bank' }
+        ],
+        'CAD': [
+            { code: 'ROYCCAT2', name: 'RBC Royal Bank (ROYCCAT2)' },
+            { code: 'TDOMCATTTOR', name: 'TD Canada Trust (TDOMCATTTOR)' },
+            { code: 'BNSCCATT', name: 'Scotiabank (BNSCCATT)' }
+        ],
+        'JPY': [
+            { code: 'BOTKJPJT', name: 'MUFG Bank (BOTKJPJT)' },
+            { code: 'SMBCJPJT', name: 'SMBC (SMBCJPJT)' }
+        ],
+        'CHF': [
+            { code: 'UBSWCHZH', name: 'UBS Switzerland (UBSWCHZH)' },
+            { code: 'PICTCHGG', name: 'Pictet & Cie (PICTCHGG)' }
+        ]
+    };
 
-        // Comprehensive US ABA Routing Number Registry Database (65+ Institutions)
-        const routingDatabase = {
-            // Corox Bank (Neutral Internal Clearing)
-            '071923456': 'Corox Bank (Internal Clearing)',
+    function renderPresets(currency) {
+        const list = document.getElementById('quickChipsList');
+        if (!list) return;
+        list.innerHTML = '';
+        const presets = PRESETS_BY_CURRENCY[currency] || PRESETS_BY_CURRENCY['USD'];
+        presets.forEach(p => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn-routing-chip';
+            btn.style.cssText = 'background: #F3F4F6; border: 1px solid #D1D5DB; border-radius: 9999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; color: #1F2937; cursor: pointer;';
+            btn.innerText = p.name;
+            btn.onclick = function() {
+                setRoutingPreset(p.code);
+            };
+            list.appendChild(btn);
+        });
+    }
 
-            // Bank of America (Wire & ACH Electronic Clearing)
-            '026009593': 'Bank of America, N.A. (Domestic Wire Clearing)',
-            '121000358': 'Bank of America, N.A. (California)',
-            '054000030': 'Bank of America, N.A. (North Carolina)',
-            '111000025': 'Bank of America, N.A. (Texas)',
-            '021200339': 'Bank of America, N.A. (New York)',
-            '011900254': 'Bank of America, N.A. (Massachusetts)',
-            '063100277': 'Bank of America, N.A. (Florida)',
+    function handleSourceAccountChange() {
+        const select = document.getElementById('from_account_number');
+        if (!select || !select.selectedOptions || select.selectedOptions.length === 0) return;
+        const opt = select.selectedOptions[0];
+        const currency = opt.getAttribute('data-currency') || 'USD';
+        const symbol = opt.getAttribute('data-symbol') || '$';
+        const routing = opt.getAttribute('data-routing');
 
-            // Requested: Fidelity Brokerage & Regions Bank
-            '101205681': 'Fidelity Brokerage Services LLC',
-            '122105155': 'Fidelity Investments (UMB Bank, N.A.)',
-            '011000138': 'Fidelity Management Trust Company',
-            '062000019': 'Regions Bank, N.A. (Main / Southeast)',
-            '063100277': 'Regions Bank, N.A. (Florida)',
-            '065200288': 'Regions Bank, N.A. (Louisiana)',
-            '081000141': 'Regions Bank, N.A. (Mid-South / Tennessee)',
+        document.getElementById('currCode').innerText = currency;
+        document.getElementById('currSymbol').innerText = symbol;
 
-            // Top US Commercial & Investment Banks
-            '021000021': 'JPMorgan Chase Bank, N.A. (New York)',
-            '111000614': 'JPMorgan Chase Bank, N.A. (Texas)',
-            '071000013': 'JPMorgan Chase Bank, N.A. (Midwest)',
-            '121000248': 'WF National Bank, N.A. (San Francisco)',
-            '091000019': 'WF National Bank, N.A. (Minneapolis)',
-            '102000076': 'WF National Bank, N.A. (Denver)',
-            '021000089': 'Citibank, N.A. (New York)',
-            '221172186': 'Citibank, N.A. (South Dakota)',
-            '321171184': 'Citibank, N.A. (Delaware)',
-            '031000053': 'PNC Bank, N.A. (Pittsburgh)',
-            '071921891': 'PNC Bank, N.A. (Midwest)',
-            '043000096': 'PNC Bank, N.A. (Ohio)',
-            '122000496': 'U.S. Bank, N.A. (West)',
-            '091000022': 'U.S. Bank, N.A. (Minneapolis)',
-            '042000013': 'U.S. Bank, N.A. (Cincinnati)',
-            '061000104': 'Truist Bank (Atlanta / Georgia)',
-            '053000196': 'Truist Bank (Richmond / Virginia)',
-            '051405515': 'Capital One Bank, N.A. (Virginia)',
-            '011103093': 'TD Bank, N.A. (New England)',
-            '031201360': 'TD Bank, N.A. (Mid-Atlantic)',
-            '021000018': 'The Bank of New York Mellon (BNY)',
-            '044000037': 'BNY Mellon, N.A. (Pittsburgh)',
-            '011000028': 'State Street Bank and Trust Company',
-            '021000128': 'Goldman Sachs Bank USA',
-            '021001088': 'Morgan Stanley Private Bank, N.A.',
-            '121136785': 'Charles Schwab Bank, SSB',
-            '121202211': 'Charles Schwab Premier Bank',
-            '011500120': 'Citizens Bank, N.A. (Rhode Island)',
-            '041000124': 'Citizens Bank, N.A. (Pennsylvania)',
-            '042000314': 'Fifth Third Bank, N.A. (Cincinnati)',
-            '071923909': 'Fifth Third Bank, N.A. (Chicago)',
-            '071000288': 'BMO Bank, N.A. (BMO Harris)',
-            '041001039': 'KeyBank, N.A.',
-            '044000024': 'Huntington National Bank',
-            '124003116': 'Ally Bank',
-            '031100649': 'Discover Bank',
-            '124085066': 'American Express National Bank',
-            '031101279': 'Barclays Bank Delaware',
-            '022000046': 'M&T Bank',
-            '071000152': 'Northern Trust Company',
-            '231372691': 'Santander Bank, N.A.',
-            '053101121': 'First Citizens Bank & Trust Company',
-            '111000753': 'Comerica Bank (Texas)',
-            '072000096': 'Comerica Bank (Michigan)',
-            '121140399': 'Silicon Valley Bank (SVB - First Citizens)',
-            '122105498': 'Western Alliance Bank',
-            '124000054': 'Zions Bancorporation, N.A.',
-            '061100606': 'Synovus Bank',
-            '084000026': 'First Horizon Bank',
-            '011104351': 'Webster Bank, N.A.',
-            '122204764': 'East West Bank',
-            '063113057': 'SouthState Bank, N.A.',
-            '103900036': 'BOK Financial (Bank of Oklahoma)',
-            '071026343': 'Wintrust Bank, N.A.',
-            '064103888': 'Pinnacle Bank',
-            '021202449': 'Valley National Bank',
-            '114000093': 'Frost Bank (Cullen/Frost Bankers)',
-            '074900650': 'Old National Bank',
-            '101000695': 'UMB Bank, N.A.',
-            '125000105': 'Washington Federal Bank (WaFd Bank)',
-            '111024823': 'Texas Capital Bank',
-            '072403259': 'Flagstar Bank, N.A.',
-            '026013673': 'Flagstar Bank, N.A. (Signature Division)',
-            '256074974': 'Navy Federal Credit Union (NFCU)',
-            '253177041': 'State Employees Credit Union (SECU)',
-            '256078420': 'Pentagon Federal Credit Union (PenFed)',
-            '325081403': 'Boeing Employees Credit Union (BECU)',
-            '322271627': 'SchoolsFirst Federal Credit Union',
-            '321175261': 'Golden 1 Credit Union',
-            '314074269': 'USAA Federal Savings Bank',
-            '031101347': 'SoFi Bank, N.A.',
-            '031101114': 'Chime (The Bancorp Bank, N.A.)',
-            '103112981': 'Chime (Stride Bank, N.A.)',
-            '121145349': 'Varo Bank, N.A.',
-            '026012881': 'Interactive Brokers LLC',
-            '321081669': 'First Republic Bank (JPMorgan Chase)',
-            '121301015': 'Bank of Hawaii',
-            '104000016': 'First National Bank of Omaha (FNBO)',
-            '101000019': 'Commerce Bank, N.A.',
-            '075900578': 'Associated Bank, N.A.',
-            '122016066': 'City National Bank',
-            '082900432': 'Simmons Bank',
-            '103200189': 'Arvest Bank',
-            '021309379': 'Synchrony Bank',
-            '021000047': 'HSBC Bank USA, N.A.',
-            '011000015': 'Bank of China USA'
-        };
-
-        function resolveReceivingBank() {
-            const routing = routingInput.value.trim();
-
-            if (routingDatabase[routing]) {
-                bankBadgeName.innerText = routingDatabase[routing];
-            } else if (routing.length >= 8) {
-                // Determine prefix range for fallback lookup
-                const prefix = routing.substring(0, 2);
-                if (prefix === '01' || prefix === '02') {
-                    bankBadgeName.innerText = 'Commercial Clearing Bank (New York / East Coast Fed Wire)';
-                } else if (prefix === '03' || prefix === '04') {
-                    bankBadgeName.innerText = 'Federal Reserve Bank District 3/4 Member Bank';
-                } else if (prefix === '06') {
-                    bankBadgeName.innerText = 'Federal Reserve Bank District 6 (Atlanta / Southeast)';
-                } else if (prefix === '07' || prefix === '08') {
-                    bankBadgeName.innerText = 'Federal Reserve Bank District 7/8 (Chicago / St. Louis)';
-                } else if (prefix === '09' || prefix === '10') {
-                    bankBadgeName.innerText = 'Federal Reserve Bank District 9/10 (Minneapolis / Kansas City)';
-                } else if (prefix === '11' || prefix === '12') {
-                    bankBadgeName.innerText = 'Pacific Clearing & Commercial Bank (West Coast Fed Wire)';
-                } else {
-                    bankBadgeName.innerText = 'Verified US Commercial Wire Institution (Routing: ' + routing + ')';
-                }
+        const routingLabel = document.getElementById('routingLabel');
+        if (routingLabel) {
+            if (currency === 'AUD') {
+                routingLabel.innerText = 'Destination Australian BSB (6 Digits) or SWIFT/BIC';
+            } else if (currency === 'GBP') {
+                routingLabel.innerText = 'Destination UK Sort Code (6 Digits) or SWIFT/BIC';
+            } else if (currency === 'EUR') {
+                routingLabel.innerText = 'Destination BIC / SWIFT Code or SEPA Clearing Code';
             } else {
-                bankBadgeName.innerText = 'Corox Bank (Internal Clearing)';
+                routingLabel.innerText = 'Destination ABA Routing / SWIFT Code';
             }
         }
 
-        window.setRoutingPreset = function(routing) {
+        renderPresets(currency);
+
+        const routingInput = document.getElementById('routing_number');
+        if (routing) {
             routingInput.value = routing;
+        }
+        resolveReceivingBank();
+    }
+
+    function resolveReceivingBank() {
+        const routingInput = document.getElementById('routing_number');
+        const bankBadgeName = document.getElementById('receivingBankName');
+        const bankCountryBadge = document.getElementById('bankCountryBadge');
+        const receivingNetwork = document.getElementById('receivingNetwork');
+        if (!routingInput || !bankBadgeName) return;
+
+        const code = routingInput.value.trim();
+
+        if (typeof window.resolveBankDirectory === 'function') {
+            const result = window.resolveBankDirectory(code);
+            bankBadgeName.innerText = result.name;
+            if (bankCountryBadge) bankCountryBadge.innerText = result.country;
+            if (receivingNetwork) receivingNetwork.innerText = result.network || 'Electronic Clearing Rail';
+        } else {
+            bankBadgeName.innerText = code.length >= 6 ? 'Commercial Bank (Code: ' + code + ')' : 'Corox Bank (Internal Clearing)';
+        }
+    }
+
+    window.setRoutingPreset = function(code) {
+        const routingInput = document.getElementById('routing_number');
+        if (routingInput) {
+            routingInput.value = code;
             resolveReceivingBank();
             routingInput.focus();
-        };
+        }
+    };
 
-        routingInput.addEventListener('input', resolveReceivingBank);
-        accountInput.addEventListener('input', resolveReceivingBank);
-        resolveReceivingBank();
+    document.addEventListener('DOMContentLoaded', function() {
+        const routingInput = document.getElementById('routing_number');
+        if (routingInput) {
+            routingInput.addEventListener('input', resolveReceivingBank);
+            routingInput.addEventListener('change', resolveReceivingBank);
+        }
+        handleSourceAccountChange();
     });
 </script>
 @endsection

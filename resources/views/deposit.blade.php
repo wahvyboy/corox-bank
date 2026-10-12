@@ -1,9 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Deposit USD')
+@section('title', 'Deposit Funds')
 @section('content')
 <div class="dashboard-header">
     <div>
-        <h2 style="font-size: 1.8rem; font-weight: 800;">Deposit Funds (USD)</h2>
+        <h2 style="font-size: 1.8rem; font-weight: 800;">Deposit Funds</h2>
         <p style="color: var(--text-secondary);">Direct deposit funds into your active Corox Bank account.</p>
     </div>
 </div>
@@ -27,40 +27,78 @@
         <div class="wf-action-icon-box" style="background: rgba(16, 185, 129, 0.1); color: #059669; width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 0.75rem;">
             🏛️
         </div>
-        <h3 style="font-size: 1.15rem; font-weight: 800; color: #111827; margin-bottom: 0.35rem;">Incoming Wire Routing</h3>
-        <p style="font-size: 13px; color: #4B5563; margin-bottom: 0.6rem; line-height: 1.4;">Direct outward senders to Corox Bank routing <code>071923456</code> and your active account number.</p>
-        <span style="font-size: 12px; font-weight: 600; color: #059669;">FedWire &amp; ACH Eligible</span>
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: #111827; margin-bottom: 0.35rem;">Incoming Wire / Electronic Clearing</h3>
+        <p style="font-size: 13px; color: #4B5563; margin-bottom: 0.6rem; line-height: 1.4;">
+            Direct outward remitter to Corox Bank clearing <code id="wireRoutingDisplay">071923456</code> and your target account number.
+        </p>
+        <span style="font-size: 12px; font-weight: 600; color: #059669;" id="networkBadge">FedWire, ACH &amp; Real-Time Clearing</span>
     </div>
 </div>
 
 <div class="portal-form-card">
     <div style="font-size: 15px; font-weight: 800; color: #111827; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #E5E7EB;">
-        Direct Wire / ACH Electronic Credit
+        Direct Wire / Electronic Account Credit
     </div>
     <form action="{{ url('/user/deposit') }}" method="POST">
         @csrf
         <div class="form-group">
-            <label for="account_number" class="form-label">Select USD Account</label>
-            <select name="account_number" id="account_number" class="form-control" required>
+            <label for="account_number" class="form-label">Select Destination Account</label>
+            <select name="account_number" id="account_number" class="form-control" required onchange="handleDepositAccountChange()">
                 @foreach(Auth::user()->accounts()->where('status', 'active')->get() as $acc)
-                    <option value="{{ $acc->account_number }}">
-                        {{ $acc->account_type }} - {{ $acc->account_number }} (Balance: ${{ number_format($acc->balance, 2) }} USD)
+                    <option value="{{ $acc->account_number }}"
+                            data-currency="{{ $acc->currency }}"
+                            data-symbol="{{ $acc->currency_symbol }}"
+                            data-routing="{{ $acc->routing_number }}">
+                        {{ $acc->account_type }} - {{ $acc->account_number }} (Balance: {{ $acc->currency_symbol }}{{ number_format($acc->balance, 2) }} {{ $acc->currency }})
                     </option>
                 @endforeach
             </select>
         </div>
 
         <div class="form-group">
-            <label for="amount" class="form-label">Deposit Amount (USD $)</label>
+            <label for="amount" class="form-label">
+                Deposit Amount (<span id="depCurrencySymbol">$</span> <span id="depCurrencyCode">USD</span>)
+            </label>
             <input type="number" step="0.01" min="1" name="amount" id="amount" class="form-control" required placeholder="0.00">
         </div>
 
         <div class="form-group">
-            <label for="description" class="form-label">Deposit Source / Reference</label>
-            <input type="text" name="description" id="description" class="form-control" placeholder="e.g. Check deposit, ACH transfer">
+            <label for="description" class="form-label">Deposit Source / Reference (Optional)</label>
+            <input type="text" name="description" id="description" class="form-control" placeholder="e.g. Inward wire transfer, invoice payment">
         </div>
 
         <button type="submit" class="btn btn-primary btn-lg btn-block">Confirm Deposit</button>
     </form>
 </div>
+
+<script>
+    function handleDepositAccountChange() {
+        const sel = document.getElementById('account_number');
+        if (!sel || !sel.selectedOptions || sel.selectedOptions.length === 0) return;
+        const opt = sel.selectedOptions[0];
+        const currency = opt.getAttribute('data-currency') || 'USD';
+        const symbol = opt.getAttribute('data-symbol') || '$';
+        const routing = opt.getAttribute('data-routing') || '071923456';
+
+        document.getElementById('depCurrencySymbol').innerText = symbol;
+        document.getElementById('depCurrencyCode').innerText = currency;
+
+        const wireRouting = document.getElementById('wireRoutingDisplay');
+        const badge = document.getElementById('networkBadge');
+
+        if (wireRouting) wireRouting.innerText = routing;
+        if (badge) {
+            if (currency === 'AUD') {
+                badge.innerText = 'NPP, Osko & BECS Electronic Clearing';
+            } else if (currency === 'GBP') {
+                badge.innerText = 'Bacs, Faster Payments & CHAPS';
+            } else if (currency === 'EUR') {
+                badge.innerText = 'SEPA Credit Transfer & TARGET2';
+            } else {
+                badge.innerText = 'FedWire, ACH & Real-Time Clearing';
+            }
+        }
+    }
+    document.addEventListener('DOMContentLoaded', handleDepositAccountChange);
+</script>
 @endsection

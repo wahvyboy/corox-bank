@@ -44,11 +44,19 @@
         <div class="wf-summary-meta">
             <div class="wf-meta-item">
                 <span class="wf-meta-label">Total Liquidity:</span>
-                <span class="wf-meta-val">${{ number_format($totalBalance ?? Auth::user()->accounts()->where('status', 'active')->sum('balance'), 2) }}</span>
+                <span class="wf-meta-val">{{ $primarySymbol ?? '$' }}{{ number_format($totalBalance ?? Auth::user()->accounts()->where('status', 'active')->sum('balance'), 2) }} {{ $primaryCurrency ?? 'USD' }}</span>
             </div>
             <div class="wf-meta-badge">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                ABA 071923456 • Member FDIC
+                @if(($primaryCurrency ?? 'USD') === 'AUD')
+                    BSB 082-001 • APRA Regulated ADI
+                @elseif(($primaryCurrency ?? 'USD') === 'GBP')
+                    Sort Code 20-00-00 • PRA / FCA Regulated
+                @elseif(($primaryCurrency ?? 'USD') === 'EUR')
+                    BIC/SEPA CRXBDEFF • ECB Supervised
+                @else
+                    ABA 071923456 • Member FDIC
+                @endif
             </div>
         </div>
     </div>
@@ -84,14 +92,15 @@
                                     </h3>
                                     <div class="wf-account-number">
                                         ...{{ substr($acc->account_number, -4) }}
-                                        <span class="wf-account-routing">Routing: {{ $acc->routing_number ?? '071923456' }}</span>
+                                        <span class="wf-account-routing">{{ $acc->currency === 'AUD' ? 'BSB' : ($acc->currency === 'GBP' ? 'Sort Code' : 'Routing') }}: {{ $acc->routing_number ?? '071923456' }}</span>
+                                        <span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:700; margin-left:6px; font-size:11px; padding:2px 7px; border-radius:4px;">{{ $acc->currency }}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="wf-account-card-right">
                                 <div class="wf-balance-amount">
-                                    ${{ number_format($acc->balance, 2) }}
+                                    {{ $acc->currency_symbol }}{{ number_format($acc->balance, 2) }}
                                 </div>
                                 <div class="wf-balance-label">Available balance</div>
                             </div>
@@ -111,7 +120,7 @@
                             </a>
                             <a href="{{ route('show.deposit.form') }}" class="wf-quick-link">
                                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg>
-                                Deposit USD
+                                Deposit Funds
                             </a>
                             <a href="{{ route('show.transaction.history') }}" class="wf-quick-link">
                                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
@@ -134,8 +143,8 @@
                     @endif
                 @empty
                     <div class="wf-account-card" style="padding: 2.5rem; text-align: center;">
-                        <p style="color: var(--text-muted-dark); font-size: 15px;">No active USD bank accounts found.</p>
-                        <a href="{{ route('create.bank.account') }}" class="btn btn-primary" style="margin-top: 1rem;">Open a USD Account</a>
+                        <p style="color: var(--text-muted-dark); font-size: 15px;">No active bank accounts found.</p>
+                        <a href="{{ route('create.bank.account') }}" class="btn btn-primary" style="margin-top: 1rem;">Open a Bank Account</a>
                     </div>
                 @endforelse
             </div>
@@ -159,7 +168,11 @@
                 <div class="wf-activity-header">
                     <div>
                         <h2 class="wf-activity-title">Recent Account Activity</h2>
-                        <div class="wf-activity-sub">Last settlement recorded: September 18, 2023 (3 years ago)</div>
+                        @if(isset($recentTransactions) && $recentTransactions->count() > 0)
+                            <div class="wf-activity-sub">Last settlement recorded: {{ $recentTransactions->first()->created_at->format('F d, Y') }}</div>
+                        @else
+                            <div class="wf-activity-sub">Commercial &amp; Institutional Account Activity</div>
+                        @endif
                     </div>
                     <a href="{{ route('show.transaction.history') }}" class="btn btn-secondary btn-sm" style="font-size: 13px; font-weight: 700;">
                         View All Transactions &rarr;
@@ -174,7 +187,7 @@
                                 <th>Date</th>
                                 <th>Description / Memo</th>
                                 <th>Type</th>
-                                <th style="text-align: right;">Amount (USD)</th>
+                                <th style="text-align: right;">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -185,19 +198,19 @@
                                             {{ $tx->created_at->format('M d, Y') }}
                                         </td>
                                         <td style="font-weight: 600; color: #1F2937; font-size: 13.5px;">
-                                            {{ $tx->description ?? 'FedWire Settlement' }}
+                                            {{ $tx->description ?? 'Settlement Clearing' }}
                                         </td>
                                         <td>
                                             @if($tx->transaction_type === 'deposit')
                                                 <span class="badge badge-deposit">Deposit</span>
                                             @elseif($tx->transaction_type === 'withdraw')
-                                                <span class="badge badge-withdraw">Wire Debit</span>
+                                                <span class="badge badge-withdraw">Debit</span>
                                             @else
-                                                <span class="badge badge-transfer">Internal Transfer</span>
+                                                <span class="badge badge-transfer">Transfer</span>
                                             @endif
                                         </td>
                                         <td style="text-align: right; font-weight: 800; font-size: 14px; color: {{ $tx->transaction_type === 'deposit' ? 'var(--success)' : ($tx->transaction_type === 'withdraw' ? 'var(--brand-red)' : '#1F2937') }};">
-                                            {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}${{ number_format($tx->amount, 2) }}
+                                            {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}{{ $tx->currency_symbol ?? '$' }}{{ number_format($tx->amount, 2) }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -216,18 +229,18 @@
                         @foreach($recentTransactions as $tx)
                             <div class="wf-mobile-tx-item">
                                 <div class="wf-mobile-tx-left">
-                                    <div class="wf-mobile-tx-desc">{{ $tx->description ?? 'FedWire Settlement' }}</div>
+                                    <div class="wf-mobile-tx-desc">{{ $tx->description ?? 'Settlement Clearing' }}</div>
                                     <div class="wf-mobile-tx-date">{{ $tx->created_at->format('M d, Y') }}</div>
                                 </div>
                                 <div class="wf-mobile-tx-right">
                                     <div class="wf-mobile-tx-amount" style="color: {{ $tx->transaction_type === 'deposit' ? 'var(--success)' : ($tx->transaction_type === 'withdraw' ? 'var(--brand-red)' : '#1F2937') }};">
-                                        {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}${{ number_format($tx->amount, 2) }}
+                                        {{ $tx->transaction_type === 'deposit' ? '+' : ($tx->transaction_type === 'withdraw' ? '-' : '') }}{{ $tx->currency_symbol ?? '$' }}{{ number_format($tx->amount, 2) }}
                                     </div>
                                     <div class="wf-mobile-tx-badge">
                                         @if($tx->transaction_type === 'deposit')
                                             <span class="badge badge-deposit" style="font-size: 10px; padding: 2px 6px;">Deposit</span>
                                         @elseif($tx->transaction_type === 'withdraw')
-                                            <span class="badge badge-withdraw" style="font-size: 10px; padding: 2px 6px;">Wire Debit</span>
+                                            <span class="badge badge-withdraw" style="font-size: 10px; padding: 2px 6px;">Debit</span>
                                         @else
                                             <span class="badge badge-transfer" style="font-size: 10px; padding: 2px 6px;">Transfer</span>
                                         @endif
@@ -244,8 +257,8 @@
             <!-- Account Disclosures -->
             <div class="wf-disclosures-box">
                 <div class="wf-disclosures-title">* Account Disclosures</div>
-                <p>Deposit products offered by Corox Bank, N.A. Member FDIC. Equal Housing Lender. Investment and insurance products are not FDIC insured, not bank guaranteed, and may lose value.</p>
-                <p>FedWire and ACH routing operations are governed under Federal Reserve Regulation CC and the Uniform Commercial Code (UCC) Article 4A.</p>
+                <p>Deposit and liquidity services provided by Corox Bank @if(($primaryCurrency ?? 'USD') === 'AUD') Limited (ACN 004 044 937), an Authorised Deposit-taking Institution (ADI) regulated by APRA and ASIC. Covered by the Australian Financial Claims Scheme (FCS). @else, N.A. Member FDIC. Equal Housing Lender. Investment and insurance products are not bank guaranteed, and may lose value. @endif</p>
+                <p>Electronic clearing operations are governed under @if(($primaryCurrency ?? 'USD') === 'AUD') Reserve Bank of Australia (RBA) regulations and the Australian Payments Network (AusPayNet). @else Federal Reserve Regulation CC and the Uniform Commercial Code (UCC) Article 4A. @endif</p>
             </div>
         </div>
 
@@ -261,7 +274,7 @@
                 </div>
                 <div class="wf-user-actions">
                     <a href="{{ route('show.bank.accounts') }}" class="wf-user-action-link">
-                        <span>View USD Accounts</span>
+                        <span>View Accounts</span>
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                     </a>
                     <form method="POST" action="{{ route('logout') }}" style="margin-top: 0.5rem;">
@@ -287,8 +300,8 @@
                 </div>
                 <div class="wf-tool-card-body">
                     <div class="wf-tool-detail">
-                        <span>FedWire Routing:</span>
-                        <strong>071923456</strong>
+                        <span>{{ ($primaryCurrency ?? 'USD') === 'AUD' ? 'BSB / Clearing:' : (($primaryCurrency ?? 'USD') === 'GBP' ? 'Sort Code:' : (($primaryCurrency ?? 'USD') === 'EUR' ? 'BIC / SWIFT:' : 'FedWire Routing:')) }}</span>
+                        <strong>{{ ($primaryCurrency ?? 'USD') === 'AUD' ? '082-001' : (($primaryCurrency ?? 'USD') === 'GBP' ? '20-00-00' : (($primaryCurrency ?? 'USD') === 'EUR' ? 'CRXBDEFF' : '071923456')) }}</strong>
                     </div>
                     <div class="wf-tool-detail">
                         <span>Status:</span>
@@ -309,7 +322,7 @@
                 <ul class="wf-accordion-list">
                     <li>
                         <a href="{{ route('show.bank.accounts') }}">
-                            <span>View All USD Accounts</span>
+                            <span>View All Accounts</span>
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </li>
@@ -321,7 +334,7 @@
                     </li>
                     <li>
                         <a href="{{ route('show.deposit.form') }}">
-                            <span>Deposit USD Funds</span>
+                            <span>Deposit Funds</span>
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </li>
