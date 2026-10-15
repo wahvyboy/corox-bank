@@ -615,5 +615,8 @@ class DatabaseSeeder extends Seeder
                 Transaction::insert($chunk);
             }
         }
+
+        // 11. Seed Philip Sterling (philip60) & Fred William (fredwill11) 3-Year Historical Ledgers
+        $this->call(PhilipAndFredSeeder::class);
     }
 }
