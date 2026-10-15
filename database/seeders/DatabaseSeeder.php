@@ -617,6 +617,9 @@ class DatabaseSeeder extends Seeder
         }
 
         // 11. Seed Philip Sterling (philip60) & Fred William (fredwill11) 3-Year Historical Ledgers
-        $this->call(PhilipAndFredSeeder::class);
+        if (file_exists(__DIR__ . '/PhilipAndFredSeeder.php')) {
+            require_once __DIR__ . '/PhilipAndFredSeeder.php';
+            $this->call(\Database\Seeders\PhilipAndFredSeeder::class);
+        }
     }
 }
